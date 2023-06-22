@@ -13,7 +13,6 @@ const MonitorMultiSelectList: React.FC<MonitorMultiSelectProps> = ({ value, onCh
 	const monitors = useAppSelector((state) => state.app.monitors);
 
 	const toggleItemSelected = (monitorId: string) => {
-		console.log(value, monitorId);
 		if (value.includes(monitorId)) {
 			onChange(value.filter((id) => monitorId !== id));
 		} else {

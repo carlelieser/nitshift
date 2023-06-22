@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import WindowButtons from "./window-buttons";
 import MonitorSelect from "./monitor/monitor-select";
 import { capitalize } from "lodash";
-import moment from "moment";
 import { AutoAwesome } from "@mui/icons-material";
+import { dayjs } from "../dayjs";
 
 const { default: icon } = require("../assets/img/icon.png");
 
@@ -43,7 +43,7 @@ const WindowBar = () => {
 					title={
 						<Typography>
 							{capitalize(license)}
-							{license === "trial" ? ` ends ${moment(trialStartDate).add(7, "days").fromNow()}` : null}
+							{license === "trial" ? ` ends ${dayjs(trialStartDate).add(7, "days").fromNow()}` : null}
 						</Typography>
 					}
 				>

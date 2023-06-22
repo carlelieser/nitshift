@@ -26,6 +26,7 @@ const Store = require("electron-store");
 export const STORE = {
 	ACTIVE_MONITOR: "active-monitor",
 	GLOBAL_BRIGHTNESS: "global-brightness",
+	LAST_UPDATED_ON: "last-updated-on",
 	LICENSE: "license",
 	MODE: "mode",
 	MONITORS: "monitors",
@@ -46,6 +47,7 @@ export const storage = () =>
 
 export const loadActiveMonitor = (): AppState["activeMonitor"] => storage().get(STORE.ACTIVE_MONITOR, null);
 export const loadGlobalBrightness = (): AppState["brightness"] => storage().get(STORE.GLOBAL_BRIGHTNESS, 100);
+export const loadLastUpdatedOn = (): number => storage().get(STORE.LAST_UPDATED_ON, null);
 export const loadLicense = (): AppState["license"] => storage().get(STORE.LICENSE, "free");
 export const loadMode = (): AppState["mode"] => storage().get(STORE.MODE, "expanded");
 export const loadMonitors = (): AppState["monitors"] => storage().get(STORE.MONITORS, []);
@@ -56,6 +58,7 @@ export const loadUserEmail = (): AppState["userEmail"] => storage().get(STORE.US
 export const loadUserId = (): AppState["userId"] => storage().get(STORE.USER_ID, null);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
 export const saveGlobalBrightness = (brightness: AppState["brightness"]) => storage().set(STORE.GLOBAL_BRIGHTNESS, brightness);
+export const saveLastUpdatedOn = (date: number) => storage().set(STORE.LAST_UPDATED_ON, date);
 export const saveLicense = (license: AppState["license"]) => storage().set(STORE.LICENSE, license);
 export const saveMode = (mode: AppState["mode"]) => storage().set(STORE.MODE, mode);
 export const saveMonitors = (monitors: AppState["monitors"]) => storage().set(STORE.MONITORS, monitors);

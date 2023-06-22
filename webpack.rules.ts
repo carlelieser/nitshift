@@ -5,6 +5,7 @@ export const rules: Required<ModuleOptions>["rules"] = [
 		test: /\.html$/i,
 		use: "raw-loader",
 	},
+	{ test: /\.worker\.ts$/, loader: "worker-loader" },
 	{
 		test: /.+\.node$/,
 		loader: "node-loader",

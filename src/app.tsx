@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo } from "react";
-import { Box, createTheme, Grow, Portal, Snackbar, ThemeProvider } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+	Box,
+	createTheme,
+	Grow,
+	Portal,
+	Snackbar,
+	ThemeProvider,
+} from "@mui/material";
 import { ipcRenderer } from "electron";
 import { Provider } from "react-redux";
 import { redux } from "./redux";
@@ -9,6 +16,9 @@ import { teal } from "@mui/material/colors";
 
 import ExpandedView from "./views/expanded";
 import CompactView from "./views/compact";
+import { Release } from "./updater";
+import shadows from "@mui/material/styles/shadows";
+import UpdateSnackbar from "./components/update-snackbar";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -16,6 +26,7 @@ const App = () => {
 	const receivedPremium = useAppSelector((state) => state.app.receivedPremium);
 	const mode = useAppSelector((state) => state.app.mode);
 	const transitioning = useAppSelector((state) => state.app.transitioning);
+	const [release, setRelease] = useState<Release>(null);
 
 	const theme = useMemo(() => {
 		return createTheme({
@@ -42,6 +53,26 @@ const App = () => {
 				},
 			},
 			components: {
+				MuiSnackbar: {
+					defaultProps: {
+						sx: {
+							m: 2,
+						},
+						TransitionComponent: Grow,
+					},
+					styleOverrides: {
+						root: {
+							boxShadow: shadows[20],
+						},
+					},
+				},
+				MuiAlert: {
+					styleOverrides: {
+						message: {
+							width: "100%"
+						}
+					}
+				},
 				MuiButton: {
 					defaultProps: {
 						sx: {
@@ -72,11 +103,16 @@ const App = () => {
 		}
 	};
 
+	const closeUpdateSnackbar = () => setRelease(null);
+
 	useEffect(() => {
 		if (!transitioning) ipcRenderer.invoke("disable-pass-through");
 	}, [transitioning]);
 
 	useEffect(() => {
+		ipcRenderer.on("update-available", (e, release: Release) => {
+			setRelease(release);
+		});
 		ipcRenderer.on("sync-license", () => {
 			dispatch(syncLicenseData());
 			dispatch(refreshAvailableMonitors());
@@ -86,6 +122,7 @@ const App = () => {
 			dispatch(setLicense("free"));
 		});
 		ipcRenderer.on("display-arrangement-changed", () => dispatch(refreshAvailableMonitors()));
+		ipcRenderer.on("refresh-monitors", () => dispatch(refreshAvailableMonitors()));
 	}, []);
 
 	return (
@@ -102,28 +139,21 @@ const App = () => {
 				onMouseOver={handleMouseOver}
 			>
 				<Box p={2} position={"relative"} height={"100%"}>
+					<UpdateSnackbar release={release} onClose={closeUpdateSnackbar} />
 					<Snackbar
 						open={mode === "expanded" && refreshed}
 						autoHideDuration={2000}
-						TransitionComponent={Grow}
 						onClose={() => dispatch(setRefreshed(false))}
 						message={"Refreshed"}
-						sx={{
-							m: 3,
-						}}
 					/>
 					<Portal>
 						<Snackbar
 							open={receivedPremium}
 							autoHideDuration={6000}
-							TransitionComponent={Grow}
 							onClose={() => dispatch(setReceivedPremium(false))}
 							message={
 								"Thanks for verifying your license. Now you can kick back and enjoy all the premium features. Have fun!"
 							}
-							sx={{
-								m: 3,
-							}}
 						/>
 					</Portal>
 					<ExpandedView />

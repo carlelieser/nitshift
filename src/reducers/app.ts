@@ -94,7 +94,7 @@ export const appSlice = createSlice({
 			let index = state.schedule.findIndex((schedule) => schedule.id === action.payload.id);
 			state.schedule[index] = action.payload;
 		},
-		refreshAvailableMonitors: (state) => {
+		refreshAvailableMonitors: (state, payload: PayloadAction<boolean>) => {
 			state.monitors = loadMonitors();
 		},
 		removeSchedule: (state, action: PayloadAction<string>) => {

@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../hooks";
 
 const MonitorListRefreshButton = () => {
 	const dispatch = useAppDispatch();
-	const handleRefresh = () => dispatch(refreshAvailableMonitors());
+	const handleRefresh = () => dispatch(refreshAvailableMonitors(true));
 
 	return (
 		<Tooltip title={<Typography>Refresh monitor list</Typography>}>

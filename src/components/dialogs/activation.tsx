@@ -150,7 +150,6 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 					});
 					goToNextChar();
 				}
-				console.log(e.key);
 				if (e.key === "Backspace") {
 					setCodeChars((prevPinChars) => {
 						prevPinChars[codeCharIndex] = "";

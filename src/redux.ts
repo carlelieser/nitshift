@@ -53,7 +53,6 @@ listener.startListening({
 			api.dispatch(refreshAvailableMonitors());
 		}
 
-		console.log("UPDATING USER LICENSE");
 		await ipcRenderer.invoke("sync-user");
 	},
 });
@@ -149,7 +148,7 @@ listener.startListening({
 	effect: (action, api) => {
 		saveMonitors(api.getState().app.monitors);
 		ipcRenderer.invoke("monitors-refreshed");
-		api.dispatch(setRefreshed(true));
+		if (action.payload) api.dispatch(setRefreshed(true));
 	},
 });
 

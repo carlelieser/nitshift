@@ -23,8 +23,6 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 
 	const handleRemoveSchedule = () => dispatch(removeSchedule(props.id));
 
-	console.log(props.time);
-
 	return (
 		<Paper elevation={4}>
 			<ScheduleItemDialog edit={props} open={editDialogOpen} onClose={closeEditDialog} />

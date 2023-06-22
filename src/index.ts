@@ -1,6 +1,7 @@
 import {
 	app,
 	BrowserWindow,
+	nativeImage,
 	Tray,
 	screen,
 	ipcMain,
@@ -26,22 +27,23 @@ import {
 	saveMonitors,
 } from "./storage";
 import { clone, difference, reduce, throttle } from "lodash";
-import { isDev, normalizeBrightness } from "./utils";
+import { isDev, normalizeBrightness, VERSION_TAG } from "./utils";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { machineIdSync } from "node-machine-id";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import { dayjs, getDateFromTime } from "./dayjs";
+import { dayjs, DEFAULT_TIMEZONE, getDateFromTime } from "./dayjs";
 
 import lumi from "lumi-control";
-import MainWindow from "./main-window";
-import ShadeManager from "./shade-manager";
+import Window from "./window";
+import Shader from "./shader";
 import encryption from "./encryption.json";
 
 import "./firebase";
 
 import * as path from "path";
 import * as process from "process";
+import Updater, { Release } from "./updater";
 
 const TRIAL_JOB_TIME = isDev ? "* * * * * *" : "0 * * * * *";
 const TRIAL_DURATION = isDev ? 1000 * 60 : 1000 * 60 * 60 * 24 * 7;
@@ -53,15 +55,21 @@ if (require("electron-squirrel-startup")) app.quit();
 
 Store.initRenderer();
 
-const { default: iconPath } = require("./assets/img/icon.ico");
+const { default: iconPath } = require("./assets/img/icon.png");
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 const schedule: Array<typeof CronJob> = [];
 
-let window = new MainWindow(MAIN_WINDOW_WEBPACK_ENTRY);
-let shades = new ShadeManager();
+let window = new Window(MAIN_WINDOW_WEBPACK_ENTRY);
+let updater = new Updater();
+let shades = new Shader();
 let tray: Tray = null;
+
+updater.on("update-available", (release: Release) => {
+	window.data?.show();
+	window.data?.webContents.send("update-available", release);
+});
 
 const handleTrayClick = () => {
 	if (window.data) window.data.show();
@@ -69,10 +77,28 @@ const handleTrayClick = () => {
 };
 
 const createTrayIcon = () => {
-	tray = new Tray(isDev ? path.resolve(".webpack", "main", iconPath) : path.resolve(__dirname, iconPath));
+	const icon = isDev ? path.resolve(".webpack", "main", iconPath) : path.resolve(__dirname, iconPath);
+	const nativeIcon = nativeImage.createFromPath(icon).resize({ width: 16 });
+	tray = new Tray(nativeIcon);
 	const contextMenu = Menu.buildFromTemplate([
 		{
-			label: "Quit",
+			icon: nativeIcon,
+			label: "Glimmr",
+			sublabel: VERSION_TAG,
+			enabled: false,
+		},
+		{
+			type: "separator",
+		},
+		{
+			label: "Check for Updates...",
+			click: () => updater.check(true),
+		},
+		{
+			type: "separator",
+		},
+		{
+			label: "Quit Glimmr",
 			click: () => {
 				tray.destroy();
 				app.quit();
@@ -80,7 +106,7 @@ const createTrayIcon = () => {
 			},
 		},
 	]);
-	tray.setToolTip("Blinder");
+	tray.setToolTip("Glimmr");
 	tray.setContextMenu(contextMenu);
 	tray.on("click", handleTrayClick);
 };
@@ -97,7 +123,7 @@ const applyBrightness = throttle(() => {
 	const shadeMonitors = monitors.filter(({ mode }) => mode === "shade");
 
 	if (nativeMonitors.length) {
-		nativeMonitors.forEach((monitor) => shades.destroyShade(monitor.id));
+		nativeMonitors.forEach((monitor) => shades.destroy(monitor.id));
 		lumi.set(
 			reduce(
 				nativeMonitors,
@@ -194,7 +220,7 @@ const startTrialCheck = () => {
 		},
 		null,
 		true,
-		"America/New_York"
+		DEFAULT_TIMEZONE
 	);
 	job.start();
 };
@@ -235,16 +261,16 @@ const checkSchedule = () => {
 	if (latestSchedule) applySchedule(latestSchedule.id);
 
 	loadSchedule().forEach(({ id, monitors, time, brightness }) => {
-		const targetDate = getDateFromTime(time);
-		const cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} * * *`;
+		const date = getDateFromTime(time);
+		const cron = `0 ${date.minute()} ${date.hour()} * * *`;
 		const job = new CronJob(
-			cronExpression,
+			cron,
 			() => {
 				applySchedule(id);
 			},
 			null,
 			true,
-			"America/New_York"
+			DEFAULT_TIMEZONE
 		);
 		job.start();
 		schedule.push(job);
@@ -271,9 +297,12 @@ app.on("ready", async () => {
 	window.create();
 	window.refreshMonitors();
 
+	updater.check(true);
+
 	createTrayIcon();
 	applyBrightness();
 
+	window.data.on("focus", () => updater.check());
 	window.data.on("show", updateStorageWithUserDoc);
 
 	screen.on("display-metrics-changed", updateMonitorsAndAdjustWindowPosition);
@@ -300,6 +329,8 @@ app.on("render-process-gone", () => {
 	window.data.show();
 });
 
+ipcMain.handle("get-app-path", () => app.getAppPath());
+
 ipcMain.handle("free-trial-started", handleFreeTrialStarted);
 ipcMain.handle("sync-user", updateUserDoc);
 
@@ -317,3 +348,4 @@ ipcMain.handle("disable-pass-through", window.disablePassThrough);
 ipcMain.handle("schedule-modified", checkSchedule);
 
 ipcMain.handle("minimize", () => window.data.minimize());
+ipcMain.handle("quit", () => app.exit());
