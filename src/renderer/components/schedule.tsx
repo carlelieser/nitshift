@@ -5,7 +5,7 @@ import { Delete, Edit, Monitor, Timer, WbSunny } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { randomUUID } from "crypto";
 import ScheduleItemDialog from "./dialogs/schedule-item";
-import { getDateFromTime } from "../dayjs";
+import { getDateFromTime } from "../../common/dayjs";
 
 const Schedule: React.FC<ScheduleItem> = (props) => {
 	const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);

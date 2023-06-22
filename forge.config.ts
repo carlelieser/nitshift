@@ -7,7 +7,7 @@ import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
-import { isDev } from "./src/utils";
+import { isDev } from "./src/common/utils";
 import * as path from "path";
 
 const config: ForgeConfig = {
@@ -41,7 +41,7 @@ const config: ForgeConfig = {
 			authors: "Glimmr",
 			exe: "Glimmr.exe",
 			iconUrl:
-				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/icon-full.ico?token=GHSAT0AAAAAACDU7EKXJEVDOFILMYDG2GYOZETXVRQ",
+				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/setup.ico?token=GHSAT0AAAAAACDU7EKX4ZOLDJZPZW3KNJM2ZET7AKQ",
 			setupIcon: path.join(__dirname, "src", "assets", "img", "setup.ico"),
 			loadingGif: path.join(__dirname, "src", "assets", "img", "installer.gif"),
 		}),
@@ -53,8 +53,8 @@ const config: ForgeConfig = {
 				config: rendererConfig,
 				entryPoints: [
 					{
-						html: "./src/index.html",
-						js: "./src/renderer.tsx",
+						html: "./src/renderer/index.html",
+						js: "./src/renderer/index.tsx",
 						name: "main_window",
 					},
 				],

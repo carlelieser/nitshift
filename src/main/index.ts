@@ -25,19 +25,19 @@ import {
     saveUserId,
     loadSchedule,
     saveMonitors,
-} from "./storage";
+} from "../common/storage";
 import {clone, difference, reduce, throttle} from "lodash";
-import {isDev, normalizeBrightness, VERSION_TAG} from "./utils";
+import {isDev, normalizeBrightness, VERSION_TAG} from "../common/utils";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import {machineIdSync} from "node-machine-id";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {db} from "./firebase";
-import {dayjs, DEFAULT_TIMEZONE, getDateFromTime} from "./dayjs";
+import {dayjs, DEFAULT_TIMEZONE, getDateFromTime} from "../common/dayjs";
 
 import lumi from "lumi-control";
 import Window from "./window";
 import Shader from "./shader";
-import encryption from "./encryption.json";
+import encryption from "../common/encryption.json";
 
 import "./firebase";
 
@@ -55,7 +55,7 @@ if (require("electron-squirrel-startup")) app.quit();
 
 Store.initRenderer();
 
-const {default: iconPath} = require("./assets/img/icon.png");
+const {default: iconPath} = require("../assets/img/icon.png");
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 

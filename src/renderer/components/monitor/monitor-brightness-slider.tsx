@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { GLOBAL } from "lumi-control";
 import { setBrightness, setMonitorBrightness } from "../../reducers/app";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { UIMonitor } from "../../types";
+import { UIMonitor } from "../../../common/types";
 import BrightnessSlider from "../brightness-slider";
 
 interface MonitorBrightnessSliderProps {

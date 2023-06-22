@@ -20,12 +20,12 @@ import { ArrowDropDown, ArrowDropUp, AutoAwesome, DonutSmall, Key, Monitor, Shop
 import { teal, yellow } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
 import { shell } from "electron";
-import { isDev } from "../utils";
-import { stripe } from "../stripe";
-import { loadUserId } from "../storage";
+import { isDev } from "../../common/utils";
+import { stripe } from "../../main/stripe";
+import { loadUserId } from "../../common/storage";
 import PriceMenu, { descriptions, prices } from "./price-menu";
 
-const { default: premiumBannerBg } = require("../assets/img/premium-banner-bg.png");
+const { default: premiumBannerBg } = require("../../assets/img/premium-banner-bg.png");
 
 const content = [
 	{
@@ -88,7 +88,7 @@ const PremiumBanner = () => {
 		});
 		await shell.openExternal(link.url);
 		setLoading(false);
-		setSnackbarOpen(true);
+		openSnackbar();
 	};
 
 	const handleButtonClick = async () => {
@@ -129,7 +129,6 @@ const PremiumBanner = () => {
 							background: open
 								? "linear-gradient(45deg, rgba(32, 97, 85, 0.8), rgba(129, 45, 203, 0.8))"
 								: "linear-gradient(45deg, rgba(32, 97, 85, 0.8), rgba(129, 45, 203, 0.4))",
-							backdropFilter: open ? "blur(10px)" : "blur(0)",
 							borderTopLeftRadius: 16,
 							borderTopRightRadius: 16,
 							transition: theme.transitions.create(["background", "backdrop-filter"]),

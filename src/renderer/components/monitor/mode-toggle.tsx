@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge, Box, IconButton } from "@mui/material";
 import { AutoAwesome, DonutLarge, DonutSmall } from "@mui/icons-material";
-import { UIMonitor } from "../../types";
+import { UIMonitor } from "../../../common/types";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setMonitorMode } from "../../reducers/app";
 import PremiumTooltip from "../premium-tooltip";

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Box, createTheme, Paper, Stack, ThemeProvider, Typography, useTheme } from "@mui/material";
 import { DragHandle, Monitor as MdMonitor } from "@mui/icons-material";
 import { GLOBAL } from "lumi-control";
-import { UIMonitor } from "../../types";
+import { UIMonitor } from "../../../common/types";
 import { upperCase } from "lodash";
 import { teal, common } from "@mui/material/colors";
 import MonitorToggle from "./monitor-toggle";

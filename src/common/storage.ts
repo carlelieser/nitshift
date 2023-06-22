@@ -1,4 +1,4 @@
-import { AppState } from "./reducers/app";
+import { AppState } from "../renderer/reducers/app";
 
 const crypto = require("crypto");
 const encryption = require("./encryption.json");

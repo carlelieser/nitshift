@@ -10,12 +10,12 @@ import MonitorMultiSelectList from "../monitor/monitor-multi-select-list";
 import BrightnessSlider from "../brightness-slider";
 import Color from "color";
 import { Monitor, Timer, WbSunny } from "@mui/icons-material";
-import { UIMonitor } from "../../types";
+import { UIMonitor } from "../../../common/types";
 import { redux } from "../../redux";
 import { useAppDispatch } from "../../hooks";
 import { addSchedule, editSchedule, ScheduleItem, setMonitorBrightness } from "../../reducers/app";
 import { clone } from "lodash";
-import { dayjs, Dayjs, getDateFromTime } from "../../dayjs";
+import { dayjs, Dayjs, getDateFromTime } from "../../../common/dayjs";
 
 interface ScheduleItemDialogProps extends DialogComponentProps {
 	edit: null | ScheduleItem;

@@ -1,10 +1,10 @@
 import type { Configuration } from "webpack";
-import { isDev } from "./src/utils";
+import { isDev } from "./src/common/utils";
 import { rules } from "./webpack.rules";
 import { plugins } from "./webpack.plugins";
 
 export const mainConfig: Configuration = {
-	entry: "./src/index.ts",
+	entry: "./src/main/index.ts",
 	target: "electron-main",
 	module: {
 		rules,

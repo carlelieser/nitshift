@@ -20,7 +20,7 @@ import { randomUUID } from "crypto";
 import { clone, times } from "lodash";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setTrialAvailability, setLicense, setReceivedPremium } from "../../reducers/app";
-import { stripe } from "../../stripe";
+import { stripe } from "../../../main/stripe";
 import Dialog, { DialogComponentProps } from "../dialog";
 
 const { default: template } = require("../../templates/email-verification.html");
@@ -310,7 +310,7 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 							onKeyUp={handleEmailKeyUp}
 							value={email}
 							onChange={handleEmailChange}
-							helperText={"Use the same email you used when purchasing the license."}
+							helperText={"This is the same email you used when you purchased the license."}
 						/>
 						<Stack justifyContent={"center"}>
 							{isCompact ? null : (

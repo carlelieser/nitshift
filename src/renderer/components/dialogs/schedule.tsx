@@ -7,7 +7,7 @@ import { TransitionGroup } from "react-transition-group";
 import Schedule from "../schedule";
 import ScheduleItemDialog from "./schedule-item";
 
-const { default: clock } = require("../../assets/img/clock.jpeg");
+const { default: clock } = require("../../../assets/img/clock.jpeg");
 
 const ScheduleDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false);

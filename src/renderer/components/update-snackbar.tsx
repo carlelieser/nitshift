@@ -11,15 +11,15 @@ import {
 	Typography,
 } from "@mui/material";
 import { common, teal } from "@mui/material/colors";
-import { ACCESS_TOKEN, Release } from "../updater";
+import { ACCESS_TOKEN, Release } from "../../main/updater";
 import { app, ipcRenderer } from "electron";
 import * as fs from "fs";
 import * as path from "path";
 import * as process from "process";
 import { Info } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { mkdir } from "../utils";
-import DownloadWorker, { DownloadWorkerEvent, TransferStatus } from "../download.worker";
+import { mkdir } from "../../common/utils";
+import DownloadWorker, { DownloadWorkerEvent, TransferStatus } from "../../main/download.worker";
 
 const worker = new DownloadWorker();
 

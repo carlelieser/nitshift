@@ -7,7 +7,7 @@ import { setMonitors, setTrialStartDate } from "../../reducers/app";
 import { DragDropContext, Droppable, Draggable, OnDragEndResponder } from "react-beautiful-dnd";
 
 import Monitor from "./monitor";
-import { UIMonitor } from "../../types";
+import { UIMonitor } from "../../../common/types";
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();

@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import { isDev } from "./utils";
-import { loadLastUpdatedOn, saveLastUpdatedOn } from "./storage";
-import { dayjs } from "./dayjs";
+import { isDev } from "../common/utils";
+import { loadLastUpdatedOn, saveLastUpdatedOn } from "../common/storage";
+import { dayjs } from "../common/dayjs";
 import EventEmitter from "events";
 
 export const ACCESS_TOKEN = "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";

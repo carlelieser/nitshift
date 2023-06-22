@@ -32,7 +32,7 @@ const MonitorSelect = () => {
 					px: 1,
 				}}
 			>
-				<Typography variant={"button"} noWrap={true} maxWidth={license === "premium" ? 100 : 50} textAlign={"left"}>
+				<Typography variant={"button"} noWrap={true} maxWidth={license === "premium" ? 100 : 60} textAlign={"left"}>
 					{activeMonitor?.name ?? GLOBAL}
 				</Typography>
 			</Button>

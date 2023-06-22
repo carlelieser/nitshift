@@ -1,5 +1,5 @@
 import type { Configuration } from "webpack";
-import { isDev } from "./src/utils";
+import { isDev } from "./src/common/utils";
 import { rules } from "./webpack.rules";
 import { plugins } from "./webpack.plugins";
 

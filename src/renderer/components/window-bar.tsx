@@ -5,9 +5,9 @@ import WindowButtons from "./window-buttons";
 import MonitorSelect from "./monitor/monitor-select";
 import {capitalize} from "lodash";
 import {AutoAwesome} from "@mui/icons-material";
-import {dayjs} from "../dayjs";
+import {dayjs} from "../../common/dayjs";
 
-const {default: icon} = require("../assets/img/logo.png");
+const {default: icon} = require("../../assets/img/logo.png");
 
 const WindowBar = () => {
     const theme = useTheme();
@@ -47,7 +47,7 @@ const WindowBar = () => {
                         </Typography>
                     }
                 >
-                    <Stack direction={"row"} alignItems={"center"} spacing={2}>
+                    <Stack direction={"row"} alignItems={"center"} spacing={1}>
                         <Badge
                             anchorOrigin={{
                                 vertical: 'top',
@@ -58,8 +58,8 @@ const WindowBar = () => {
                                     <AutoAwesome sx={{fontSize: 12, mt: 2}}/> : null
                             }
                         >
-                            <Box width={24} height={24} borderRadius={9999}
-                                 sx={{backgroundImage: `url(${icon})`, backgroundSize: "cover"}}/>
+                            <Box width={36} height={36}
+                                 sx={{backgroundImage: `url("${icon}")`, backgroundSize: "cover"}}/>
                         </Badge>
                         <Typography variant={"h5"} fontWeight={"bold"}>Glimmr</Typography>
                     </Stack>

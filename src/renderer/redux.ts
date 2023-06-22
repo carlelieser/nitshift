@@ -31,10 +31,10 @@ import {
 	saveTrialStartDate,
 	storage,
 	STORE,
-} from "./storage";
+} from "../common/storage";
 import { ipcRenderer } from "electron";
 import { clone } from "lodash";
-import { dayjs } from "./dayjs";
+import { dayjs } from "../common/dayjs";
 
 const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMiddleware();
 
