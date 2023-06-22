@@ -24,7 +24,6 @@ import { stripe } from "../../stripe";
 import Dialog, { DialogComponentProps } from "../dialog";
 
 const { default: template } = require("../../templates/email-verification.html");
-const { default: vaultBg } = require("../../assets/img/vault.png");
 
 const { clipboard } = require("electron");
 const nodemailer = require("nodemailer");

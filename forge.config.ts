@@ -32,7 +32,7 @@ const config: ForgeConfig = {
 					/webpack\.rules/,
 				],
 				derefSymlinks: true,
-				icon: "./src/assets/img/icon-full.ico",
+				icon: "./src/assets/img/setup.ico",
 				asar: true,
 		  },
 	rebuildConfig: {},
@@ -42,7 +42,7 @@ const config: ForgeConfig = {
 			exe: "Glimmr.exe",
 			iconUrl:
 				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/icon-full.ico?token=GHSAT0AAAAAACDU7EKXJEVDOFILMYDG2GYOZETXVRQ",
-			setupIcon: path.join(__dirname, "src", "assets", "img", "icon.ico"),
+			setupIcon: path.join(__dirname, "src", "assets", "img", "setup.ico"),
 			loadingGif: path.join(__dirname, "src", "assets", "img", "installer.gif"),
 		}),
 	],
