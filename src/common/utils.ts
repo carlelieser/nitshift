@@ -6,4 +6,4 @@ export const normalizeBrightness = (brightness: number, globalBrightness: number
 
 export const mkdir = (path: string) => new Promise((resolve) => fs.mkdir(path, resolve));
 
-export const VERSION_TAG = "v0.0.1-beta";
+export const VERSION_TAG = "v0.0.2";
