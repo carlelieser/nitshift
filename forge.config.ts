@@ -32,7 +32,8 @@ const config: ForgeConfig = {
 					/webpack\.rules/,
 				],
 				derefSymlinks: true,
-				icon: "./src/assets/img/icon.ico",
+				icon: "./src/assets/img/icon-full.ico",
+				asar: true,
 		  },
 	rebuildConfig: {},
 	makers: [
