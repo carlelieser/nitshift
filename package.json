@@ -1,6 +1,6 @@
 {
   "name": "glimmr",
-  "productName": "glimmr",
+  "productName": "Glimmr",
   "target": "node",
   "version": "0.0.1",
   "description": "Programmatically adjust the brightness of your monitors.",
