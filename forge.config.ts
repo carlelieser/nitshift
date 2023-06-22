@@ -41,7 +41,7 @@ const config: ForgeConfig = {
 			authors: "Glimmr",
 			exe: "Glimmr.exe",
 			iconUrl:
-				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/setup.ico?token=GHSAT0AAAAAACDU7EKX4ZOLDJZPZW3KNJM2ZET7AKQ",
+				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/setup.ico?token=GHSAT0AAAAAACDU7EKWDXXZOR4KQRZ2FZGAZEUY75Q",
 			setupIcon: path.join(__dirname, "src", "assets", "img", "setup.ico"),
 			loadingGif: path.join(__dirname, "src", "assets", "img", "installer.gif"),
 		}),
