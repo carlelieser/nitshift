@@ -1,7 +1,6 @@
 import React from "react";
-import { Divider, Grow, IconButton, Paper, Stack, Typography, Modal, Box, Button } from "@mui/material";
+import { Divider, IconButton, Paper, Stack, Typography, Modal, Box, Button, Slide } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { useAppSelector } from "../hooks";
 
 export interface DialogComponentProps {
 	open: boolean;
@@ -23,11 +22,9 @@ interface DialogProps extends DialogComponentProps {
 }
 
 const Dialog: React.FC<DialogProps> = ({ open, title, children, actions, scrollContent = "x-hidden", onClose, onReset }) => {
-	const isCompact = useAppSelector((state) => state.app.mode === "compact");
-
 	return (
 		<Modal open={open} onClose={onClose} keepMounted={false} hideBackdrop={true} closeAfterTransition={true} sx={{ outline: "none" }}>
-			<Grow in={open} onExited={onReset}>
+			<Slide direction={"up"} in={open} onExited={onReset}>
 				<Paper
 					sx={{
 						borderRadius: 4,
@@ -65,7 +62,7 @@ const Dialog: React.FC<DialogProps> = ({ open, title, children, actions, scrollC
 						) : null}
 					</Box>
 				</Paper>
-			</Grow>
+			</Slide>
 		</Modal>
 	);
 };

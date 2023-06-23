@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
     "allowJs": true,
     "module": "commonjs",
     "lib": [
       "WebWorker",
       "DOM",
-      "ES6"
+      "ESNext"
     ],
     "skipLibCheck": true,
     "esModuleInterop": true,

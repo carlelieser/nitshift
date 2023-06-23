@@ -32,7 +32,7 @@ const ExpandedView = () => {
 				elevation={0}
 			>
 				<WindowBar />
-				<Stack spacing={2} pt={2}>
+				<Stack spacing={1} pt={1}>
 					<Stack spacing={2} px={2} bgcolor={"inherit"}>
 						<PremiumBanner />
 						<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>

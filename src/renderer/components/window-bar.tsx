@@ -6,6 +6,8 @@ import MonitorSelect from "./monitor/monitor-select";
 import { capitalize } from "lodash";
 import { AutoAwesome } from "@mui/icons-material";
 import { dayjs } from "../../common/dayjs";
+import { yellow } from "@mui/material/colors";
+import shadows from "@mui/material/styles/shadows";
 
 const { default: icon } = require("../../assets/img/logo.png");
 
@@ -48,20 +50,23 @@ const WindowBar = () => {
 					}
 				>
 					<Stack direction={"row"} alignItems={"center"} spacing={1}>
+						<Box width={36} height={36} sx={{ backgroundImage: `url("${icon}")`, backgroundSize: "cover" }} />
+
 						<Badge
 							anchorOrigin={{
 								vertical: "top",
-								horizontal: "left",
+								horizontal: "right",
 							}}
 							badgeContent={
-								license === "premium" ? <AutoAwesome sx={{ fontSize: 12, mt: 2, ml: 1, color: "warning.main" }} /> : null
+								license === "premium" ? (
+									<AutoAwesome sx={{ fontSize: 12, mt: 3, ml: 2, color: yellow[500], shadow: shadows[8] }} />
+								) : null
 							}
 						>
-							<Box width={36} height={36} sx={{ backgroundImage: `url("${icon}")`, backgroundSize: "cover" }} />
+							<Typography variant={"h5"} fontWeight={"bold"}>
+								Glimmr
+							</Typography>
 						</Badge>
-						<Typography variant={"h5"} fontWeight={"bold"}>
-							Glimmr
-						</Typography>
 					</Stack>
 				</Tooltip>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>

@@ -27,7 +27,8 @@ import {
 	saveMonitors,
 } from "../common/storage";
 import { clone, difference, reduce, throttle } from "lodash";
-import { isDev, normalizeBrightness, VERSION_TAG } from "../common/utils";
+import { isDev, normalizeBrightness } from "../common/utils";
+import { VERSION_TAG } from "../common/version";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { machineIdSync } from "node-machine-id";
 import { doc, getDoc, setDoc } from "firebase/firestore";
