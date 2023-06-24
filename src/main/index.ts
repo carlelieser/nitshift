@@ -297,10 +297,8 @@ const handleWindowFocused = () => {
 };
 
 const handleWindowBlurred = () => {
-	if (window.data.webContents.isDevToolsFocused()) return;
-	if (!window.data.isMinimized()) {
-		window.data.webContents.send("blurred");
-	}
+	if (isDev && window.data.webContents.isDevToolsFocused()) return;
+	if (!window.data.isMinimized()) window.data.webContents.send("blurred");
 };
 
 const handleWindowShown = () => {
@@ -324,12 +322,17 @@ app.on("ready", async () => {
 	await initAuth();
 	checkSchedule();
 
+	window.on("window-created", (window: BrowserWindow) => {
+		window.on("show", handleWindowShown);
+		window.on("focus", handleWindowFocused);
+		window.on("blur", handleWindowBlurred);
+	});
+
+	window.on("ready-to-show", (window: BrowserWindow) => {
+		window.show();
+	});
+
 	window.create();
-
-	window.data.on("focus", handleWindowFocused);
-	window.data.on("blur", handleWindowBlurred);
-	window.data.on("show", handleWindowShown);
-
 	window.refreshMonitors();
 
 	updater.check(true);

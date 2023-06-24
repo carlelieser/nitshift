@@ -3,8 +3,9 @@ import { loadLicense, loadMode, loadMonitors, saveMonitors } from "../common/sto
 import lumi from "lumi-control";
 import { isDev } from "../common/utils";
 import { UIMonitor } from "../common/types";
+import EventEmitter from "events";
 
-class Window {
+class Window extends EventEmitter {
 	private readonly entry: any;
 	private dimensions: any = {
 		expanded: {
@@ -21,6 +22,7 @@ class Window {
 	public data: BrowserWindow;
 
 	constructor(entry: any) {
+		super();
 		this.entry = entry;
 	}
 
@@ -79,7 +81,8 @@ class Window {
 			},
 			...coordinates,
 		});
-		this.data.on("ready-to-show", () => this.data.show());
+		this.emit("window-created", this.data);
+		this.data.on("ready-to-show", () => this.emit("ready-to-show", this.data));
 		this.applyMode();
 		await this.data.loadURL(this.entry);
 		if (isDev) {
