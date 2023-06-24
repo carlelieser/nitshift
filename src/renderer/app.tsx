@@ -22,7 +22,7 @@ const App = () => {
 
 	const [release, setRelease] = useState<Release>(null);
 
-	const [focused, setFocused] = useState<boolean>(false);
+	const [focused, setFocused] = useState<boolean>(true);
 
 	const theme = useMemo(() => {
 		return createTheme({

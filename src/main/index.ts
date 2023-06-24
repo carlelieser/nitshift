@@ -374,5 +374,6 @@ ipcMain.handle("disable-pass-through", window.disablePassThrough);
 ipcMain.handle("schedule-modified", checkSchedule);
 
 ipcMain.handle("show", () => window.data.show());
+ipcMain.handle("blur", () => window.data.blur());
 ipcMain.handle("minimize", () => window.data.minimize());
 ipcMain.handle("quit", () => app.exit());
