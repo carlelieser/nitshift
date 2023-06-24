@@ -2,26 +2,21 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron-forge start",
+    "format": "prettier ./src/**/*.{ts,tsx} --write",
     "package": "cross-env NODE_ENV=production electron-forge package",
     "make": "cross-env NODE_ENV=production electron-forge make",
-    "decrement-version": "ts-node-esm ./update-version.ts -- --decrement",
-    "increment-version": "ts-node-esm ./update-version.ts -- --increment",
-    "upload-release": "ts-node-esm ./upload-release.ts",
-    "publish": "npm run increment-version && npm run make && npm run upload-release",
-    "lint": "eslint --ext .ts,.tsx .",
-    "format": "prettier ./src/**/*.{ts,tsx} --write"
+    "rollback": "ts-node-esm pipeline/draft.ts -- --decrement",
+    "draft": "ts-node-esm pipeline/draft.ts -- --increment",
+    "upload": "ts-node-esm pipeline/upload.ts",
+    "publish": "npm run format && npm run draft && npm run make && npm run upload"
   },
   "keywords": [],
-  "author": {
-    "name": "Carlos Santos",
-    "email": "carloseliesersantos@gmail.com"
-  },
-  "license": "MIT",
+  "author": "Glimmr",
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
     "@electron-forge/maker-deb": "^6.1.1",
@@ -46,6 +41,7 @@
     "fork-ts-checker-webpack-plugin": "^7.3.0",
     "gh-release-assets": "^2.0.1",
     "log-symbols": "4.1.0",
+    "node-emoji": "^2.1.0",
     "node-loader": "^2.0.0",
     "ora": "5.4.1",
     "prettier": "^2.8.8",

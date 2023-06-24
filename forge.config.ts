@@ -19,6 +19,7 @@ const config: ForgeConfig = {
 					/node_modules\/\\.cache/,
 					/.*\\.(iobj|pdb|ipdb)$/,
 					/src/,
+					/release/,
 					/\.idea/,
 					/\.eslintrc/,
 					/\.gitignore/,
@@ -40,8 +41,6 @@ const config: ForgeConfig = {
 		new MakerSquirrel({
 			authors: "Glimmr",
 			exe: "Glimmr.exe",
-			iconUrl:
-				"https://raw.githubusercontent.com/carlelieser/glimmr/main/src/assets/img/setup.ico?token=GHSAT0AAAAAACDU7EKWDXXZOR4KQRZ2FZGAZEUY75Q",
 			setupExe: "glimmer-setup.exe",
 			setupIcon: path.join(__dirname, "src", "assets", "img", "setup.ico"),
 			loadingGif: path.join(__dirname, "src", "assets", "img", "installer.gif"),

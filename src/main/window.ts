@@ -2,6 +2,7 @@ import { BrowserWindow, screen } from "electron";
 import { loadLicense, loadMode, loadMonitors, saveMonitors } from "../common/storage";
 import lumi from "lumi-control";
 import { isDev } from "../common/utils";
+import { UIMonitor } from "../common/types";
 
 class Window {
 	private readonly entry: any;
@@ -98,23 +99,33 @@ class Window {
 		const license = loadLicense();
 		const storedMonitors = loadMonitors();
 		const availableMonitors = lumi.monitors();
+		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => ({
+			...monitor,
+			brightness: 100,
+			mode: "native",
+			disabled: false,
+			...(storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id) ?? {}),
+			...(license === "free"
+				? {
+						mode: "native",
+						disabled: index > 1,
+						brightness: 100,
+				  }
+				: {}),
+		}));
 
-		saveMonitors(
-			availableMonitors.map((monitor, index) => ({
-				...monitor,
-				brightness: 100,
-				mode: "native",
-				disabled: false,
-				...(storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id) ?? {}),
-				...(license === "free"
-					? {
-							mode: "native",
-							disabled: index > 1,
-							brightness: 100,
-					  }
-					: {}),
-			}))
-		);
+		monitors.sort((a, b) => {
+			const aIndex = storedMonitors.findIndex((monitor) => monitor.id === a.id);
+			const bIndex = storedMonitors.findIndex((monitor) => monitor.id === b.id);
+
+			if (aIndex !== -1 && bIndex === -1) return -1;
+
+			if (bIndex !== -1 && aIndex === -1) return 1;
+
+			return aIndex - bIndex;
+		});
+
+		saveMonitors(monitors);
 
 		if (this.data) this.data.webContents.send("refresh-monitors");
 	};

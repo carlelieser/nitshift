@@ -39,7 +39,7 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 
 	const startDownload = async () => {
 		const asset = release.assets[0];
-		const appPath = await ipcRenderer.invoke("get-app-path");
+		const appPath = await ipcRenderer.invoke("get-temp-path");
 		const tmpPath = path.join(appPath, "tmp");
 
 		outputPath.current = path.join(tmpPath, asset.name);

@@ -28,7 +28,6 @@ import {
 } from "../common/storage";
 import { clone, difference, reduce, throttle } from "lodash";
 import { isDev, normalizeBrightness } from "../common/utils";
-import { VERSION_TAG } from "../common/version";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { machineIdSync } from "node-machine-id";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -39,6 +38,7 @@ import lumi from "lumi-control";
 import Window from "./window";
 import Shader from "./shader";
 import encryption from "../common/encryption.json";
+import release from "../common/release.json";
 
 import "./firebase";
 
@@ -85,7 +85,7 @@ const createTrayIcon = () => {
 		{
 			icon: nativeIcon.resize({ width: 16 }),
 			label: "Glimmr",
-			sublabel: VERSION_TAG,
+			sublabel: release.tag_name,
 			enabled: false,
 		},
 		{
@@ -330,7 +330,7 @@ app.on("render-process-gone", () => {
 	window.data.show();
 });
 
-ipcMain.handle("get-app-path", () => app.getAppPath());
+ipcMain.handle("get-temp-path", () => app.getPath("temp"));
 
 ipcMain.handle("free-trial-started", handleFreeTrialStarted);
 ipcMain.handle("sync-user", updateUserDoc);

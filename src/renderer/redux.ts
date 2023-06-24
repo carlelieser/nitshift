@@ -139,7 +139,7 @@ listener.startListening({
 listener.startListening({
 	actionCreator: setMonitors,
 	effect: (action, api) => {
-		saveMonitors(api.getState().app.monitors);
+		saveMonitors(action.payload);
 	},
 });
 
