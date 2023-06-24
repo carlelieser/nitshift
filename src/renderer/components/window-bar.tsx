@@ -1,6 +1,6 @@
 import React from "react";
 import { alpha, Badge, Box, Divider, Paper, Stack, Tooltip, Typography, useTheme } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppSelector } from "../hooks";
 import WindowButtons from "./window-buttons";
 import MonitorSelect from "./monitor/monitor-select";
 import { capitalize } from "lodash";
@@ -13,7 +13,6 @@ const icon = require("../../assets/img/icon.svg");
 
 const WindowBar = () => {
 	const theme = useTheme();
-	const dispatch = useAppDispatch();
 	const trialStartDate = useAppSelector((state) => state.app.trialStartDate);
 	const mode = useAppSelector((state) => state.app.mode);
 	const license = useAppSelector((state) => state.app.license);

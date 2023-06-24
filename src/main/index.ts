@@ -291,11 +291,45 @@ const initAuth = async () => {
 	else await createNewUser();
 };
 
+const handleWindowFocused = () => {
+	window.data.webContents.send("focused");
+	updater.check();
+};
+
+const handleWindowBlurred = () => {
+	if (window.data.webContents.isDevToolsFocused()) return;
+	if (!window.data.isMinimized()) {
+		window.data.webContents.send("blurred");
+	}
+};
+
+const handleWindowShown = () => {
+	updateStorageWithUserDoc();
+	window.data.webContents.send("focused");
+};
+
+const handleHeaderReceived = (
+	details: OnHeadersReceivedListenerDetails,
+	callback: (headersReceivedResponse: HeadersReceivedResponse) => void
+) => {
+	callback({
+		responseHeaders: {
+			...details.responseHeaders,
+			"Content-Security-Policy": ["connect-src 'self' * 'unsafe-eval'"],
+		},
+	});
+};
+
 app.on("ready", async () => {
 	await initAuth();
 	checkSchedule();
 
 	window.create();
+
+	window.data.on("focus", handleWindowFocused);
+	window.data.on("blur", handleWindowBlurred);
+	window.data.on("show", handleWindowShown);
+
 	window.refreshMonitors();
 
 	updater.check(true);
@@ -303,22 +337,10 @@ app.on("ready", async () => {
 	createTrayIcon();
 	applyBrightness();
 
-	window.data.on("focus", () => updater.check());
-	window.data.on("show", updateStorageWithUserDoc);
-
 	screen.on("display-metrics-changed", updateMonitorsAndAdjustWindowPosition);
 	screen.on("display-added", updateMonitorsAndAdjustWindowPosition);
 	screen.on("display-removed", updateMonitorsAndAdjustWindowPosition);
-	session.defaultSession.webRequest.onHeadersReceived(
-		(details: OnHeadersReceivedListenerDetails, callback: (headersReceivedResponse: HeadersReceivedResponse) => void) => {
-			callback({
-				responseHeaders: {
-					...details.responseHeaders,
-					"Content-Security-Policy": ["connect-src 'self' * 'unsafe-eval'"],
-				},
-			});
-		}
-	);
+	session.defaultSession.webRequest.onHeadersReceived(handleHeaderReceived);
 });
 
 app.on("activate", () => {
@@ -348,5 +370,6 @@ ipcMain.handle("disable-pass-through", window.disablePassThrough);
 
 ipcMain.handle("schedule-modified", checkSchedule);
 
+ipcMain.handle("show", () => window.data.show());
 ipcMain.handle("minimize", () => window.data.minimize());
 ipcMain.handle("quit", () => app.exit());

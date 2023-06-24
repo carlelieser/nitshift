@@ -16,7 +16,7 @@ const WindowButtons = () => {
 	const openActivationDialog = () => setActivationDialogOpen(true);
 	const closeActivationDialog = () => setActivationDialogOpen(false);
 
-	const handleMinimize = () => ipcRenderer.invoke("minimize");
+	const handleMinimize = () => window.blur();
 
 	const toggleMode = () => {
 		dispatch(setTransitioning(true));

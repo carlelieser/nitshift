@@ -19,7 +19,10 @@ const App = () => {
 	const receivedPremium = useAppSelector((state) => state.app.receivedPremium);
 	const mode = useAppSelector((state) => state.app.mode);
 	const transitioning = useAppSelector((state) => state.app.transitioning);
+
 	const [release, setRelease] = useState<Release>(null);
+
+	const [focused, setFocused] = useState<boolean>(false);
 
 	const theme = useMemo(() => {
 		return createTheme({
@@ -116,6 +119,8 @@ const App = () => {
 		});
 		ipcRenderer.on("display-arrangement-changed", () => dispatch(refreshAvailableMonitors()));
 		ipcRenderer.on("refresh-monitors", () => dispatch(refreshAvailableMonitors()));
+		ipcRenderer.on("focused", () => setFocused(true));
+		ipcRenderer.on("blurred", () => setFocused(false));
 	}, []);
 
 	return (
@@ -131,27 +136,37 @@ const App = () => {
 				}}
 				onMouseOver={handleMouseOver}
 			>
-				<Box p={2} position={"relative"} height={"100%"}>
-					<UpdateSnackbar release={release} onClose={closeUpdateSnackbar} />
-					<Snackbar
-						open={mode === "expanded" && refreshed}
-						autoHideDuration={2000}
-						onClose={() => dispatch(setRefreshed(false))}
-						message={"Refreshed"}
-					/>
-					<Portal>
+				<Grow
+					in={focused}
+					style={{
+						transformOrigin: "bottom center",
+					}}
+					onExited={() => {
+						if (!focused) ipcRenderer.invoke("minimize");
+					}}
+				>
+					<Box p={2} position={"relative"} height={"100%"}>
+						<UpdateSnackbar release={release} onClose={closeUpdateSnackbar} />
 						<Snackbar
-							open={receivedPremium}
-							autoHideDuration={6000}
-							onClose={() => dispatch(setReceivedPremium(false))}
-							message={
-								"Thanks for verifying your license. Now you can kick back and enjoy all the premium features. Have fun!"
-							}
+							open={mode === "expanded" && refreshed}
+							autoHideDuration={2000}
+							onClose={() => dispatch(setRefreshed(false))}
+							message={"Refreshed"}
 						/>
-					</Portal>
-					<ExpandedView />
-					<CompactView />
-				</Box>
+						<Portal>
+							<Snackbar
+								open={receivedPremium}
+								autoHideDuration={6000}
+								onClose={() => dispatch(setReceivedPremium(false))}
+								message={
+									"Thanks for verifying your license. Now you can kick back and enjoy all the premium features. Have fun!"
+								}
+							/>
+						</Portal>
+						<ExpandedView />
+						<CompactView />
+					</Box>
+				</Grow>
 			</div>
 		</ThemeProvider>
 	);

@@ -71,7 +71,7 @@ class Updater extends EventEmitter {
 		}
 		await this.populate();
 		if (this.LATEST_RELEASE) {
-			if (this.LATEST_RELEASE.tag_name !== release.tag_name) {
+			if (isDev || this.LATEST_RELEASE.tag_name !== release.tag_name) {
 				this.emit("update-available", this.LATEST_RELEASE);
 			}
 		}

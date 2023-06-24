@@ -2,7 +2,7 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {
@@ -10,11 +10,12 @@
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "package": "cross-env NODE_ENV=production electron-forge package",
     "make": "cross-env NODE_ENV=production electron-forge make",
-    "rollback": "ts-node-esm pipeline/draft.ts -- --decrement",
-    "draft": "ts-node-esm pipeline/draft.ts -- --increment",
-    "upload": "ts-node-esm pipeline/upload.ts",
-    "publish": "npm run format && npm run draft && npm run make && npm run upload",
-    "publish:auto": "npm run format && npm run draft && npm run make && npm run upload -- -- --auto"
+    "version:prev": "ts-node-esm pipeline/version.ts -- --decrement",
+    "version:next": "ts-node-esm pipeline/version.ts -- --increment",
+    "draft": "ts-node-esm pipeline/draft.ts",
+    "prepublish": "npm run format && npm run version:next && npm run make",
+    "publish": "npm run draft",
+    "publish:auto": "npm run prepublish && npm run draft -- -- --auto"
   },
   "keywords": [],
   "author": "Glimmr",
