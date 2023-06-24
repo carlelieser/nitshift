@@ -3,7 +3,7 @@ import { GLOBAL } from "lumi-control";
 import { setBrightness, setMonitorBrightness } from "../../reducers/app";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { UIMonitor } from "../../../common/types";
-import BrightnessSlider from "../brightness-slider";
+import Slider from "../slider";
 
 interface MonitorBrightnessSliderProps {
 	monitorId: string;
@@ -32,7 +32,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({ monit
 
 	const handleBrightnessUpdate = (brightness: number) => dispatchBrightness(brightness);
 
-	return <BrightnessSlider value={brightness} disabled={disabled} onChange={handleBrightnessUpdate} />;
+	return <Slider value={brightness} disabled={disabled} onChange={handleBrightnessUpdate} />;
 };
 
 export default MonitorBrightnessSlider;

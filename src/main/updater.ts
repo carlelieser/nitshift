@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { isDev } from "../common/utils";
 import { loadLastUpdatedOn, saveLastUpdatedOn } from "../common/storage";
 import { dayjs } from "../common/dayjs";
+import release from "../common/release.json";
 import EventEmitter from "events";
 
 export const ACCESS_TOKEN = "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";
@@ -69,7 +70,11 @@ class Updater extends EventEmitter {
 			if (lastCheckedOn) if (dayjs().diff(dayjs(lastCheckedOn), "day") < 1) return;
 		}
 		await this.populate();
-		if (this.LATEST_RELEASE) this.emit("update-available", this.LATEST_RELEASE);
+		if (this.LATEST_RELEASE) {
+			if (this.LATEST_RELEASE.tag_name !== release.tag_name) {
+				this.emit("update-available", this.LATEST_RELEASE);
+			}
+		}
 		saveLastUpdatedOn(dayjs().valueOf());
 	};
 }

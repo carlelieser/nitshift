@@ -310,7 +310,7 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 							onKeyUp={handleEmailKeyUp}
 							value={email}
 							onChange={handleEmailChange}
-							helperText={"This is the same email you used when you purchased the license."}
+							helperText={"This is the email you used when purchasing your license."}
 						/>
 						<Stack justifyContent={"center"}>
 							{isCompact ? null : (

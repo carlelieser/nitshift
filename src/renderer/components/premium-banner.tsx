@@ -7,6 +7,7 @@ import {
 	Button,
 	CircularProgress,
 	Collapse,
+	Grid,
 	IconButton,
 	Paper,
 	Slide,
@@ -16,7 +17,17 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import { ArrowDropDown, ArrowDropUp, AutoAwesome, DonutSmall, Key, Monitor, ShoppingCartCheckout, WbSunny } from "@mui/icons-material";
+import {
+	ArrowDropDown,
+	ArrowDropUp,
+	AutoAwesome,
+	DonutSmall,
+	Key,
+	Monitor,
+	Schedule,
+	ShoppingCartCheckout,
+	WbSunny,
+} from "@mui/icons-material";
 import { teal, yellow } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
 import { shell } from "electron";
@@ -30,18 +41,23 @@ const { default: premiumBannerBg } = require("../../assets/img/premium-banner-bg
 const content = [
 	{
 		icon: Monitor,
-		title: "Unlimited Monitors",
-		subtitle: "No cap on the amount of monitors you can adjust",
+		title: "Unlimited",
+		subtitle: "No limit on the amount of monitors you can adjust",
 	},
 	{
 		icon: WbSunny,
 		title: "Global Brightness",
-		subtitle: "Control brightness on all screens in one move",
+		subtitle: "Use one slider to control all your displays",
 	},
 	{
 		icon: DonutSmall,
 		title: "Shade Mode",
-		subtitle: "Adjust brightness even on old or hub-connected monitors",
+		subtitle: "Old monitor or connected through an adapter? No problem",
+	},
+	{
+		icon: Schedule,
+		title: "Schedule",
+		subtitle: "Automatically adjust the brightness at the time that's right for you",
 	},
 ];
 
@@ -53,7 +69,7 @@ const PremiumBanner = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
-	const [selectedPrice, setSelectedPrice] = useState<string>(prices[4]);
+	const [selectedPrice, setSelectedPrice] = useState<string>(prices[2]);
 	const [priceDescription, setPriceDescription] = useState<string>(descriptions[selectedPrice]);
 	const [priceMenuOpen, setPriceMenuOpen] = useState<boolean>(false);
 
@@ -102,7 +118,7 @@ const PremiumBanner = () => {
 	};
 
 	return license !== "premium" ? (
-		<>
+		<Box pt={1}>
 			<Snackbar open={snackbarOpen} onClose={closeSnackbar} autoHideDuration={null}>
 				<Alert severity={"info"} onClose={closeSnackbar} sx={{ width: "100%" }} elevation={8}>
 					<span>Once you've made your purchase, zip on back to the app and click on the</span>{" "}
@@ -113,15 +129,21 @@ const PremiumBanner = () => {
 				</Alert>
 			</Snackbar>
 			<Paper
+				component={"div"}
 				sx={{
-					backgroundImage: `url(${premiumBannerBg})`,
-					backgroundSize: "cover",
-					backgroundPosition: "center",
 					borderRadius: 4,
 					overflow: "hidden",
+					position: "relative",
+					backdropFilter: "blur(0)",
 				}}
 			>
-				<>
+				<Box
+					sx={{
+						backgroundImage: `url(${premiumBannerBg})`,
+						backgroundPosition: "center",
+						backgroundSize: "cover",
+					}}
+				>
 					<Stack
 						spacing={0}
 						p={2}
@@ -142,32 +164,45 @@ const PremiumBanner = () => {
 							{open ? <ArrowDropUp /> : <ArrowDropDown />}
 						</Stack>
 						<Collapse in={open}>
-							<Stack spacing={1}>
+							<Grid container={true} spacing={1} pt={2}>
 								{content.map((feature) => {
 									const Icon = feature.icon;
 									return (
-										<Stack direction={"row"} spacing={2} key={feature.title}>
-											<Avatar
+										<Grid item={true} xs={12} key={feature.title}>
+											<Paper
 												sx={{
-													bgcolor: alpha(yellow[900], 0.2),
-													color: yellow[500],
-													backdropFilter: "blur(5px)",
+													p: 2,
+													borderRadius: 4,
+													bgcolor: alpha(theme.palette.background.paper, 0.4),
+													backdropFilter: "blur(20px)",
+													position: "relative",
 												}}
+												variant={"outlined"}
 											>
-												<Icon />
-											</Avatar>
-											<Stack>
-												<Typography variant={"h6"} fontWeight={"bold"}>
-													{feature.title}
-												</Typography>
-												<Typography sx={{ opacity: 0.9 }} fontSize={14}>
-													{feature.subtitle}
-												</Typography>
-											</Stack>
-										</Stack>
+												<Stack spacing={1}>
+													<Stack direction={"row"} spacing={1} alignItems={"center"}>
+														<Avatar
+															sx={{
+																bgcolor: alpha(yellow[900], 0.2),
+																color: yellow[500],
+																backdropFilter: "blur(5px)",
+															}}
+														>
+															<Icon />
+														</Avatar>
+														<Typography variant={"h6"} fontWeight={500} lineHeight={1}>
+															{feature.title}
+														</Typography>
+													</Stack>
+													<Typography fontSize={14} width={"100%"} sx={{ opacity: 0.8 }}>
+														{feature.subtitle}
+													</Typography>
+												</Stack>
+											</Paper>
+										</Grid>
 									);
 								})}
-							</Stack>
+							</Grid>
 						</Collapse>
 					</Stack>
 					<Stack
@@ -231,9 +266,9 @@ const PremiumBanner = () => {
 							</Box>
 						</Slide>
 					</Stack>
-				</>
+				</Box>
 			</Paper>
-		</>
+		</Box>
 	) : null;
 };
 

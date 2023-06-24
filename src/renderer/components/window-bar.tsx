@@ -9,7 +9,7 @@ import { dayjs } from "../../common/dayjs";
 import { yellow } from "@mui/material/colors";
 import shadows from "@mui/material/styles/shadows";
 
-const icon = require("../../assets/img/logo.svg");
+const icon = require("../../assets/img/icon.svg");
 
 const WindowBar = () => {
 	const theme = useTheme();

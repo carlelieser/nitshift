@@ -18,7 +18,7 @@ import * as path from "path";
 import * as process from "process";
 import { Info } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { mkdir } from "../../common/utils";
+import { createDirectory, removeDirectory } from "../../common/utils";
 import DownloadWorker, { DownloadWorkerEvent, TransferStatus } from "../../main/download.worker";
 
 const worker = new DownloadWorker();
@@ -40,12 +40,12 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 	const startDownload = async () => {
 		const asset = release.assets[0];
 		const appPath = await ipcRenderer.invoke("get-temp-path");
-		console.log(appPath);
-		const tmpPath = path.join(appPath, "tmp");
+		const tmpPath = path.join(appPath, "glimmer-tmp");
 
 		outputPath.current = path.join(tmpPath, asset.name);
 
-		await mkdir(tmpPath);
+		await removeDirectory(tmpPath);
+		await createDirectory(tmpPath);
 
 		worker.postMessage({
 			url: asset.url,

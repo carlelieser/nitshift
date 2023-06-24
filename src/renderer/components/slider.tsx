@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
-import { IconButton, Slider, SliderValueLabelProps, Stack, Tooltip, Typography } from "@mui/material";
+import { IconButton, Slider as MUISlider, SliderValueLabelProps, Stack, Tooltip, Typography } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
-interface BrightnessSliderProps {
+interface SliderProps {
 	value: number;
 	onChange: (value: number) => void;
 	color?: string;
@@ -21,7 +21,7 @@ const CustomValueLabel = (props: SliderValueLabelProps) => {
 	);
 };
 
-const BrightnessSlider: React.FC<BrightnessSliderProps> = ({
+const Slider: React.FC<SliderProps> = ({
 	value,
 	disabled = false,
 	className = "",
@@ -58,7 +58,7 @@ const BrightnessSlider: React.FC<BrightnessSliderProps> = ({
 			<IconButton disabled={value === 0 || disabled} onClick={decrement} color={"inherit"}>
 				<Remove sx={{ width: 18, height: 18 }} />
 			</IconButton>
-			<Slider
+			<MUISlider
 				className={"brightness-slider"}
 				min={0}
 				max={100}
@@ -80,4 +80,4 @@ const BrightnessSlider: React.FC<BrightnessSliderProps> = ({
 	);
 };
 
-export default BrightnessSlider;
+export default Slider;

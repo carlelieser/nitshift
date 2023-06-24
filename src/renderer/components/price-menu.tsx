@@ -1,6 +1,19 @@
 import React from "react";
-import { ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Typography } from "@mui/material";
-import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
+import {
+	Box,
+	IconButton,
+	ListItemIcon,
+	ListItemText,
+	ListSubheader,
+	Menu,
+	MenuItem,
+	Slide,
+	SlideProps,
+	Stack,
+	Typography,
+} from "@mui/material";
+import { Close, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
+import { omit } from "lodash";
 
 interface PriceDescriptions {
 	[price: string]: string;
@@ -27,8 +40,25 @@ interface PriceMenuProps {
 
 const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, anchorEl, onClose, onChange }) => {
 	return (
-		<Menu open={open} anchorEl={anchorEl} onClose={onClose}>
-			<ListSubheader>Select a fair price</ListSubheader>
+		<Menu
+			open={open}
+			TransitionComponent={Slide}
+			TransitionProps={
+				{
+					direction: "up",
+				} as any
+			}
+			anchorEl={anchorEl}
+			onClose={onClose}
+		>
+			<ListSubheader>
+				<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+					Select a fair price
+					<IconButton size={"small"} onClick={onClose}>
+						<Close />
+					</IconButton>
+				</Stack>
+			</ListSubheader>
 			{Object.keys(descriptions).map((price) => (
 				<MenuItem
 					key={price}
@@ -43,7 +73,15 @@ const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, ancho
 					<ListItemText
 						primary={<Typography fontWeight={500}>{price}</Typography>}
 						secondary={
-							<Typography sx={{ opacity: 0.7, fontSize: 14, whiteSpace: "pre-wrap" }}>{descriptions[price]}</Typography>
+							<Typography
+								sx={{
+									opacity: 0.7,
+									fontSize: 14,
+									whiteSpace: "pre-wrap",
+								}}
+							>
+								{descriptions[price]}
+							</Typography>
 						}
 					/>
 				</MenuItem>

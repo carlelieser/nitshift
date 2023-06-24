@@ -7,7 +7,7 @@ import { Button, Chip, Collapse, Stack, Typography, useTheme } from "@mui/materi
 import Stepper from "../stepper/stepper";
 import StepView from "../stepper/step-view";
 import MonitorMultiSelectList from "../monitor/monitor-multi-select-list";
-import BrightnessSlider from "../brightness-slider";
+import Slider from "../slider";
 import Color from "color";
 import { Monitor, Timer, WbSunny } from "@mui/icons-material";
 import { UIMonitor } from "../../../common/types";
@@ -149,7 +149,7 @@ const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onC
 								%
 							</Typography>
 						</Stack>
-						<BrightnessSlider color={"inherit"} value={brightness} disableTooltip={true} onChange={handleBrightnessChange} />
+						<Slider color={"inherit"} value={brightness} disableTooltip={true} onChange={handleBrightnessChange} />
 					</Stack>
 				</StepView>
 			),
