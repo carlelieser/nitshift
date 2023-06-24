@@ -1,1 +1,4 @@
-{ "tag_name": "v0.1.0", "body": "Stop showing dev tools in prod." }
+{
+  "tag_name": "v0.1.1",
+  "body": "Improve activation dialog UI. Security fixes. Show profile image in sent emails."
+}

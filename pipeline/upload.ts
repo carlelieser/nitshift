@@ -13,6 +13,8 @@ import logSymbols = require("log-symbols");
 import * as emoji from "node-emoji";
 import release from "../src/common/release.json";
 
+const auto = process.argv.includes("--auto");
+
 const assetPath = path.join(__dirname, "..", "out", "make", "squirrel.windows", "x64", "glimmr-setup.exe");
 
 const seeYa = () => console.log(emoji.get("wave"), "Well, alrighty then.");
@@ -109,15 +111,15 @@ const uploadAsset = (releaseId: number) => {
 };
 
 const upload = async () => {
-	const shouldCreateRelease = await new Confirm("Create release?").run();
+	const shouldCreateRelease = auto ? true : await new Confirm("Create release?").run();
 
 	if (shouldCreateRelease) {
 		const release = await createRelease();
-		const shouldUpload = await new Confirm("Start asset upload?").run();
+		const shouldUpload = auto ? true : await new Confirm("Start asset upload?").run();
 
 		if (shouldUpload) {
 			await uploadAsset(release.id);
-			const shouldPublish = await new Confirm("Publish release?").run();
+			const shouldPublish = auto ? true : await new Confirm("Publish release?").run();
 			if (shouldPublish) await publishRelease(release.id);
 		}
 	}

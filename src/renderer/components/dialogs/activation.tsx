@@ -14,7 +14,7 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import { Check, Email, Key, Send } from "@mui/icons-material";
+import { Check, Email, Key, Refresh, Send } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { randomUUID } from "crypto";
 import { clone, times } from "lodash";
@@ -22,18 +22,20 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setTrialAvailability, setLicense, setReceivedPremium } from "../../reducers/app";
 import { stripe } from "../../../main/stripe";
 import Dialog, { DialogComponentProps } from "../dialog";
+import Mail from "nodemailer/lib/mailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const { default: template } = require("../../templates/email-verification.html");
 
 const { clipboard } = require("electron");
 const nodemailer = require("nodemailer");
 
-const transportConfig = {
+const transportConfig: SMTPTransport.Options = {
 	host: "smtp.gmail.com",
 	port: 587,
 	auth: {
 		user: "support@glimmr.app",
-		pass: "V1#z&&F42rOWFLau",
+		pass: "qvogrsdhexznjjmk",
 	},
 };
 
@@ -61,11 +63,15 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 		code.current = id.substring(0, 6).toUpperCase();
 	};
 
-	const getEmailConfig = () => ({
+	const getEmailConfig = (): Mail.Options => ({
 		from: "Glimmr <support@glimmr.app>",
 		to: email,
 		subject: "Your single-use code",
 		html: template.replace("[CODE]", code.current),
+		headers: {
+			"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
+			"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1",
+		},
 	});
 
 	const attemptToSendVerificationEmail = async () => {
@@ -270,15 +276,33 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 									</Paper>
 								))}
 							</Stack>
-							{isCompact ? (
-								<Tooltip title={<Typography>Verify</Typography>}>
-									<IconButton onClick={verifyCode}>{loading ? <CircularProgress size={24} /> : <Check />}</IconButton>
-								</Tooltip>
-							) : (
-								<LoadingButton loading={loading} startIcon={<Check />} onClick={verifyCode}>
-									Verify
-								</LoadingButton>
-							)}
+							<Stack direction={"row"} alignItems={"center"} spacing={1}>
+								{isCompact ? (
+									<Tooltip title={<Typography>Resend</Typography>}>
+										<IconButton onClick={sendVerificationEmail}>
+											{loading ? <CircularProgress size={24} /> : <Refresh />}
+										</IconButton>
+									</Tooltip>
+								) : (
+									<LoadingButton
+										loading={loading}
+										startIcon={<Refresh />}
+										color={"secondary"}
+										onClick={sendVerificationEmail}
+									>
+										Retry
+									</LoadingButton>
+								)}
+								{isCompact ? (
+									<Tooltip title={<Typography>Verify</Typography>}>
+										<IconButton onClick={verifyCode}>{loading ? <CircularProgress size={24} /> : <Check />}</IconButton>
+									</Tooltip>
+								) : (
+									<LoadingButton loading={loading} startIcon={<Check />} onClick={verifyCode}>
+										Verify
+									</LoadingButton>
+								)}
+							</Stack>
 						</Stack>
 					</Stack>
 				</Collapse>

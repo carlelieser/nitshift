@@ -2,7 +2,7 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {
@@ -13,7 +13,8 @@
     "rollback": "ts-node-esm pipeline/draft.ts -- --decrement",
     "draft": "ts-node-esm pipeline/draft.ts -- --increment",
     "upload": "ts-node-esm pipeline/upload.ts",
-    "publish": "npm run format && npm run draft && npm run make && npm run upload"
+    "publish": "npm run format && npm run draft && npm run make && npm run upload",
+    "publish:auto": "npm run format && npm run draft && npm run make && npm run upload -- -- --auto"
   },
   "keywords": [],
   "author": "Glimmr",
@@ -28,6 +29,7 @@
     "@types/color": "^3.0.3",
     "@types/lodash": "^4.14.194",
     "@types/node-fetch": "^2.6.4",
+    "@types/nodemailer": "^6.4.8",
     "@types/prettier": "^2.7.3",
     "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "^18.2.4",
