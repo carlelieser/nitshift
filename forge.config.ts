@@ -41,7 +41,8 @@ const config: ForgeConfig = {
 		new MakerSquirrel({
 			authors: "Glimmr",
 			exe: "Glimmr.exe",
-			setupExe: "glimmer-setup.exe",
+			iconUrl: "https://www.dropbox.com/s/y0e37i0lrz4mexx/setup.ico?dl=1",
+			setupExe: "glimmr-setup.exe",
 			setupIcon: path.join(__dirname, "src", "assets", "img", "setup.ico"),
 			loadingGif: path.join(__dirname, "src", "assets", "img", "installer.gif"),
 		}),

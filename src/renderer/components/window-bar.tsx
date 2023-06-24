@@ -50,8 +50,7 @@ const WindowBar = () => {
 					}
 				>
 					<Stack direction={"row"} alignItems={"center"} spacing={1}>
-						<Box width={36} height={36} sx={{ backgroundImage: `url("${icon}")`, backgroundSize: "cover" }} />
-
+						<Box width={24} height={24} sx={{ backgroundImage: `url("${icon}")`, backgroundSize: "cover" }} />
 						<Badge
 							anchorOrigin={{
 								vertical: "top",

@@ -24,6 +24,7 @@ release.tag_name = `v${version}`;
 
 const format = (object: object) =>
 	prettier.format(JSON.stringify(object), {
+		singleAttributePerLine: true,
 		trailingComma: "none",
 		quoteProps: "preserve",
 		parser: "json5",

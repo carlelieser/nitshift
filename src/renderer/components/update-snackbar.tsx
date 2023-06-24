@@ -40,6 +40,7 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 	const startDownload = async () => {
 		const asset = release.assets[0];
 		const appPath = await ipcRenderer.invoke("get-temp-path");
+		console.log(appPath);
 		const tmpPath = path.join(appPath, "tmp");
 
 		outputPath.current = path.join(tmpPath, asset.name);
@@ -60,8 +61,9 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 
 	useEffect(() => {
 		if (finished) {
-			execFile(outputPath.current);
-			ipcRenderer.invoke("quit");
+			execFile(outputPath.current, () => {
+				ipcRenderer.invoke("quit");
+			});
 		}
 	}, [finished]);
 
@@ -91,9 +93,10 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 			>
 				<AlertTitle>{downloading ? "Downloading" : "Update available"}</AlertTitle>
 				{downloading ? (
-					<Stack width={"100%"}>
+					<Stack direction={"row"} width={"100%"} spacing={1} alignItems={"center"}>
 						<LinearProgress
 							sx={{
+								width: "100%",
 								[`&.${linearProgressClasses.colorPrimary}`]: {
 									backgroundColor: "rgba(255, 255, 255, 0.3)",
 								},
@@ -105,6 +108,9 @@ const UpdateSnackbar: React.FC<UpdateSnackbarProps> = ({ release, onClose }) => 
 							variant={"determinate"}
 							value={progress.percentage}
 						/>
+						<Typography variant={"button"} sx={{ opacity: 0.7 }}>
+							{Math.floor(progress.percentage)}%
+						</Typography>
 					</Stack>
 				) : (
 					<Stack>

@@ -2,7 +2,7 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {

@@ -13,7 +13,7 @@ import logSymbols = require("log-symbols");
 import * as emoji from "node-emoji";
 import release from "../src/common/release.json";
 
-const assetPath = path.join(__dirname, "..", "out", "make", "squirrel.windows", "x64", "glimmer-setup.exe");
+const assetPath = path.join(__dirname, "..", "out", "make", "squirrel.windows", "x64", "glimmr-setup.exe");
 
 const seeYa = () => console.log(emoji.get("wave"), "Well, alrighty then.");
 

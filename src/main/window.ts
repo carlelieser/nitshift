@@ -82,9 +82,11 @@ class Window {
 		this.data.on("ready-to-show", () => this.data.show());
 		this.applyMode();
 		await this.data.loadURL(this.entry);
-		this.data.webContents.openDevTools({
-			mode: "detach",
-		});
+		if (isDev) {
+			this.data.webContents.openDevTools({
+				mode: "detach",
+			});
+		}
 	};
 
 	public enablePassThrough = () => {
