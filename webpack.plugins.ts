@@ -1,13 +1,13 @@
-import {BytenodeWebpackPlugin} from "@herberttn/bytenode-webpack-plugin";
+import { BytenodeWebpackPlugin } from "@herberttn/bytenode-webpack-plugin";
+import { isDev } from "./src/common/utils";
 
-export const plugins =
-    process.env.NODE_ENV === "development"
-        ? []
-        : [
-            new BytenodeWebpackPlugin({
-                exclude: [/\.worker/],
-                compileForElectron: true,
-                keepSource: false,
-                preventSourceMaps: true
-            }),
-        ];
+export const plugins = isDev
+	? []
+	: [
+			new BytenodeWebpackPlugin({
+				exclude: [/\.worker/],
+				compileForElectron: true,
+				keepSource: false,
+				preventSourceMaps: true,
+			}),
+	  ];

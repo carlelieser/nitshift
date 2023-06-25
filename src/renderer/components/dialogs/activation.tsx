@@ -20,10 +20,11 @@ import { randomUUID } from "crypto";
 import { clone, times } from "lodash";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setTrialAvailability, setLicense, setReceivedPremium } from "../../reducers/app";
-import { stripe } from "../../../main/stripe";
+import { findCustomerByEmail, getMostRecentPaymentIntentForCustomer, stripe } from "../../../main/stripe";
 import Dialog, { DialogComponentProps } from "../dialog";
 import Mail from "nodemailer/lib/mailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { ipcRenderer } from "electron";
 
 const { default: template } = require("../../templates/email-verification.html");
 
@@ -129,19 +130,13 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 
 	const verifyLicense = async () => {
 		try {
-			const customerResponse = await stripe.customers.list({
-				email,
-				limit: 1,
-			});
-			const customer = customerResponse.data[0];
-			const paymentIntentResponse = await stripe.paymentIntents.list({
-				customer: customer.id,
-			});
-			const paymentIntent = paymentIntentResponse.data[0];
+			const customer = await findCustomerByEmail(email);
+			const paymentIntent = await getMostRecentPaymentIntentForCustomer(customer.id);
 			setLicenseVerified(paymentIntent.status === "succeeded");
 		} catch (err) {
-			if (err) setError("Error verifying license. Please try again.");
+			if (err) setError(err?.message ?? "Error verifying license. Please try again.");
 		}
+		setLoading(false);
 	};
 
 	const handleKeyDown = useCallback(
@@ -221,6 +216,11 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [handleKeyDown]);
+
+	useEffect(() => {
+		if (open) ipcRenderer.invoke("disable-auto-hide");
+		else ipcRenderer.invoke("enable-auto-hide");
+	}, [open]);
 
 	return (
 		<Dialog open={open} title={"Activate"} onClose={onClose} onReset={handleReset}>

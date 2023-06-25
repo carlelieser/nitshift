@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	Alert,
 	alpha,
@@ -30,7 +30,7 @@ import {
 } from "@mui/icons-material";
 import { teal, yellow } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
-import { shell } from "electron";
+import { ipcRenderer, shell } from "electron";
 import { isDev } from "../../common/utils";
 import { stripe } from "../../main/stripe";
 import { loadUserId } from "../../common/storage";
@@ -102,6 +102,7 @@ const PremiumBanner = () => {
 			],
 			customer_creation: "always",
 		});
+		await ipcRenderer.invoke("disable-auto-hide");
 		await shell.openExternal(link.url);
 		setLoading(false);
 		openSnackbar();
@@ -116,6 +117,12 @@ const PremiumBanner = () => {
 		setSelectedPrice(price);
 		setPriceDescription(description);
 	};
+
+	useEffect(() => {
+		if (!snackbarOpen) {
+			ipcRenderer.invoke("enable-auto-hide");
+		}
+	}, [snackbarOpen]);
 
 	return license !== "premium" ? (
 		<Box pt={1}>

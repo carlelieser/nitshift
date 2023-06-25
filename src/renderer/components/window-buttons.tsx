@@ -16,7 +16,10 @@ const WindowButtons = () => {
 	const openActivationDialog = () => setActivationDialogOpen(true);
 	const closeActivationDialog = () => setActivationDialogOpen(false);
 
-	const handleMinimize = () => ipcRenderer.invoke("blur");
+	const handleMinimize = async () => {
+		await ipcRenderer.invoke("enable-auto-hide");
+		await ipcRenderer.invoke("blur");
+	};
 
 	const toggleMode = () => {
 		dispatch(setTransitioning(true));

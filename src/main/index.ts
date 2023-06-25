@@ -66,6 +66,7 @@ let window = new Window(MAIN_WINDOW_WEBPACK_ENTRY);
 let updater = new Updater();
 let shades = new Shader();
 let tray: Tray = null;
+let autoHideEnabled = true;
 
 updater.on("update-available", (release: Release) => {
 	window.data?.show();
@@ -297,6 +298,7 @@ const handleWindowFocused = () => {
 };
 
 const handleWindowBlurred = () => {
+	if (!autoHideEnabled) return;
 	if (isDev && window.data.webContents.isDevToolsFocused()) return;
 	if (!window.data.isMinimized()) window.data.webContents.send("blurred");
 };
@@ -372,6 +374,9 @@ ipcMain.handle("enable-pass-through", window.enablePassThrough);
 ipcMain.handle("disable-pass-through", window.disablePassThrough);
 
 ipcMain.handle("schedule-modified", checkSchedule);
+
+ipcMain.handle("enable-auto-hide", () => (autoHideEnabled = true));
+ipcMain.handle("disable-auto-hide", () => (autoHideEnabled = false));
 
 ipcMain.handle("show", () => window.data.show());
 ipcMain.handle("blur", () => window.data.blur());
