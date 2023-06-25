@@ -305,7 +305,7 @@ const initAuth = async () => {
 const handleWindowFocused = () => {
 	window.data.webContents.send("focused");
 	updater.check();
-	window.readjust();
+	window.applyMode();
 };
 
 const handleWindowBlurred = () => {

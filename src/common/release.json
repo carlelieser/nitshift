@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.1.9",
-  "body": "Hide monitor instance count when it is zero."
+  "tag_name": "v0.2.0",
+  "body": "Apply mode on window focus"
 }
