@@ -61,6 +61,15 @@ const Monitor: React.FC<MonitorProps> = ({ id, name, mode, brightness, disabled,
 		}
 	}, [id]);
 
+	const instanceCount = useMemo(() => {
+		try {
+			const count = Number(id.split("_").pop());
+			return Number.isNaN(count) ? 0 : count;
+		} catch (err) {
+			return 0;
+		}
+	}, [id]);
+
 	return (
 		<ThemeProvider theme={monitorTheme}>
 			<Paper
@@ -95,7 +104,7 @@ const Monitor: React.FC<MonitorProps> = ({ id, name, mode, brightness, disabled,
 					{id === GLOBAL ? null : (
 						<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} px={2} py={1}>
 							<Stack direction={"row"} spacing={2} alignItems={"center"}>
-								<Badge badgeContent={dragDisabled ? null : id.split("_").pop()}>
+								<Badge badgeContent={dragDisabled || !instanceCount ? null : instanceCount}>
 									<Box {...(dragHandleProps ?? {})}>
 										<MdMonitor className={"monitor-icon"} opacity={0.8} color={"inherit"} />
 										<DragHandle className={"drag-handle"} />
