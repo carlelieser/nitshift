@@ -53,7 +53,6 @@ const Monitor: React.FC<MonitorProps> = ({ id, name, mode, brightness, disabled,
 		[theme, id, disabled]
 	);
 	const formattedId = useMemo(() => {
-		console.log(id.split("_").pop());
 		try {
 			return id.split("\\")[1];
 		} catch (err) {

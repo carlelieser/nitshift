@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.1.7",
-  "body": "Fix tooltip display when switching app modes. Fix app launch when offline. Display monitor instance count in UI. Automatically resize window on focus."
+  "tag_name": "v0.1.8",
+  "body": "Remove unnecessary console log"
 }
