@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, createTheme, Paper, Stack, ThemeProvider, Typography, useTheme } from "@mui/material";
+import { Badge, Box, createTheme, Paper, Stack, ThemeProvider, Typography, useTheme } from "@mui/material";
 import { DragHandle, Monitor as MdMonitor } from "@mui/icons-material";
 import { GLOBAL } from "lumi-control";
 import { UIMonitor } from "../../../common/types";
@@ -53,6 +53,7 @@ const Monitor: React.FC<MonitorProps> = ({ id, name, mode, brightness, disabled,
 		[theme, id, disabled]
 	);
 	const formattedId = useMemo(() => {
+		console.log(id.split("_").pop());
 		try {
 			return id.split("\\")[1];
 		} catch (err) {
@@ -95,10 +96,12 @@ const Monitor: React.FC<MonitorProps> = ({ id, name, mode, brightness, disabled,
 					{id === GLOBAL ? null : (
 						<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} px={2} py={1}>
 							<Stack direction={"row"} spacing={2} alignItems={"center"}>
-								<Box {...(dragHandleProps ?? {})}>
-									<MdMonitor className={"monitor-icon"} opacity={0.8} color={"inherit"} />
-									<DragHandle className={"drag-handle"} />
-								</Box>
+								<Badge badgeContent={dragDisabled ? null : id.split("_").pop()}>
+									<Box {...(dragHandleProps ?? {})}>
+										<MdMonitor className={"monitor-icon"} opacity={0.8} color={"inherit"} />
+										<DragHandle className={"drag-handle"} />
+									</Box>
+								</Badge>
 								<Stack spacing={-0.5}>
 									<Typography fontWeight={500}>{upperCase(name)}</Typography>
 									<Typography variant={"subtitle2"} fontSize={12} sx={{ opacity: 0.7, width: 145 }} noWrap={true}>

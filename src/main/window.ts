@@ -5,19 +5,20 @@ import { isDev } from "../common/utils";
 import { UIMonitor } from "../common/types";
 import EventEmitter from "events";
 
+export const dimensions: any = {
+	expanded: {
+		width: 400,
+		height: 450,
+	},
+	compact: {
+		width: 520,
+		height: 220,
+	},
+	padding: 20,
+};
+
 class Window extends EventEmitter {
 	private readonly entry: any;
-	private dimensions: any = {
-		expanded: {
-			width: 400,
-			height: 450,
-		},
-		compact: {
-			width: 520,
-			height: 220,
-		},
-		padding: 20,
-	};
 
 	public data: BrowserWindow;
 
@@ -32,12 +33,12 @@ class Window extends EventEmitter {
 		const mode = loadMode();
 		const right = monitor.workArea.x + monitor.workArea.width;
 		const bottom = monitor.workArea.y + monitor.workArea.height;
-		const width = this.dimensions[mode].width;
-		const height = this.dimensions[mode].height;
+		const width = dimensions[mode].width;
+		const height = dimensions[mode].height;
 
 		return {
-			x: right - width - this.dimensions.padding,
-			y: bottom - height - this.dimensions.padding,
+			x: right - width - dimensions.padding,
+			y: bottom - height - dimensions.padding,
 		};
 	};
 
@@ -52,7 +53,8 @@ class Window extends EventEmitter {
 		const mode = loadMode();
 		if (this.data) {
 			this.data.setResizable(true);
-			this.data.setSize(this.dimensions[mode].width, this.dimensions[mode].height, true);
+			this.data.setMaximumSize(dimensions[mode].width, dimensions[mode].height);
+			this.data.setSize(dimensions[mode].width, dimensions[mode].height, true);
 			this.data.setResizable(false);
 			this.readjust();
 		}
@@ -61,6 +63,7 @@ class Window extends EventEmitter {
 	public create = async () => {
 		const coordinates = this.getCoordinates();
 		if (this.data) this.data.destroy();
+		const mode = loadMode();
 		this.data = new BrowserWindow({
 			transparent: true,
 			show: false,

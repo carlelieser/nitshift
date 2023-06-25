@@ -92,7 +92,6 @@ listener.startListening({
 listener.startListening({
 	actionCreator: setMode,
 	effect: (action, api) => {
-		setTimeout(() => api.dispatch(setTransitioning(false)), 300);
 		saveMode(action.payload);
 		ipcRenderer.invoke("mode-changed", action.payload);
 	},

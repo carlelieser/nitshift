@@ -33,6 +33,7 @@ import { machineIdSync } from "node-machine-id";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { dayjs, DEFAULT_TIMEZONE, getDateFromTime } from "../common/dayjs";
+import AutoLaunch from "auto-launch";
 
 import lumi from "lumi-control";
 import Window from "./window";
@@ -159,46 +160,54 @@ const createNewUser = async () => {
 };
 
 const updateUserDoc = async () => {
-	const auth = getAuth();
-	const id = loadUserId();
-	const email = loadUserEmail();
-	await signInWithEmailAndPassword(auth, email, encryption.id);
-	const license = loadLicense();
-	const trialStartDate = loadTrialStartDate();
-	const trialAvailability = loadTrialAvailability();
-	await setDoc(
-		doc(db, "users", email),
-		{
-			id,
-			email,
-			license,
-			trialStartDate,
-			trialAvailability,
-		},
-		{ merge: true }
-	);
+	try {
+		const auth = getAuth();
+		const id = loadUserId();
+		const email = loadUserEmail();
+		await signInWithEmailAndPassword(auth, email, encryption.id);
+		const license = loadLicense();
+		const trialStartDate = loadTrialStartDate();
+		const trialAvailability = loadTrialAvailability();
+		await setDoc(
+			doc(db, "users", email),
+			{
+				id,
+				email,
+				license,
+				trialStartDate,
+				trialAvailability,
+			},
+			{ merge: true }
+		);
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 const updateStorageWithUserDoc = async () => {
-	const auth = getAuth();
-	const email = loadUserEmail();
-	await signInWithEmailAndPassword(auth, email, encryption.id);
-	const docRef = doc(db, "users", email);
-	const docSnap = await getDoc(docRef);
-	if (docSnap.exists()) {
-		const user = docSnap.data();
-		saveLicense(user.license);
-		saveTrialStartDate(user.trialStartDate);
-		saveTrialAvailability(user.trialAvailability);
-		if (user.trialStartDate) {
-			if (Date.now() - user.trialStartDate >= TRIAL_DURATION) {
-				startTrialCheck();
-				await updateUserDoc();
+	try {
+		const auth = getAuth();
+		const email = loadUserEmail();
+		await signInWithEmailAndPassword(auth, email, encryption.id);
+		const docRef = doc(db, "users", email);
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			const user = docSnap.data();
+			saveLicense(user.license);
+			saveTrialStartDate(user.trialStartDate);
+			saveTrialAvailability(user.trialAvailability);
+			if (user.trialStartDate) {
+				if (Date.now() - user.trialStartDate >= TRIAL_DURATION) {
+					startTrialCheck();
+					await updateUserDoc();
+				}
 			}
+			window.data?.webContents.send("sync-license");
+		} else {
+			await updateUserDoc();
 		}
-		window.data?.webContents.send("sync-license");
-	} else {
-		await updateUserDoc();
+	} catch (err) {
+		console.log(err);
 	}
 };
 
@@ -228,6 +237,7 @@ const startTrialCheck = () => {
 };
 
 const applySchedule = (id: string) => {
+	if (loadLicense() === "free") return;
 	const schedule = loadSchedule().find((schedule) => schedule.id === id);
 	if (!schedule) return;
 	const referenceMonitors = loadMonitors();
@@ -295,6 +305,7 @@ const initAuth = async () => {
 const handleWindowFocused = () => {
 	window.data.webContents.send("focused");
 	updater.check();
+	window.readjust();
 };
 
 const handleWindowBlurred = () => {
@@ -320,7 +331,19 @@ const handleHeaderReceived = (
 	});
 };
 
+const handleAutoLaunch = () => {
+	const autoLaunch = new AutoLaunch({
+		name: "Glimmr",
+		path: app.getPath("exe"),
+	});
+	autoLaunch.isEnabled().then((enabled) => {
+		if (!enabled) autoLaunch.enable();
+	});
+};
+
 app.on("ready", async () => {
+	handleAutoLaunch();
+
 	await initAuth();
 	checkSchedule();
 
@@ -377,6 +400,10 @@ ipcMain.handle("schedule-modified", checkSchedule);
 
 ipcMain.handle("enable-auto-hide", () => (autoHideEnabled = true));
 ipcMain.handle("disable-auto-hide", () => (autoHideEnabled = false));
+
+ipcMain.on("get-window-size", (e) => {
+	e.returnValue = window.data.getSize();
+});
 
 ipcMain.handle("show", () => window.data.show());
 ipcMain.handle("blur", () => window.data.blur());
