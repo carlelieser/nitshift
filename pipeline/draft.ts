@@ -25,9 +25,9 @@ const quit = (spinner: ora.Ora, message: string) => {
 	process.exit();
 };
 
-const createRelease = (): Promise<Release> => {
-	const spinner = ora("Creating release").start();
-	return fetch("https://api.github.com/repos/carlelieser/glimmr/releases", {
+const createRelease = (repo: string): Promise<Release> => {
+	const spinner = ora(`${repo}: creating release`).start();
+	return fetch(`https://api.github.com/repos/${repo}/releases`, {
 		method: "POST",
 		headers: {
 			Accept: "application/vnd.github+json",
@@ -36,30 +36,28 @@ const createRelease = (): Promise<Release> => {
 		},
 		body: JSON.stringify({
 			...release,
-			target_commitish: "main",
 			name: `Release ${release.tag_name}`,
 			draft: true,
 			prerelease: false,
 			generate_release_notes: false,
 		}),
 	})
-		.then((response) => response.json())
+		.then((response) => {
+			return response.json();
+		})
 		.catch((err) => {
-			quit(
-				spinner,
-				`Failed to create release:
- ${err}`
-			);
+			console.log(err);
+			quit(spinner, `${repo}: failed`);
 		})
 		.finally(() => {
 			spinner.stop();
-			console.log(logSymbols.success, "Release created");
+			console.log(logSymbols.success, `${repo}: release created`);
 		});
 };
 
-const publishRelease = (releaseId: number) => {
-	const spinner = ora("Publishing release").start();
-	return fetch(`https://api.github.com/repos/carlelieser/glimmr/releases/${releaseId}`, {
+const publishRelease = (repo: string, releaseId: number) => {
+	const spinner = ora(`${repo}: ${releaseId}: publishing release`).start();
+	return fetch(`https://api.github.com/repos/${repo}/releases/${releaseId}`, {
 		method: "PATCH",
 		headers: {
 			Accept: "application/vnd.github+json",
@@ -72,16 +70,16 @@ const publishRelease = (releaseId: number) => {
 	})
 		.then((response) => response.json())
 		.catch((err) => {
-			quit(spinner, `Failed to publish release:\n ${err}`);
+			quit(spinner, `${repo}: ${releaseId} failed`);
 		})
 		.finally(() => {
 			spinner.stop();
-			console.log(logSymbols.success, "Release published");
+			console.log(logSymbols.success, `${repo}: ${releaseId} release published`);
 			process.exit();
 		});
 };
 
-const uploadAsset = (releaseId: number) => {
+const uploadAsset = (repo: string, releaseId: number) => {
 	return new Promise<void>((resolve) => {
 		console.log(logSymbols.info, `Uploading asset to release: ${releaseId}`);
 		const size = fs.statSync(assetPath).size;
@@ -89,7 +87,7 @@ const uploadAsset = (releaseId: number) => {
 		bar.start(size, 0);
 		const result = ghReleaseAssets(
 			{
-				url: `https://uploads.github.com/repos/carlelieser/glimmr/releases/${releaseId}/assets`,
+				url: `https://uploads.github.com/repos/${repo}/releases/${releaseId}/assets`,
 				token: ACCESS_TOKEN,
 				assets: [
 					{
@@ -100,7 +98,7 @@ const uploadAsset = (releaseId: number) => {
 			},
 			(err: any, assets: any) => {
 				bar.stop();
-				console.log(logSymbols.success, "Asset uploaded");
+				console.log(logSymbols.success, "asset uploaded");
 				resolve();
 			}
 		);
@@ -110,21 +108,25 @@ const uploadAsset = (releaseId: number) => {
 	});
 };
 
-const upload = async () => {
-	const shouldCreateRelease = auto ? true : await new Confirm("Create release?").run();
-
+const upload = async (repo: string) => {
+	const shouldCreateRelease = auto ? true : await new Confirm(`${repo}: create release?`).run();
 	if (shouldCreateRelease) {
-		const release = await createRelease();
-		const shouldUpload = auto ? true : await new Confirm("Start asset upload?").run();
+		const release = await createRelease(repo);
+		const shouldUpload = auto ? true : await new Confirm(`${repo}: start asset upload?`).run();
 
 		if (shouldUpload) {
-			await uploadAsset(release.id);
-			const shouldPublish = auto ? true : await new Confirm("Publish release?").run();
-			if (shouldPublish) await publishRelease(release.id);
+			await uploadAsset(repo, release.id);
+			const shouldPublish = auto ? true : await new Confirm(`${repo}: publish release?`).run();
+			if (shouldPublish) await publishRelease(repo, release.id);
 		}
 	}
 
 	seeYa();
 };
 
-upload();
+const run = async () => {
+	await upload("carlelieser/glimmr");
+	await upload("carlelieser/glimmr-release");
+};
+
+run();
