@@ -12,10 +12,11 @@
     "make": "cross-env NODE_ENV=production electron-forge make",
     "version:prev": "ts-node-esm pipeline/version.ts -- --decrement",
     "version:next": "ts-node-esm pipeline/version.ts -- --increment",
+    "drop": "ts-node-esm pipeline/drop.ts",
     "draft": "ts-node-esm pipeline/draft.ts",
     "prepublish": "npm run format && npm run version:next && npm run make",
-    "publish": "npm run draft",
-    "publish:auto": "npm run prepublish && npm run draft -- -- --auto"
+    "publish": "npm run draft && npm run drop",
+    "publish:auto": "npm run prepublish && npm run draft -- -- --auto && npm run drop"
   },
   "keywords": [],
   "author": "Glimmr",
@@ -47,6 +48,7 @@
     "log-symbols": "4.1.0",
     "node-emoji": "^2.1.0",
     "node-loader": "^2.0.0",
+    "node-ssh": "^13.1.0",
     "ora": "5.4.1",
     "prettier": "^2.8.8",
     "prompt-confirm": "^2.0.4",
