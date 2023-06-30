@@ -65,6 +65,7 @@ class Window extends EventEmitter {
 		if (this.data) this.data.destroy();
 		const mode = loadMode();
 		this.data = new BrowserWindow({
+			focusable: true,
 			transparent: true,
 			show: false,
 			resizable: false,
@@ -109,6 +110,7 @@ class Window extends EventEmitter {
 		const availableMonitors = lumi.monitors();
 		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => ({
 			...monitor,
+			nickname: monitor.name,
 			brightness: 100,
 			mode: "native",
 			disabled: false,

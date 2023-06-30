@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AutoAwesome, Timer } from "@mui/icons-material";
 import { Badge, Box, Button } from "@mui/material";
 import { useAppSelector } from "../hooks";
 import PremiumTooltip from "./premium-tooltip";
 import ScheduleDialog from "./dialogs/schedule";
+import { ipcRenderer } from "electron";
 
 const ScheduleButton = () => {
 	const [scheduleOpen, setScheduleOpen] = useState<boolean>(false);
@@ -11,6 +12,14 @@ const ScheduleButton = () => {
 
 	const openScheduleDialog = () => setScheduleOpen(true);
 	const closeScheduleDialog = () => setScheduleOpen(false);
+
+	useEffect(() => {
+		if (scheduleOpen) {
+			ipcRenderer.invoke("disable-auto-hide");
+		} else {
+			ipcRenderer.invoke("enable-auto-hide");
+		}
+	}, [scheduleOpen]);
 
 	return (
 		<>

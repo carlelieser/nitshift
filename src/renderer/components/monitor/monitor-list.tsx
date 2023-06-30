@@ -48,6 +48,8 @@ const MonitorList = () => {
 					<Monitor
 						id={GLOBAL}
 						name={GLOBAL}
+						nickname={""}
+						menuDisabled={true}
 						brightness={brightness}
 						mode={"native"}
 						disabled={globalMonitorDisabled}
@@ -64,6 +66,7 @@ const MonitorList = () => {
 								<Box {...provided.droppableProps} ref={provided.innerRef}>
 									{monitors.map((monitor, index) => {
 										const disabled = license === "free" ? (index > 1 ? true : monitor.disabled) : monitor.disabled;
+										const menuDisabled = license === "free" ? index > 1 : false;
 										const dragDisabled = disabled || monitors.length === 1;
 										return (
 											<Draggable
@@ -89,6 +92,7 @@ const MonitorList = () => {
 														<Monitor
 															{...monitor}
 															disabled={disabled}
+															menuDisabled={menuDisabled}
 															dragDisabled={dragDisabled}
 															dragHandleProps={provided.dragHandleProps}
 														/>

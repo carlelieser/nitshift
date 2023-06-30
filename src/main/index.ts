@@ -309,7 +309,7 @@ const handleWindowFocused = () => {
 };
 
 const handleWindowBlurred = () => {
-	if (!autoHideEnabled) return;
+	if (!autoHideEnabled || shades.anyFocused()) return;
 	if (isDev && window.data.webContents.isDevToolsFocused()) return;
 	if (!window.data.isMinimized()) window.data.webContents.send("blurred");
 };
@@ -346,6 +346,10 @@ app.on("ready", async () => {
 
 	await initAuth();
 	checkSchedule();
+
+	shades.on("blurred", (shadeWindow: BrowserWindow) => {
+		if (!window.data.webContents.isFocused()) shadeWindow.focus();
+	});
 
 	window.on("window-created", (window: BrowserWindow) => {
 		window.on("show", handleWindowShown);

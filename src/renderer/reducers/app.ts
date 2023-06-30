@@ -50,6 +50,7 @@ type MonitorAction<T> = { id: string } & T;
 type MonitorMode = UIMonitor["mode"];
 
 interface MonitorActionPayload {
+	nickname: string;
 	brightness: number;
 	disabled: boolean;
 	mode: MonitorMode;
@@ -58,6 +59,7 @@ interface MonitorActionPayload {
 export type SetMonitorBrightnessAction = MonitorAction<Pick<MonitorActionPayload, "brightness">>;
 export type SetMonitorDisabledAction = MonitorAction<Pick<MonitorActionPayload, "disabled">>;
 export type SetMonitorModeAction = MonitorAction<Pick<MonitorActionPayload, "mode">>;
+export type SetMonitorNameAction = MonitorAction<Pick<MonitorActionPayload, "nickname">>;
 
 const findMonitorIndexById = (monitors: UIMonitor[], id: string) => monitors.findIndex((monitor) => monitor.id === id);
 
@@ -121,6 +123,10 @@ export const appSlice = createSlice({
 			const monitorIndex = findMonitorIndexById(state.monitors, id);
 			state.monitors[monitorIndex].mode = mode;
 		},
+		setMonitorName: (state, action: PayloadAction<SetMonitorNameAction>) => {
+			const monitorIndex = findMonitorIndexById(state.monitors, action.payload.id);
+			state.monitors[monitorIndex].nickname = action.payload.nickname;
+		},
 		setMonitors: createReducer<AppState["monitors"]>("monitors"),
 		setReceivedPremium: createReducer<AppState["receivedPremium"]>("receivedPremium"),
 		setRefreshed: createReducer<AppState["refreshed"]>("refreshed"),
@@ -148,6 +154,7 @@ export const {
 	setMonitorBrightness,
 	setMonitorDisabled,
 	setMonitorMode,
+	setMonitorName,
 	setMonitors,
 	setReceivedPremium,
 	setRefreshed,

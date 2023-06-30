@@ -1,12 +1,13 @@
 import { BrowserWindow } from "electron";
 import lumi from "lumi-control";
 import { max, min } from "lodash";
+import EventEmitter from "events";
 
 export interface Shades {
 	[monitorId: string]: BrowserWindow;
 }
 
-class Shader {
+class Shader extends EventEmitter {
 	private shades: Shades = {};
 	private maxBrightness = 100;
 	private minBrightness = 10;
@@ -32,14 +33,18 @@ class Shader {
 			resizable: false,
 			minimizable: false,
 			closable: false,
-			focusable: false,
-			show: true,
+			focusable: true,
+			show: false,
 		});
 		this.shades[id].on("blur", () => {
+			this.emit("blurred", this.shades[id]);
 			this.shades[id].setAlwaysOnTop(true, "screen-saver", 9999);
 		});
+		this.shades[id].show();
 		this.shades[id].setIgnoreMouseEvents(true);
 	};
+
+	public anyFocused = () => !!Object.values(this.shades).find((window) => window.isFocused());
 
 	public update = (id: string, brightness: number) => {
 		if (this.shades[id]) this.shades[id].setBackgroundColor(this.generateColorForBrightness(brightness));

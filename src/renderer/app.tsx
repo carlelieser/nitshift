@@ -103,6 +103,13 @@ const App = () => {
 						},
 					},
 				},
+				MuiMenu: {
+					defaultProps: {
+						disableEnforceFocus: transitioning,
+						disablePortal: transitioning,
+						hidden: transitioning,
+					},
+				},
 			},
 		});
 	}, [mode, transitioning]);

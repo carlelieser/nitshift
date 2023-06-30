@@ -3,7 +3,7 @@ import { Paper, Stack } from "@mui/material";
 import WindowBar from "../components/window-bar";
 import { useAppSelector } from "../hooks";
 import MonitorToggle from "../components/monitor/monitor-toggle";
-import MonitorModeToggle from "../components/monitor/mode-toggle";
+import MonitorModeToggle from "../components/monitor/monitor-mode-toggle";
 import MonitorBrightnessSlider from "../components/monitor/monitor-brightness-slider";
 import { GLOBAL } from "lumi-control";
 
@@ -27,8 +27,8 @@ const CompactView = () => {
 					<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
 						{activeMonitor ? (
 							<Stack direction={"row"} alignItems={"center"} spacing={1} p={1}>
-								<MonitorToggle monitorId={activeMonitor.id} disabled={activeMonitor.disabled} />
-								<MonitorModeToggle monitorId={activeMonitor.id} mode={activeMonitor.mode} />
+								<MonitorToggle variant={"icon-button"} monitorId={activeMonitor.id} disabled={activeMonitor.disabled} />
+								<MonitorModeToggle variant={"icon-button"} monitorId={activeMonitor.id} mode={activeMonitor.mode} />
 							</Stack>
 						) : null}
 						{activeMonitor ? (

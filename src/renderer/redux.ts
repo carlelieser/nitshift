@@ -19,6 +19,7 @@ import {
 	removeSchedule,
 	editSchedule,
 	setSchedule,
+	setMonitorName,
 } from "./reducers/app";
 import {
 	saveActiveMonitor,
@@ -107,7 +108,7 @@ listener.startListening({
 });
 
 listener.startListening({
-	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode),
+	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode, setMonitorName),
 	effect: (action, api) => {
 		api.dispatch(setActiveMonitor(action.payload.id));
 		saveMonitors(api.getState().app.monitors);
