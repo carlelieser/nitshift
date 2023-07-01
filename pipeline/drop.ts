@@ -1,9 +1,9 @@
-import release from "../release.json";
+import release from "../src/common/release.json";
 import config from "../package.json";
 import * as emoji from "node-emoji";
 import ora from "ora";
 
-import logSymbols = require("log-symbols");
+import * as logSymbols from "log-symbols";
 
 const { NodeSSH } = require("node-ssh");
 const client = new NodeSSH();

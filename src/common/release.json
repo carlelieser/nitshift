@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.2.6",
-  "body": "Fix dev tools bug."
+  "tag_name": "v0.2.8",
+  "body": "Fix issue where brightness value doesn't get saved for free users."
 }

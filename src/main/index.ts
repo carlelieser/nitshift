@@ -161,10 +161,9 @@ const createNewUser = async () => {
 
 const updateUserDoc = async () => {
 	try {
-		const auth = getAuth();
 		const id = loadUserId();
 		const email = loadUserEmail();
-		await signInWithEmailAndPassword(auth, email, encryption.id);
+		await signIn();
 		const license = loadLicense();
 		const trialStartDate = loadTrialStartDate();
 		const trialAvailability = loadTrialAvailability();
@@ -184,11 +183,26 @@ const updateUserDoc = async () => {
 	}
 };
 
+const signIn = async () => {
+	const auth = getAuth();
+	const email = loadUserEmail();
+	let userNotFound = false;
+	return signInWithEmailAndPassword(auth, email, encryption.id)
+		.catch((err) => {
+			if (err.code === "auth/user-not-found") {
+				userNotFound = true;
+				return createNewUser();
+			}
+		})
+		.finally(() => {
+			if (userNotFound) return signInWithEmailAndPassword(auth, email, encryption.id);
+		});
+};
+
 const updateStorageWithUserDoc = async () => {
 	try {
-		const auth = getAuth();
 		const email = loadUserEmail();
-		await signInWithEmailAndPassword(auth, email, encryption.id);
+		await signIn();
 		const docRef = doc(db, "users", email);
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {

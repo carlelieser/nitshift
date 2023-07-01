@@ -7,9 +7,9 @@ import * as console from "console";
 import * as process from "process";
 import config from "../package.json";
 import * as ProgressBar from "cli-progress";
-import ghReleaseAssets = require("gh-release-assets");
-import Confirm = require("prompt-confirm");
-import logSymbols = require("log-symbols");
+import ghReleaseAssets from "gh-release-assets";
+import Confirm from "prompt-confirm";
+import * as logSymbols from "log-symbols";
 import * as emoji from "node-emoji";
 import release from "../src/common/release.json";
 

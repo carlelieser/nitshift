@@ -112,17 +112,18 @@ class Window extends EventEmitter {
 
 		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => {
 			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1];
+			const storedMonitor = storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id);
 			return {
 				...monitor,
 				brightness: 100,
 				mode: "native",
 				disabled: false,
-				...(storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id) ?? {}),
+				...(storedMonitor ?? {}),
 				...(license === "free"
 					? {
 							mode: "native",
 							disabled: index > 1,
-							brightness: 100,
+							brightness: index > 1 ? 100 : storedMonitor?.brightness,
 					  }
 					: {}),
 				nickname: nickname ?? monitor.name,
