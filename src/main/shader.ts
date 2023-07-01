@@ -18,6 +18,7 @@ class Shader extends EventEmitter {
 	public create = (id: string, brightness: number) => {
 		const monitors = lumi.monitors();
 		const monitor = monitors.find((monitor) => monitor.id === id);
+		if (!monitor) return;
 		this.shades[id] = new BrowserWindow({
 			type: "toolbar",
 			transparent: true,

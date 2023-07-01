@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.2.2",
-  "body": "Allow renaming monitors. Fix bug where shade mode overlay shows underneath apps."
+  "tag_name": "v0.2.6",
+  "body": "Fix dev tools bug."
 }

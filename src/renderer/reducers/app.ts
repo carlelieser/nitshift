@@ -5,6 +5,7 @@ import {
 	loadGlobalBrightness,
 	loadLicense,
 	loadMode,
+	loadMonitorNicknames,
 	loadMonitors,
 	loadSchedule,
 	loadTrialAvailability,
@@ -18,7 +19,7 @@ import { merge } from "lodash";
 import { randomUUID } from "crypto";
 
 export interface ScheduleItemContent {
-	monitors: Array<string>;
+	monitors: Array<UIMonitor>;
 	time: string;
 	brightness: number;
 }
@@ -35,6 +36,7 @@ export interface AppState {
 	license: "free" | "trial" | "premium";
 	mode: "expanded" | "compact";
 	monitors: Array<UIMonitor>;
+	monitorNicknames: Array<[string, string]>;
 	receivedPremium: boolean;
 	refreshed: boolean;
 	schedule: Array<ScheduleItem>;
@@ -69,6 +71,7 @@ const initialState: AppState = {
 	license: loadLicense(),
 	mode: loadMode(),
 	monitors: loadMonitors(),
+	monitorNicknames: loadMonitorNicknames(),
 	receivedPremium: false,
 	refreshed: false,
 	schedule: loadSchedule(),
@@ -111,7 +114,9 @@ export const appSlice = createSlice({
 		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
 			const { id, brightness } = action.payload;
 			const monitorIndex = findMonitorIndexById(state.monitors, id);
-			state.monitors[monitorIndex].brightness = brightness;
+			if (monitorIndex > -1) {
+				state.monitors[monitorIndex].brightness = brightness;
+			}
 		},
 		setMonitorDisabled: (state, action: PayloadAction<SetMonitorDisabledAction>) => {
 			const { id, disabled } = action.payload;
@@ -125,7 +130,16 @@ export const appSlice = createSlice({
 		},
 		setMonitorName: (state, action: PayloadAction<SetMonitorNameAction>) => {
 			const monitorIndex = findMonitorIndexById(state.monitors, action.payload.id);
+			const monitorNicknameIndex = state.monitorNicknames.findIndex((tuple) => tuple[0] === action.payload.id);
+			const nicknamePair: [string, string] = [action.payload.id, action.payload.nickname];
+
 			state.monitors[monitorIndex].nickname = action.payload.nickname;
+
+			if (monitorNicknameIndex > 0) {
+				state.monitorNicknames[monitorNicknameIndex] = nicknamePair;
+			} else {
+				state.monitorNicknames = [...state.monitorNicknames, nicknamePair];
+			}
 		},
 		setMonitors: createReducer<AppState["monitors"]>("monitors"),
 		setReceivedPremium: createReducer<AppState["receivedPremium"]>("receivedPremium"),

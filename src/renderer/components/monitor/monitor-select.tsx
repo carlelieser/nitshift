@@ -33,7 +33,7 @@ const MonitorSelect = () => {
 				}}
 			>
 				<Typography variant={"button"} noWrap={true} maxWidth={license === "premium" ? 100 : 60} textAlign={"left"}>
-					{activeMonitor?.name ?? GLOBAL}
+					{activeMonitor?.nickname ?? GLOBAL}
 				</Typography>
 			</Button>
 			<Menu
@@ -58,7 +58,7 @@ const MonitorSelect = () => {
 						Global
 					</MenuItem>
 				)}
-				{monitors.map(({ id, name }, index) => (
+				{monitors.map(({ id, name, nickname }, index) => (
 					<MenuItem
 						disabled={license === "free" ? index > 1 : null}
 						key={`monitor-item-${id}`}
@@ -73,7 +73,7 @@ const MonitorSelect = () => {
 								<AutoAwesome color={"warning"} />
 							</ListItemIcon>
 						) : null}
-						<ListItemText>{name}</ListItemText>
+						<ListItemText sx={{ textTransform: "capitalize" }}>{nickname}</ListItemText>
 					</MenuItem>
 				))}
 			</Menu>

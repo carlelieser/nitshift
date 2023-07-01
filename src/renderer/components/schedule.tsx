@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Button, Chip, Divider, Paper, Stack } from "@mui/material";
+import { Box, Button, Chip, Divider, lighten, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { removeSchedule, ScheduleItem } from "../reducers/app";
 import { Delete, Edit, Monitor, Timer, WbSunny } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -9,14 +9,11 @@ import { getDateFromTime } from "../../common/dayjs";
 
 const Schedule: React.FC<ScheduleItem> = (props) => {
 	const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+	const theme = useTheme();
 
 	const id = useMemo(() => randomUUID(), []);
 	const dispatch = useAppDispatch();
 	const monitors = useAppSelector((state) => state.app.monitors);
-	const monitorNames = useMemo(
-		() => monitors.filter((monitor) => props.monitors.includes(monitor.id)).map((monitor) => monitor.name),
-		[monitors, props.monitors]
-	);
 
 	const openEditDialog = () => setEditDialogOpen(true);
 	const closeEditDialog = () => setEditDialogOpen(false);
@@ -30,9 +27,36 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 				<Stack direction={"row"} alignItems={"center"} spacing={2} px={2}>
 					<Monitor />
 					<Stack direction={"row"} alignItems={"center"} gap={1} flexWrap={"wrap"}>
-						{monitorNames.map((name) => (
-							<Chip key={`${id}-${name}`} label={name} />
-						))}
+						{props.monitors.map((monitor) => {
+							const connected = !!monitors.find((ref) => ref.id === monitor.id);
+							return (
+								<Paper
+									key={`${id}-${monitor.name}`}
+									sx={{
+										px: 2,
+										py: 1,
+										borderRadius: 2,
+										bgcolor: lighten(theme.palette.background.paper, 6 * 0.025),
+									}}
+									variant={"outlined"}
+								>
+									<Stack spacing={-0.5}>
+										<Typography textTransform={"capitalize"}>{monitor.nickname}</Typography>
+										<Stack direction={"row"} alignItems={"center"} spacing={1}>
+											<Box
+												width={6}
+												height={6}
+												borderRadius={"100%"}
+												bgcolor={connected ? "success.main" : "error.main"}
+											/>
+											<Typography fontSize={12} sx={{ opacity: 0.7 }}>
+												{connected ? "Connected" : "Disconnected"}
+											</Typography>
+										</Stack>
+									</Stack>
+								</Paper>
+							);
+						})}
 					</Stack>
 				</Stack>
 				<Divider />

@@ -42,7 +42,7 @@ function getColorAtProgress(
 const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onClose }) => {
 	const [activeStep, setActiveStep] = useState<number>(0);
 
-	const [selectedMonitors, setSelectedMonitors] = useState<Array<string>>(edit?.monitors ?? []);
+	const [selectedMonitors, setSelectedMonitors] = useState<Array<UIMonitor>>(edit?.monitors ?? []);
 	const [brightness, setBrightness] = useState<number>(edit?.brightness ?? 100);
 	const [time, setTime] = useState<Dayjs | null>(edit?.time ? getDateFromTime(edit.time) : dayjs());
 	const [timeView, setTimeView] = useState<"hours" | "minutes">("hours");
@@ -72,7 +72,7 @@ const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onC
 
 	const handleStepChange = (step: number) => setActiveStep(step);
 
-	const handleMonitorSelectChange = (monitors: Array<string>) => setSelectedMonitors(monitors);
+	const handleMonitorSelectChange = (monitors: Array<UIMonitor>) => setSelectedMonitors(monitors);
 
 	const handleBrightnessChange = (brightness: number) => setBrightness(brightness);
 
@@ -160,10 +160,10 @@ const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onC
 
 	useEffect(() => {
 		if (!open) return;
-		selectedMonitors.forEach((monitorId) => {
+		selectedMonitors.forEach((monitor) => {
 			dispatch(
 				setMonitorBrightness({
-					id: monitorId,
+					id: monitor.id,
 					brightness,
 				})
 			);

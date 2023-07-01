@@ -75,7 +75,6 @@ const publishRelease = (repo: string, releaseId: number) => {
 		.finally(() => {
 			spinner.stop();
 			console.log(logSymbols.success, `${repo}: ${releaseId} release published`);
-			process.exit();
 		});
 };
 
@@ -127,6 +126,7 @@ const upload = async (repo: string) => {
 const run = async () => {
 	await upload("carlelieser/glimmr");
 	await upload("carlelieser/glimmr-release");
+	process.exit();
 };
 
 run();

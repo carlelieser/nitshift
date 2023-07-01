@@ -1,5 +1,5 @@
 import { BrowserWindow, screen } from "electron";
-import { loadLicense, loadMode, loadMonitors, saveMonitors } from "../common/storage";
+import { loadLicense, loadMode, loadMonitorNicknames, loadMonitors, saveMonitors } from "../common/storage";
 import lumi from "lumi-control";
 import { isDev } from "../common/utils";
 import { UIMonitor } from "../common/types";
@@ -14,7 +14,7 @@ export const dimensions: any = {
 		width: 520,
 		height: 220,
 	},
-	padding: 20,
+	padding: 4,
 };
 
 class Window extends EventEmitter {
@@ -107,22 +107,27 @@ class Window extends EventEmitter {
 	public refreshMonitors = () => {
 		const license = loadLicense();
 		const storedMonitors = loadMonitors();
+		const storedMonitorNicknames = loadMonitorNicknames();
 		const availableMonitors = lumi.monitors();
-		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => ({
-			...monitor,
-			nickname: monitor.name,
-			brightness: 100,
-			mode: "native",
-			disabled: false,
-			...(storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id) ?? {}),
-			...(license === "free"
-				? {
-						mode: "native",
-						disabled: index > 1,
-						brightness: 100,
-				  }
-				: {}),
-		}));
+
+		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => {
+			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1];
+			return {
+				...monitor,
+				brightness: 100,
+				mode: "native",
+				disabled: false,
+				...(storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id) ?? {}),
+				...(license === "free"
+					? {
+							mode: "native",
+							disabled: index > 1,
+							brightness: 100,
+					  }
+					: {}),
+				nickname: nickname ?? monitor.name,
+			};
+		});
 
 		monitors.sort((a, b) => {
 			const aIndex = storedMonitors.findIndex((monitor) => monitor.id === a.id);

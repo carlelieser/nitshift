@@ -30,6 +30,7 @@ export const STORE = {
 	LICENSE: "license",
 	MODE: "mode",
 	MONITORS: "monitors",
+	MONITOR_NICKNAMES: "monitor-nicknames",
 	SCHEDULE: "schedule",
 	TRIAL_AVAILABILITY: "trail-availability",
 	TRIAL_START_DATE: "trial-start-date",
@@ -51,6 +52,7 @@ export const loadLastUpdatedOn = (): number => storage().get(STORE.LAST_UPDATED_
 export const loadLicense = (): AppState["license"] => storage().get(STORE.LICENSE, "free");
 export const loadMode = (): AppState["mode"] => storage().get(STORE.MODE, "expanded");
 export const loadMonitors = (): AppState["monitors"] => storage().get(STORE.MONITORS, []);
+export const loadMonitorNicknames = (): AppState["monitorNicknames"] => storage().get(STORE.MONITOR_NICKNAMES, []);
 export const loadSchedule = (): AppState["schedule"] => storage().get(STORE.SCHEDULE, []);
 export const loadTrialAvailability = (): AppState["trialAvailability"] => storage().get(STORE.TRIAL_AVAILABILITY, false);
 export const loadTrialStartDate = (): AppState["trialStartDate"] => storage().get(STORE.TRIAL_START_DATE, null);
@@ -62,6 +64,7 @@ export const saveLastUpdatedOn = (date: number) => storage().set(STORE.LAST_UPDA
 export const saveLicense = (license: AppState["license"]) => storage().set(STORE.LICENSE, license);
 export const saveMode = (mode: AppState["mode"]) => storage().set(STORE.MODE, mode);
 export const saveMonitors = (monitors: AppState["monitors"]) => storage().set(STORE.MONITORS, monitors);
+export const saveMonitorNicknames = (monitors: AppState["monitorNicknames"]) => storage().set(STORE.MONITOR_NICKNAMES, monitors);
 export const saveSchedule = (schedule: AppState["schedule"]) => storage().set(STORE.SCHEDULE, schedule);
 export const saveTrialAvailability = (available: AppState["trialAvailability"]) => storage().set(STORE.TRIAL_AVAILABILITY, available);
 export const saveTrialStartDate = (date: AppState["trialStartDate"]) => storage().set(STORE.TRIAL_START_DATE, date);

@@ -26,7 +26,7 @@ import {
 	loadSchedule,
 	saveMonitors,
 } from "../common/storage";
-import { clone, difference, reduce, throttle } from "lodash";
+import { clone, debounce, difference, reduce, throttle } from "lodash";
 import { isDev, normalizeBrightness } from "../common/utils";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { machineIdSync } from "node-machine-id";
@@ -114,10 +114,10 @@ const createTrayIcon = () => {
 	tray.on("click", handleTrayClick);
 };
 
-const updateMonitorsAndAdjustWindowPosition = () => {
+const updateMonitorsAndAdjustWindowPosition = debounce(() => {
 	window.refreshMonitors();
 	window.readjust();
-};
+}, 2000);
 
 const applyBrightness = throttle(() => {
 	const monitors = loadMonitors().filter(({ disabled }) => !disabled);
@@ -242,10 +242,8 @@ const applySchedule = (id: string) => {
 	if (!schedule) return;
 	const referenceMonitors = loadMonitors();
 	const prevMonitors = loadMonitors();
-	prevMonitors.forEach(({ id }, index) => {
-		if (schedule.monitors.includes(id)) {
-			prevMonitors[index].brightness = schedule.brightness;
-		}
+	prevMonitors.forEach((monitor, index) => {
+		if (schedule.monitors.find((ref) => ref.id === monitor.id)) monitor.brightness = schedule.brightness;
 	});
 	const updatedMonitors = clone(prevMonitors);
 	saveMonitors(updatedMonitors);

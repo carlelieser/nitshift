@@ -26,6 +26,7 @@ import {
 	saveGlobalBrightness,
 	saveLicense,
 	saveMode,
+	saveMonitorNicknames,
 	saveMonitors,
 	saveSchedule,
 	saveTrialAvailability,
@@ -34,7 +35,7 @@ import {
 	STORE,
 } from "../common/storage";
 import { ipcRenderer } from "electron";
-import { clone } from "lodash";
+import { clone, cloneDeep } from "lodash";
 import { dayjs } from "../common/dayjs";
 
 const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMiddleware();
@@ -104,6 +105,25 @@ listener.startListening({
 		api.dispatch(setActiveMonitor(null));
 		saveGlobalBrightness(action.payload);
 		ipcRenderer.invoke("global-brightness-changed");
+	},
+});
+
+listener.startListening({
+	actionCreator: setMonitorName,
+	effect: (action, api) => {
+		const state = cloneDeep(api.getState());
+		const relevantSchedules = state.app.schedule.filter(({ monitors }) => monitors.find((monitor) => monitor.id === action.payload.id));
+		saveMonitorNicknames(api.getState().app.monitorNicknames);
+
+		if (relevantSchedules.length) {
+			relevantSchedules.forEach((schedule) => {
+				schedule.monitors = schedule.monitors.map((ref) => {
+					const correspondingMonitor = state.app.monitors.find((monitor) => monitor.id === ref.id);
+					return correspondingMonitor ? correspondingMonitor : ref;
+				});
+				api.dispatch(editSchedule(schedule));
+			});
+		}
 	},
 });
 

@@ -152,7 +152,7 @@ const Monitor: React.FC<MonitorProps> = ({
 										</Box>
 									</Badge>
 									<Stack spacing={-0.5}>
-										<Typography fontWeight={500}>{upperCase(nickname ?? name)}</Typography>
+										<Typography fontWeight={500}>{upperCase(nickname)}</Typography>
 										<Typography variant={"subtitle2"} fontSize={12} sx={{ opacity: 0.7, width: 145 }} noWrap={true}>
 											{formattedId}
 										</Typography>
