@@ -1,6 +1,8 @@
 import React from "react";
-import { Divider, IconButton, Paper, Stack, Typography, Modal, Box, Button, Slide, Portal } from "@mui/material";
+import { Divider, IconButton, Paper, Stack, Typography, Modal, Box, Button, Slide, Portal, Grow } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { ipcRenderer } from "electron";
+import { stubFalse } from "lodash";
 
 export interface DialogComponentProps {
 	open: boolean;
@@ -18,10 +20,20 @@ interface DialogProps extends DialogComponentProps {
 	actions?: Array<Action>;
 	children: React.ReactNode;
 	scrollContent?: "y" | "x-hidden";
-	onReset: () => void;
+	onEntered?: () => void;
+	onExited?: () => void;
 }
 
-const Dialog: React.FC<DialogProps> = ({ open, title, children, actions, scrollContent = "x-hidden", onClose, onReset }) => {
+const Dialog: React.FC<DialogProps> = ({
+	open,
+	title,
+	children,
+	actions,
+	scrollContent = "x-hidden",
+	onClose,
+	onEntered = stubFalse,
+	onExited = stubFalse,
+}) => {
 	return (
 		<Portal>
 			<Modal
@@ -33,7 +45,7 @@ const Dialog: React.FC<DialogProps> = ({ open, title, children, actions, scrollC
 				closeAfterTransition={true}
 				sx={{ outline: "none" }}
 			>
-				<Slide direction={"up"} in={open} onExited={onReset}>
+				<Grow in={open} onEntered={onEntered} onExited={onExited}>
 					<Paper
 						sx={{
 							borderRadius: 4,
@@ -81,7 +93,7 @@ const Dialog: React.FC<DialogProps> = ({ open, title, children, actions, scrollC
 							) : null}
 						</Box>
 					</Paper>
-				</Slide>
+				</Grow>
 			</Modal>
 		</Portal>
 	);

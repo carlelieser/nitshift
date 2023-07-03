@@ -39,7 +39,7 @@ function getColorAtProgress(
 	return resultColor;
 }
 
-const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onClose }) => {
+const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onClose }) => {
 	const [activeStep, setActiveStep] = useState<number>(0);
 
 	const [selectedMonitors, setSelectedMonitors] = useState<Array<UIMonitor>>(edit?.monitors ?? []);
@@ -219,7 +219,7 @@ const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onC
 			]}
 			scrollContent={"y"}
 			onClose={onClose}
-			onReset={handleReset}
+			onExited={handleReset}
 		>
 			<Stack p={2}>
 				<Stepper steps={steps} activeStep={activeStep} onChange={handleStepChange} />
@@ -228,4 +228,4 @@ const ScheduleItemDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onC
 	);
 };
 
-export default ScheduleItemDialog;
+export default AddScheduleDialog;

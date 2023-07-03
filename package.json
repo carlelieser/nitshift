@@ -2,11 +2,12 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron-forge start",
+    "capture": "cross-env CAPTURE=true NODE_ENV=development electron-forge start",
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "package": "cross-env NODE_ENV=production electron-forge package",
     "make": "cross-env NODE_ENV=production electron-forge make",

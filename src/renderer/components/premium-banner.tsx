@@ -36,7 +36,7 @@ import { stripe } from "../../main/stripe";
 import { loadUserId } from "../../common/storage";
 import PriceMenu, { descriptions, prices } from "./price-menu";
 
-const { default: premiumBannerBg } = require("../../assets/img/premium-banner-bg.png");
+const { default: premiumBannerBg } = require("../assets/img/premium-banner-bg.png");
 
 const content = [
 	{

@@ -27,14 +27,23 @@ class Window extends EventEmitter {
 		this.entry = entry;
 	}
 
+	private getWidth = () => {
+		const mode = loadMode();
+		return dimensions[mode].width * (process.env.CAPTURE ? 2 : 1);
+	};
+
+	private getHeight = () => {
+		const mode = loadMode();
+		return dimensions[mode].height * (process.env.CAPTURE ? 2 : 1);
+	};
+
 	private getCoordinates = () => {
 		const { screen } = require("electron");
 		const monitor = screen.getPrimaryDisplay();
-		const mode = loadMode();
 		const right = monitor.workArea.x + monitor.workArea.width;
 		const bottom = monitor.workArea.y + monitor.workArea.height;
-		const width = dimensions[mode].width;
-		const height = dimensions[mode].height;
+		const width = this.getWidth();
+		const height = this.getHeight();
 
 		return {
 			x: right - width - dimensions.padding,
@@ -50,11 +59,12 @@ class Window extends EventEmitter {
 	};
 
 	public applyMode = () => {
-		const mode = loadMode();
 		if (this.data) {
+			const width = this.getWidth();
+			const height = this.getHeight();
 			this.data.setResizable(true);
-			this.data.setMaximumSize(dimensions[mode].width, dimensions[mode].height);
-			this.data.setSize(dimensions[mode].width, dimensions[mode].height, true);
+			this.data.setMaximumSize(width, height);
+			this.data.setSize(width, height, true);
 			this.data.setResizable(false);
 			this.readjust();
 		}

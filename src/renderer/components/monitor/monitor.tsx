@@ -5,8 +5,6 @@ import { GLOBAL } from "lumi-control";
 import { UIMonitor } from "../../../common/types";
 import { merge, upperCase } from "lodash";
 import { teal, common } from "@mui/material/colors";
-import MonitorToggle from "./monitor-toggle";
-import MonitorModeToggle from "./monitor-mode-toggle";
 import MonitorBrightnessSlider from "./monitor-brightness-slider";
 import Color from "color";
 import { DraggableProvided } from "react-beautiful-dnd";

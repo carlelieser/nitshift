@@ -4,7 +4,7 @@ import { Close, Key, UnfoldLess, UnfoldMore } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { setMode, setTransitioning } from "../reducers/app";
 import { ipcRenderer } from "electron";
-import ActivationDialog from "./dialogs/activation";
+import ActivateLicenseDialog from "./dialogs/activate-license";
 
 const WindowButtons = () => {
 	const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const WindowButtons = () => {
 
 	return (
 		<Stack direction={"row"} alignItems={"center"} spacing={1}>
-			<ActivationDialog open={activationDialogOpen} onClose={closeActivationDialog} />
+			<ActivateLicenseDialog open={activationDialogOpen} onClose={closeActivationDialog} />
 			{license !== "premium" ? (
 				<Tooltip title={<Typography>Activate</Typography>}>
 					<IconButton size={"small"} onClick={openActivationDialog}>
@@ -36,7 +36,7 @@ const WindowButtons = () => {
 					</IconButton>
 				</Tooltip>
 			) : null}
-			<Tooltip title={<Typography>{mode === "compact" ? "Expand" : "Minimize"}</Typography>}>
+			<Tooltip title={<Typography>{mode === "compact" ? "Expanded View" : "Compact View"}</Typography>}>
 				<IconButton size={"small"} onClick={toggleMode}>
 					{mode === "expanded" ? <UnfoldLess /> : <UnfoldMore />}
 				</IconButton>

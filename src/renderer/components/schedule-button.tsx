@@ -3,7 +3,7 @@ import { AutoAwesome, Timer } from "@mui/icons-material";
 import { Badge, Box, Button } from "@mui/material";
 import { useAppSelector } from "../hooks";
 import PremiumTooltip from "./premium-tooltip";
-import ScheduleDialog from "./dialogs/schedule";
+import ViewScheduleDialog from "./dialogs/view-schedule";
 import { ipcRenderer } from "electron";
 
 const ScheduleButton = () => {
@@ -14,11 +14,8 @@ const ScheduleButton = () => {
 	const closeScheduleDialog = () => setScheduleOpen(false);
 
 	useEffect(() => {
-		if (scheduleOpen) {
-			ipcRenderer.invoke("disable-auto-hide");
-		} else {
-			ipcRenderer.invoke("enable-auto-hide");
-		}
+		if (scheduleOpen) ipcRenderer.invoke("disable-auto-hide");
+		else ipcRenderer.invoke("enable-auto-hide");
 	}, [scheduleOpen]);
 
 	return (
@@ -32,7 +29,7 @@ const ScheduleButton = () => {
 					</Button>
 				</Box>
 			</PremiumTooltip>
-			<ScheduleDialog open={scheduleOpen} onClose={closeScheduleDialog} />
+			<ViewScheduleDialog open={scheduleOpen} onClose={closeScheduleDialog} />
 		</>
 	);
 };

@@ -40,7 +40,7 @@ const transportConfig: SMTPTransport.Options = {
 	},
 };
 
-const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
+const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 	const theme = useTheme();
 	const dispatch = useAppDispatch();
 	const isCompact = useAppSelector((state) => state.app.mode === "compact");
@@ -223,7 +223,7 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 	}, [open]);
 
 	return (
-		<Dialog open={open} title={"Activate"} onClose={onClose} onReset={handleReset}>
+		<Dialog open={open} title={"Activate"} onClose={onClose} onExited={handleReset}>
 			<Stack height={"100%"} alignItems={"center"} justifyContent={"center"}>
 				<Collapse in={emailSent}>
 					<Stack alignItems={"center"} justifyContent={"center"} spacing={2}>
@@ -357,4 +357,4 @@ const ActivationDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => 
 	);
 };
 
-export default ActivationDialog;
+export default ActivateLicenseDialog;

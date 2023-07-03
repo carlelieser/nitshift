@@ -4,7 +4,7 @@ import { removeSchedule, ScheduleItem } from "../reducers/app";
 import { Delete, Edit, Monitor, Timer, WbSunny } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { randomUUID } from "crypto";
-import ScheduleItemDialog from "./dialogs/schedule-item";
+import AddScheduleDialog from "./dialogs/add-schedule";
 import { getDateFromTime } from "../../common/dayjs";
 
 const Schedule: React.FC<ScheduleItem> = (props) => {
@@ -22,7 +22,7 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 
 	return (
 		<Paper elevation={4}>
-			<ScheduleItemDialog edit={props} open={editDialogOpen} onClose={closeEditDialog} />
+			<AddScheduleDialog edit={props} open={editDialogOpen} onClose={closeEditDialog} />
 			<Stack spacing={2} justifyContent={"space-between"} py={2}>
 				<Stack direction={"row"} alignItems={"center"} spacing={2} px={2}>
 					<Monitor />

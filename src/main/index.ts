@@ -46,6 +46,7 @@ import "./firebase";
 import * as path from "path";
 import * as process from "process";
 import Updater, { Release } from "./updater";
+import fs from "fs";
 
 const TRIAL_JOB_TIME = isDev ? "* * * * * *" : "0 * * * * *";
 const TRIAL_DURATION = isDev ? 1000 * 60 : 1000 * 60 * 60 * 24 * 7;
@@ -57,7 +58,7 @@ if (require("electron-squirrel-startup")) app.quit();
 
 Store.initRenderer();
 
-const { default: iconPath } = require("../assets/img/icon.png");
+const { default: iconPath } = require("../renderer/assets/img/icon.png");
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
@@ -68,6 +69,8 @@ let updater = new Updater();
 let shades = new Shader();
 let tray: Tray = null;
 let autoHideEnabled = true;
+
+let screenshotsCaptured = 0;
 
 updater.on("update-available", (release: Release) => {
 	window.data?.show();
@@ -87,7 +90,7 @@ const createTrayIcon = () => {
 		{
 			icon: nativeIcon.resize({ width: 16 }),
 			label: "Glimmr",
-			sublabel: release.tag_name,
+			sublabel: `${release.tag_name} ${isDev ? "DEV" : ""}`,
 			enabled: false,
 		},
 		{
@@ -321,7 +324,7 @@ const handleWindowFocused = () => {
 };
 
 const handleWindowBlurred = () => {
-	if (!autoHideEnabled || shades.anyFocused()) return;
+	if (!autoHideEnabled || shades.anyFocused() || process.env.CAPTURE) return;
 	if (isDev && window.data.webContents.isDevToolsFocused()) return;
 	if (!window.data.isMinimized()) window.data.webContents.send("blurred");
 };
@@ -351,6 +354,19 @@ const handleAutoLaunch = () => {
 	autoLaunch.isEnabled().then((enabled) => {
 		if (!enabled) autoLaunch.enable();
 	});
+};
+
+const captureScreenshot = async (id: number) => {
+	const [width, height] = window.data.getSize();
+	const data = await window.data.webContents.capturePage({
+		width,
+		height,
+		x: 0,
+		y: 0,
+	});
+	await new Promise<void>((resolve) =>
+		fs.writeFile(path.resolve("screenshots", `${release.tag_name}-${id}.png`), data.toPNG(), () => resolve())
+	);
 };
 
 app.on("ready", async () => {
@@ -413,6 +429,10 @@ ipcMain.handle("enable-pass-through", window.enablePassThrough);
 ipcMain.handle("disable-pass-through", window.disablePassThrough);
 
 ipcMain.handle("schedule-modified", checkSchedule);
+
+ipcMain.handle("capture-screenshot", async () => {
+	await captureScreenshot(++screenshotsCaptured);
+});
 
 ipcMain.handle("enable-auto-hide", () => (autoHideEnabled = true));
 ipcMain.handle("disable-auto-hide", () => (autoHideEnabled = false));

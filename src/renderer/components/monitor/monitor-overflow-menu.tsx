@@ -5,6 +5,7 @@ import { useAppSelector } from "../../hooks";
 import MonitorToggle from "./monitor-toggle";
 import MonitorModeToggle from "./monitor-mode-toggle";
 import MonitorRename from "./monitor-rename";
+import { ipcRenderer } from "electron";
 
 interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl"> {
 	disabled: boolean;
@@ -20,9 +21,12 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ open, disable
 		<Box>
 			<Menu
 				autoFocus={open}
-				keepMounted={true}
+				keepMounted={false}
 				open={open}
 				anchorEl={ref.current}
+				sx={{
+					marginLeft: process.env.CAPTURE ? -23.5 : 0,
+				}}
 				onClose={onClose}
 				onClick={() => onClose({}, "backdropClick")}
 			>

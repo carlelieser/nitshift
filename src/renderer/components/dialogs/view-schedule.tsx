@@ -5,22 +5,20 @@ import { useAppSelector } from "../../hooks";
 import { Add } from "@mui/icons-material";
 import { TransitionGroup } from "react-transition-group";
 import Schedule from "../schedule";
-import ScheduleItemDialog from "./schedule-item";
+import AddScheduleDialog from "./add-schedule";
 
-const { default: clock } = require("../../../assets/img/clock.jpeg");
+const { default: clock } = require("../../assets/img/clock.jpeg");
 
-const ScheduleDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
-	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+const ViewScheduleDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
+	const [addScheduleDialogOpen, setAddScheduleDialogOpen] = useState<boolean>(false);
 
 	const schedule = useAppSelector((state) => state.app.schedule);
 
-	const openDialog = () => setDialogOpen(true);
-	const closeDialog = () => setDialogOpen(false);
-
-	const handleReset = () => {};
+	const openDialog = () => setAddScheduleDialogOpen(true);
+	const closeDialog = () => setAddScheduleDialogOpen(false);
 
 	return (
-		<Dialog open={open} onClose={onClose} title={"Schedule"} onReset={handleReset}>
+		<Dialog open={open} onClose={onClose} title={"Schedule"}>
 			<Stack spacing={2} p={2} pb={12}>
 				<TransitionGroup>
 					{schedule.length === 0 ? (
@@ -65,9 +63,9 @@ const ScheduleDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 					<Add />
 				</Fab>
 			</Stack>
-			<ScheduleItemDialog edit={null} open={dialogOpen} onClose={closeDialog} />
+			<AddScheduleDialog edit={null} open={addScheduleDialogOpen} onClose={closeDialog} />
 		</Dialog>
 	);
 };
 
-export default ScheduleDialog;
+export default ViewScheduleDialog;

@@ -75,7 +75,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 					onClick: handleConfirmNameChange,
 				},
 			]}
-			onReset={() => {}}
+			onExited={() => {}}
 			open={open}
 			onClose={onClose}
 		>

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { GLOBAL } from "lumi-control";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -8,6 +8,7 @@ import { DragDropContext, Droppable, Draggable, OnDragEndResponder } from "react
 
 import Monitor from "./monitor";
 import { UIMonitor } from "../../../common/types";
+import { ipcRenderer } from "electron";
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
@@ -15,6 +16,8 @@ const MonitorList = () => {
 	const monitors = useAppSelector((state) => state.app.monitors);
 	const license = useAppSelector((state) => state.app.license);
 	const brightness = useAppSelector((state) => state.app.brightness);
+
+	const [scheduleScreenshotCaptured, setScheduleScreenshotCaptured] = useState(false);
 
 	const globalMonitorDisabled = useMemo(() => license === "free" || monitors.every(({ disabled }) => disabled), [license, monitors]);
 
@@ -68,6 +71,7 @@ const MonitorList = () => {
 										const disabled = license === "free" ? (index > 1 ? true : monitor.disabled) : monitor.disabled;
 										const menuDisabled = license === "free" ? index > 1 : false;
 										const dragDisabled = disabled || monitors.length === 1;
+
 										return (
 											<Draggable
 												isDragDisabled={dragDisabled}

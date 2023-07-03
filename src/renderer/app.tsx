@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, createTheme, Grow, Portal, Snackbar, ThemeProvider } from "@mui/material";
 import { ipcRenderer } from "electron";
 import { Provider } from "react-redux";
@@ -80,8 +80,14 @@ const App = () => {
 						},
 					},
 				},
+				MuiIconButton: {
+					defaultProps: {
+						disableFocusRipple: !!process.env.CAPTURE,
+					},
+				},
 				MuiButton: {
 					defaultProps: {
+						disableFocusRipple: !!process.env.CAPTURE,
 						sx: {
 							px: 2,
 						},
@@ -163,6 +169,17 @@ const App = () => {
 		ipcRenderer.on("refresh-monitors", () => dispatch(refreshAvailableMonitors()));
 		ipcRenderer.on("focused", () => setFocused(true));
 		ipcRenderer.on("blurred", () => setFocused(false));
+
+		if (process.env.CAPTURE) {
+			window.addEventListener("keyup", (e) => {
+				if (e.keyCode === 48) {
+					e.stopPropagation();
+					e.preventDefault();
+					ipcRenderer.invoke("capture-screenshot");
+					return false;
+				}
+			});
+		}
 	}, []);
 
 	return (
@@ -180,6 +197,7 @@ const App = () => {
 					}}
 					onMouseOver={handleMouseOver}
 				>
+					{process.env.CAPTURE ? <style>{"body { zoom: 2; }"}</style> : null}
 					<Grow
 						in={transitioning ? !transitioning : focused}
 						style={{
