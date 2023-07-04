@@ -10,7 +10,7 @@
     "capture": "cross-env CAPTURE=true NODE_ENV=development electron-forge start",
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "package": "cross-env NODE_ENV=production electron-forge package",
-    "make": "cross-env NODE_ENV=production electron-forge make",
+    "make": "cross-env NODE_ENV=production CERTIFICATE_PASSWORD=UqM8%qqzHfkxg7iY electron-forge make",
     "version:prev": "ts-node-esm pipeline/version.ts -- --decrement",
     "version:next": "ts-node-esm pipeline/version.ts -- --increment",
     "drop": "ts-node-esm pipeline/drop.ts",
