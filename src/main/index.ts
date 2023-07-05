@@ -159,6 +159,7 @@ const createNewUser = async () => {
 	const [id, email] = getIdAndEmail();
 	saveUserId(id);
 	saveUserEmail(email);
+	saveTrialAvailability(true);
 	return createUserWithEmailAndPassword(auth, email, encryption.id).then(updateUserDoc).catch(updateStorageWithUserDoc);
 };
 
@@ -221,6 +222,7 @@ const updateStorageWithUserDoc = async () => {
 			}
 			window.data?.webContents.send("sync-license");
 		} else {
+			saveTrialAvailability(true);
 			await updateUserDoc();
 		}
 	} catch (err) {
@@ -312,6 +314,7 @@ const handleFreeTrialStarted = async () => {
 const initAuth = async () => {
 	const user = loadUserId();
 	const license = loadLicense();
+	if (isDev) console.log(user);
 	if (license === "trial") startTrialCheck();
 	if (user) await updateStorageWithUserDoc();
 	else await createNewUser();

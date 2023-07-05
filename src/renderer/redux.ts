@@ -12,7 +12,6 @@ import {
 	setMonitorDisabled,
 	setMonitorMode,
 	setRefreshed,
-	setTransitioning,
 	setTrialStartDate,
 	setMonitors,
 	addSchedule,
@@ -43,16 +42,28 @@ const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMi
 listener.startListening({
 	actionCreator: setLicense,
 	effect: async (action, api) => {
+		const state = cloneDeep(api.getState());
+
 		saveLicense(action.payload);
 
 		if (action.payload === "free") {
-			const state = api.getState();
 			const activeMonitorIndex = state.app.monitors.findIndex(({ id }) => id === state.app.activeMonitor?.id);
 			const shouldResetActiveMonitor = activeMonitorIndex > 1 || activeMonitorIndex === -1;
 			if (shouldResetActiveMonitor) {
-				api.dispatch(setActiveMonitor(api.getState().app.monitors?.[0]?.id));
+				api.dispatch(setActiveMonitor(state.app.monitors?.[0]?.id));
 			}
 			api.dispatch(refreshAvailableMonitors());
+		}
+
+		if (action.payload === "trial" || action.payload === "premium") {
+			api.dispatch(
+				setMonitors(
+					state.app.monitors.map((monitor) => {
+						monitor.disabled = false;
+						return monitor;
+					})
+				)
+			);
 		}
 
 		await ipcRenderer.invoke("sync-user");

@@ -1,4 +1,7 @@
 import { AppState } from "../renderer/reducers/app";
+import * as process from "process";
+import fs from "fs";
+import logSymbols from "log-symbols";
 
 const crypto = require("crypto");
 const encryption = require("./encryption.json");
@@ -70,3 +73,9 @@ export const saveTrialAvailability = (available: AppState["trialAvailability"]) 
 export const saveTrialStartDate = (date: AppState["trialStartDate"]) => storage().set(STORE.TRIAL_START_DATE, date);
 export const saveUserEmail = (email: AppState["userEmail"]) => storage().set(STORE.USER_EMAIL, email);
 export const saveUserId = (id: AppState["userId"]) => storage().set(STORE.USER_ID, id);
+
+if (process.argv.includes("--clear")) {
+	const path = storage().path;
+	fs.rmSync(path, { force: true });
+	console.log(logSymbols.success, `storage file cleared: ${path}`);
+}

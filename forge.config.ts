@@ -47,8 +47,8 @@ const config: ForgeConfig = {
 			setupExe: "glimmr-setup.exe",
 			setupIcon: path.join(__dirname, "src", "renderer", "assets", "img", "icon.ico"),
 			loadingGif: path.join(__dirname, "src", "renderer", "assets", "img", "installer.gif"),
-			certificateFile: path.join(__dirname, "pipeline", "cert.pfx"),
-			certificatePassword: process.env.CERTIFICATE_PASSWORD,
+			// certificateFile: path.join(__dirname, "pipeline", "cert.pfx"),
+			// certificatePassword: process.env.CERTIFICATE_PASSWORD,
 		}),
 	],
 	plugins: [

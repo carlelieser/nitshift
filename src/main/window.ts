@@ -133,7 +133,7 @@ class Window extends EventEmitter {
 					? {
 							mode: "native",
 							disabled: index > 1,
-							brightness: index > 1 ? 100 : storedMonitor?.brightness,
+							brightness: index > 1 ? 100 : storedMonitor?.brightness ?? 100,
 					  }
 					: {}),
 				nickname: nickname ?? monitor.name,

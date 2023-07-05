@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.3.0",
-  "body": "Bug fixes/improvements."
+  "tag_name": "v0.3.1",
+  "body": "Fix issue where free trial button is hidden for free users."
 }
