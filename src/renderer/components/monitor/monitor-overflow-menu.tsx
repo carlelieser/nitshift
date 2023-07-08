@@ -21,7 +21,7 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ open, disable
 		<Box>
 			<Menu
 				autoFocus={open}
-				keepMounted={false}
+				keepMounted={true}
 				open={open}
 				anchorEl={ref.current}
 				sx={{

@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.3.1",
-  "body": "Fix issue where free trial button is hidden for free users."
+  "tag_name": "v0.3.2",
+  "body": "Fix issue where monitor rename dialog is closed immediately after opening."
 }
