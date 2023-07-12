@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.3.2",
-  "body": "Fix issue where monitor rename dialog is closed immediately after opening."
+  "tag_name": "v0.3.3",
+  "body": "Automatically send license verification confirmation email."
 }

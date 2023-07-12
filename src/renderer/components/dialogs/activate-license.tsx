@@ -26,7 +26,8 @@ import Mail from "nodemailer/lib/mailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { ipcRenderer } from "electron";
 
-const { default: template } = require("../../templates/email-verification.html");
+const { default: emailVerificationTemplate } = require("../../templates/email-verification.html");
+const { default: licenseVerifiedTemplate } = require("../../templates/license-verified.html");
 
 const { clipboard } = require("electron");
 const nodemailer = require("nodemailer");
@@ -64,31 +65,52 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 		code.current = id.substring(0, 6).toUpperCase();
 	};
 
-	const getEmailConfig = (): Mail.Options => ({
+	const getEmailVerificationConfig = (): Mail.Options => ({
 		from: "Glimmr <support@glimmr.app>",
 		to: email,
 		subject: "Your single-use code",
-		html: template.replace("[CODE]", code.current),
+		html: emailVerificationTemplate.replace("[CODE]", code.current),
 		headers: {
 			"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
 			"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1",
 		},
 	});
 
-	const attemptToSendVerificationEmail = async () => {
+	const getLicenseVerifiedConfig = (): Mail.Options => ({
+		from: "Glimmr <support@glimmr.app>",
+		to: email,
+		bcc: "glimmr.app+98972a7044@invite.trustpilot.com",
+		subject: "License verified",
+		html: licenseVerifiedTemplate,
+		headers: {
+			"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
+			"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1",
+		},
+	});
+
+	const attemptToSendEmailVerificationEmail = async () => {
 		updateCode();
 		try {
 			let transporter = nodemailer.createTransport(transportConfig);
-			await transporter.sendMail(getEmailConfig());
+			await transporter.sendMail(getEmailVerificationConfig());
 			setEmailSent(true);
 		} catch (err) {
 			if (err) setError("Error sending email. Please try again.");
 		}
 	};
 
+	const attemptToSendLicenseVerifiedEmail = async () => {
+		try {
+			let transporter = nodemailer.createTransport(transportConfig);
+			await transporter.sendMail(getLicenseVerifiedConfig());
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	const sendVerificationEmail = async () => {
 		setLoading(true);
-		await attemptToSendVerificationEmail();
+		await attemptToSendEmailVerificationEmail();
 		setLoading(false);
 	};
 
@@ -191,6 +213,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	useEffect(() => {
 		if (licenseVerified) {
+			attemptToSendLicenseVerifiedEmail();
 			dispatch(setReceivedPremium(true));
 			dispatch(setLicense("premium"));
 			dispatch(setTrialAvailability(false));
