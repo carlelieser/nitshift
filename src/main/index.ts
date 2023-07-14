@@ -1,34 +1,34 @@
 import {
 	app,
 	BrowserWindow,
-	nativeImage,
-	Tray,
-	screen,
+	HeadersReceivedResponse,
 	ipcMain,
 	Menu,
+	nativeImage,
 	OnHeadersReceivedListenerDetails,
-	HeadersReceivedResponse,
+	screen,
 	session,
+	Tray,
 } from "electron";
 import {
-	loadMonitors,
+	loadGlobalBrightness,
 	loadLicense,
+	loadMonitors,
+	loadSchedule,
+	loadTrialAvailability,
+	loadTrialStartDate,
 	loadUserEmail,
 	loadUserId,
-	loadGlobalBrightness,
-	loadTrialStartDate,
-	loadTrialAvailability,
 	saveLicense,
-	saveTrialStartDate,
+	saveMonitors,
 	saveTrialAvailability,
+	saveTrialStartDate,
 	saveUserEmail,
 	saveUserId,
-	loadSchedule,
-	saveMonitors,
 } from "../common/storage";
 import { clone, debounce, difference, reduce, throttle } from "lodash";
 import { isDev, normalizeBrightness } from "../common/utils";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { machineIdSync } from "node-machine-id";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
@@ -120,7 +120,7 @@ const createTrayIcon = () => {
 const updateMonitorsAndAdjustWindowPosition = debounce(() => {
 	window.refreshMonitors();
 	window.readjust();
-}, 2000);
+}, 3000);
 
 const applyBrightness = throttle(() => {
 	const monitors = loadMonitors().filter(({ disabled }) => !disabled);

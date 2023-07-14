@@ -4,6 +4,7 @@ import lumi from "lumi-control";
 import { isDev } from "../common/utils";
 import { UIMonitor } from "../common/types";
 import EventEmitter from "events";
+import { merge } from "lodash";
 
 export const dimensions: any = {
 	expanded: {
@@ -120,9 +121,12 @@ class Window extends EventEmitter {
 		const storedMonitorNicknames = loadMonitorNicknames();
 		const availableMonitors = lumi.monitors();
 
+		storedMonitors.forEach((monitor) => (monitor.connected = false));
+
 		const monitors: Array<UIMonitor> = availableMonitors.map((monitor, index) => {
 			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1];
 			const storedMonitor = storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id);
+			console.log(storedMonitor?.id);
 			return {
 				...monitor,
 				brightness: 100,
@@ -133,10 +137,11 @@ class Window extends EventEmitter {
 					? {
 							mode: "native",
 							disabled: index > 1,
-							brightness: index > 1 ? 100 : storedMonitor?.brightness ?? 100,
+							brightness: index > 1 ? 100 : storedMonitor?.brightness === undefined ? 100 : storedMonitor.brightness,
 					  }
 					: {}),
 				nickname: nickname ?? monitor.name,
+				connected: true,
 			};
 		});
 
@@ -151,7 +156,7 @@ class Window extends EventEmitter {
 			return aIndex - bIndex;
 		});
 
-		saveMonitors(monitors);
+		saveMonitors(merge(storedMonitors, monitors));
 
 		if (this.data) this.data.webContents.send("refresh-monitors");
 	};

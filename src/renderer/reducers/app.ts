@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
 	loadActiveMonitor,
+	loadBrightnessModes,
 	loadGlobalBrightness,
 	loadLicense,
 	loadMode,
@@ -28,11 +29,21 @@ export interface ScheduleItem extends ScheduleItemContent {
 	id: string;
 }
 
+export interface BrightnessMode {
+	id?: string;
+	label: string;
+	active: boolean;
+	brightness: number;
+	icon: string;
+	removable: boolean;
+}
+
 export interface AppState {
 	[key: string]: any;
 
 	activeMonitor: UIMonitor | null;
 	brightness: number;
+	brightnessModes: Array<BrightnessMode>;
 	license: "free" | "trial" | "premium";
 	mode: "expanded" | "compact";
 	monitors: Array<UIMonitor>;
@@ -68,6 +79,7 @@ const findMonitorIndexById = (monitors: UIMonitor[], id: string) => monitors.fin
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
 	brightness: loadGlobalBrightness(),
+	brightnessModes: loadBrightnessModes(),
 	license: loadLicense(),
 	mode: loadMode(),
 	monitors: loadMonitors(),
@@ -92,8 +104,16 @@ export const appSlice = createSlice({
 	name: "app",
 	initialState,
 	reducers: {
+		addBrightnessMode: (state, action: PayloadAction<BrightnessMode>) => {
+			state.brightnessModes.push(merge({ id: randomUUID() }, action.payload));
+		},
 		addSchedule: (state, action: PayloadAction<ScheduleItemContent>) => {
 			state.schedule.push(merge({ id: randomUUID() }, action.payload));
+		},
+		editBrightnessMode: (state, action: PayloadAction<Partial<BrightnessMode>>) => {
+			let index = state.brightnessModes.findIndex((mode) => mode.id === action.payload.id);
+			state.brightnessModes[index] = merge({}, state.brightnessModes[index], action.payload);
+			console.log(state.brightnessModes[index]);
 		},
 		editSchedule: (state, action: PayloadAction<ScheduleItem>) => {
 			let index = state.schedule.findIndex((schedule) => schedule.id === action.payload.id);
@@ -102,8 +122,17 @@ export const appSlice = createSlice({
 		refreshAvailableMonitors: (state, payload: PayloadAction<boolean>) => {
 			state.monitors = loadMonitors();
 		},
+		removeBrightnessMode: (state, action: PayloadAction<string>) => {
+			state.brightnessModes = state.brightnessModes.filter(({ id }) => id !== action.payload);
+		},
 		removeSchedule: (state, action: PayloadAction<string>) => {
 			state.schedule = state.schedule.filter(({ id }) => id !== action.payload);
+		},
+		setActiveBrightnessMode: (state, action: PayloadAction<string>) => {
+			state.brightnessModes = state.brightnessModes.map((mode) => merge({}, mode, { active: false }));
+			state.brightnessModes = state.brightnessModes.map((mode) =>
+				mode.id === action.payload ? merge({}, mode, { active: true }) : mode
+			);
 		},
 		setActiveMonitor: (state, action: PayloadAction<AppState["activeMonitor"]["id"]>) => {
 			state.activeMonitor = state.monitors.find(({ id }) => id === action.payload);
@@ -157,10 +186,14 @@ export const appSlice = createSlice({
 });
 
 export const {
+	addBrightnessMode,
 	addSchedule,
+	editBrightnessMode,
 	editSchedule,
 	refreshAvailableMonitors,
+	removeBrightnessMode,
 	removeSchedule,
+	setActiveBrightnessMode,
 	setActiveMonitor,
 	setBrightness,
 	setLicense,

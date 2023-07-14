@@ -8,7 +8,7 @@ import { GLOBAL } from "lumi-control";
 const MonitorSelect = () => {
 	const dispatch = useAppDispatch();
 	const license = useAppSelector((state) => state.app.license);
-	const monitors = useAppSelector((state) => state.app.monitors);
+	const monitors = useAppSelector((state) => state.app.monitors.filter((monitor) => monitor.connected));
 	const activeMonitor = useAppSelector((state) => state.app.activeMonitor);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);

@@ -28,7 +28,7 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 					<Monitor />
 					<Stack direction={"row"} alignItems={"center"} gap={1} flexWrap={"wrap"}>
 						{props.monitors.map((monitor) => {
-							const connected = !!monitors.find((ref) => ref.id === monitor.id);
+							const connected = monitors.find((ref) => ref.id === monitor.id)?.connected;
 							return (
 								<Paper
 									key={`${id}-${monitor.name}`}

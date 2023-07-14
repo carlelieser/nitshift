@@ -2,7 +2,7 @@
   "name": "glimmr",
   "productName": "Glimmr",
   "target": "node",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Programmatically adjust the brightness of your monitors.",
   "main": ".webpack/main/main.js",
   "scripts": {
@@ -16,8 +16,8 @@
     "version:prev": "ts-node-esm pipeline/version.ts -- --decrement",
     "version:next": "ts-node-esm pipeline/version.ts -- --increment",
     "upload": "ts-node-esm pipeline/upload-installer.ts",
-    "release:create": "ts-node-esm pipeline/create-release.ts",
     "release:prepare": "npm run format && npm run version:next && npm run make && npm run sign",
+    "release:create": "ts-node-esm pipeline/create-release.ts",
     "release:auto": "npm run release:create -- -- --auto && npm run upload",
     "publish:auto": "npm run release:prepare && npm run release:auto",
     "release": "npm run release:create && npm run upload",

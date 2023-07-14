@@ -1,4 +1,4 @@
 {
-  "tag_name": "v0.3.3",
-  "body": "Automatically send license verification confirmation email."
+  "tag_name": "v0.3.4",
+  "body": "New brightness mode feature! Also fixed a bug causing monitor brightness to be reset upon connecting/disconnecting."
 }

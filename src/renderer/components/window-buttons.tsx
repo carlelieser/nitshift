@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { setMode, setTransitioning } from "../reducers/app";
 import { ipcRenderer } from "electron";
 import ActivateLicenseDialog from "./dialogs/activate-license";
+import BrightnessModeButton from "./brightness-mode-button";
 
 const WindowButtons = () => {
 	const dispatch = useAppDispatch();
@@ -29,6 +30,7 @@ const WindowButtons = () => {
 	return (
 		<Stack direction={"row"} alignItems={"center"} spacing={1}>
 			<ActivateLicenseDialog open={activationDialogOpen} onClose={closeActivationDialog} />
+			<BrightnessModeButton />
 			{license !== "premium" ? (
 				<Tooltip title={<Typography>Activate</Typography>}>
 					<IconButton size={"small"} onClick={openActivationDialog}>

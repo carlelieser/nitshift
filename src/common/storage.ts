@@ -2,6 +2,7 @@ import { AppState } from "../renderer/reducers/app";
 import * as process from "process";
 import fs from "fs";
 import logSymbols from "log-symbols";
+import { createDefaultBrightnessMode } from "./utils";
 
 const crypto = require("crypto");
 const encryption = require("./encryption.json");
@@ -29,6 +30,7 @@ const Store = require("electron-store");
 export const STORE = {
 	ACTIVE_MONITOR: "active-monitor",
 	GLOBAL_BRIGHTNESS: "global-brightness",
+	BRIGHTNESS_MODES: "brightness-modes",
 	LAST_UPDATED_ON: "last-updated-on",
 	LICENSE: "license",
 	MODE: "mode",
@@ -49,7 +51,17 @@ export const storage = () =>
 		deserialize: (value: string) => JSON.parse(decrypt(value)),
 	});
 
+const defaultBrightnessModes = [
+	createDefaultBrightnessMode("Custom", "LightMode", 100, true),
+	createDefaultBrightnessMode("Work", "Work", 80),
+	createDefaultBrightnessMode("Reading", "Book", 65),
+	createDefaultBrightnessMode("Gaming", "SportsEsports", 90),
+	createDefaultBrightnessMode("Movie", "Movie", 80),
+	createDefaultBrightnessMode("Night", "Bedtime", 30),
+];
+
 export const loadActiveMonitor = (): AppState["activeMonitor"] => storage().get(STORE.ACTIVE_MONITOR, null);
+export const loadBrightnessModes = (): AppState["brightnessModes"] => storage().get(STORE.BRIGHTNESS_MODES, defaultBrightnessModes);
 export const loadGlobalBrightness = (): AppState["brightness"] => storage().get(STORE.GLOBAL_BRIGHTNESS, 100);
 export const loadLastUpdatedOn = (): number => storage().get(STORE.LAST_UPDATED_ON, null);
 export const loadLicense = (): AppState["license"] => storage().get(STORE.LICENSE, "free");
@@ -62,6 +74,7 @@ export const loadTrialStartDate = (): AppState["trialStartDate"] => storage().ge
 export const loadUserEmail = (): AppState["userEmail"] => storage().get(STORE.USER_EMAIL, null);
 export const loadUserId = (): AppState["userId"] => storage().get(STORE.USER_ID, null);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
+export const saveBrightnessModes = (modes: AppState["brightnessModes"]) => storage().set(STORE.BRIGHTNESS_MODES, modes);
 export const saveGlobalBrightness = (brightness: AppState["brightness"]) => storage().set(STORE.GLOBAL_BRIGHTNESS, brightness);
 export const saveLastUpdatedOn = (date: number) => storage().set(STORE.LAST_UPDATED_ON, date);
 export const saveLicense = (license: AppState["license"]) => storage().set(STORE.LICENSE, license);

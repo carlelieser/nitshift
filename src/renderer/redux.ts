@@ -1,9 +1,15 @@
 import { configureStore, createListenerMiddleware, isAnyOf, ListenerMiddlewareInstance } from "@reduxjs/toolkit";
 import {
+	addBrightnessMode,
+	addSchedule,
 	appSlice,
 	AppState,
+	editBrightnessMode,
+	editSchedule,
 	refreshAvailableMonitors,
-	setTrialAvailability,
+	removeBrightnessMode,
+	removeSchedule,
+	setActiveBrightnessMode,
 	setActiveMonitor,
 	setBrightness,
 	setLicense,
@@ -11,17 +17,16 @@ import {
 	setMonitorBrightness,
 	setMonitorDisabled,
 	setMonitorMode,
-	setRefreshed,
-	setTrialStartDate,
-	setMonitors,
-	addSchedule,
-	removeSchedule,
-	editSchedule,
-	setSchedule,
 	setMonitorName,
+	setMonitors,
+	setRefreshed,
+	setSchedule,
+	setTrialAvailability,
+	setTrialStartDate,
 } from "./reducers/app";
 import {
 	saveActiveMonitor,
+	saveBrightnessModes,
 	saveGlobalBrightness,
 	saveLicense,
 	saveMode,
@@ -34,7 +39,7 @@ import {
 	STORE,
 } from "../common/storage";
 import { ipcRenderer } from "electron";
-import { clone, cloneDeep } from "lodash";
+import { clone, cloneDeep, merge } from "lodash";
 import { dayjs } from "../common/dayjs";
 
 const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMiddleware();
@@ -113,6 +118,15 @@ listener.startListening({
 listener.startListening({
 	actionCreator: setBrightness,
 	effect: (action, api) => {
+		const state = api.getState();
+		const mode = state.app.brightnessModes.find((mode) => mode.active);
+		api.dispatch(
+			editBrightnessMode(
+				merge({}, mode, {
+					brightness: action.payload,
+				})
+			)
+		);
 		api.dispatch(setActiveMonitor(null));
 		saveGlobalBrightness(action.payload);
 		ipcRenderer.invoke("global-brightness-changed");
@@ -202,6 +216,22 @@ listener.startListening({
 		saveSchedule(schedule);
 		api.dispatch(setSchedule(schedule));
 		ipcRenderer.invoke("schedule-modified");
+	},
+});
+
+listener.startListening({
+	matcher: isAnyOf(addBrightnessMode, editBrightnessMode, removeBrightnessMode),
+	effect: (action, api) => {
+		saveBrightnessModes(api.getState().app.brightnessModes);
+	},
+});
+
+listener.startListening({
+	actionCreator: setActiveBrightnessMode,
+	effect: (action, api) => {
+		const mode = api.getState().app.brightnessModes.find((mode) => mode.id === action.payload);
+		api.dispatch(setBrightness(mode.brightness));
+		saveBrightnessModes(api.getState().app.brightnessModes);
 	},
 });
 

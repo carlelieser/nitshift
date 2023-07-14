@@ -1,23 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { GLOBAL } from "lumi-control";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { AutoAwesome } from "@mui/icons-material";
 import { setMonitors, setTrialStartDate } from "../../reducers/app";
-import { DragDropContext, Droppable, Draggable, OnDragEndResponder } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from "react-beautiful-dnd";
 
 import Monitor from "./monitor";
 import { UIMonitor } from "../../../common/types";
-import { ipcRenderer } from "electron";
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
 	const trialAvailability = useAppSelector((state) => state.app.trialAvailability);
-	const monitors = useAppSelector((state) => state.app.monitors);
+	const monitors = useAppSelector((state) => state.app.monitors.filter((monitor) => monitor.connected));
 	const license = useAppSelector((state) => state.app.license);
 	const brightness = useAppSelector((state) => state.app.brightness);
-
-	const [scheduleScreenshotCaptured, setScheduleScreenshotCaptured] = useState(false);
 
 	const globalMonitorDisabled = useMemo(() => license === "free" || monitors.every(({ disabled }) => disabled), [license, monitors]);
 
@@ -62,6 +59,7 @@ const MonitorList = () => {
 						serialNumber={null}
 						position={{ x: 0, y: 0 }}
 						size={{ width: 0, height: 0 }}
+						connected={true}
 					/>
 					<DragDropContext onDragEnd={handleDragEnd}>
 						<Droppable droppableId={"droppable"}>

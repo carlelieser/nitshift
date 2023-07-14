@@ -7,4 +7,5 @@ export interface UIMonitor extends Monitor {
 	brightness: number;
 	mode: BrightnessMode;
 	disabled: boolean;
+	connected: boolean;
 }
