@@ -20,6 +20,7 @@ const BrightnessModeMenu: React.FC<MenuProps> = (props) => {
 				sx: {
 					ml: -6,
 					mt: 1,
+					minWidth: 150,
 				},
 			}}
 		>

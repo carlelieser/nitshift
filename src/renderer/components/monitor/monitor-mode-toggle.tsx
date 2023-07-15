@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Badge, Box, IconButton, ListItemIcon, ListItemText, MenuItem, Tooltip, Typography } from "@mui/material";
-import { AutoAwesome, DisplaySettings, DonutLarge, DonutSmall, Info } from "@mui/icons-material";
+import { AutoAwesome, DonutLarge, DonutSmall, InfoOutlined } from "@mui/icons-material";
 import { UIMonitor } from "../../../common/types";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setMonitorMode } from "../../reducers/app";
@@ -15,7 +15,7 @@ interface MonitorModeToggleProps {
 const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorId, mode }) => {
 	const dispatch = useAppDispatch();
 	const license = useAppSelector((state) => state.app.license);
-	const label = useMemo(() => (mode === "native" ? "Use shade mode" : "Use native mode"), [mode]);
+	const label = useMemo(() => (mode === "native" ? "Enable shade mode" : "Disable shade mode"), [mode]);
 	const icon = useMemo(() => (mode === "native" ? <DonutSmall /> : <DonutLarge />), [mode]);
 
 	const toggle = () => {
@@ -47,7 +47,7 @@ const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorI
 						}
 					>
 						<ListItemIcon sx={{ ml: 4 }}>
-							<Info fontSize={"small"} opacity={0.7} />
+							<InfoOutlined fontSize={"small"} opacity={0.7} />
 						</ListItemIcon>
 					</Tooltip>
 				</MenuItem>

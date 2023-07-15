@@ -1,6 +1,7 @@
 import {
 	app,
 	BrowserWindow,
+	clipboard,
 	HeadersReceivedResponse,
 	ipcMain,
 	Menu,
@@ -95,6 +96,10 @@ const createTrayIcon = () => {
 		},
 		{
 			type: "separator",
+		},
+		{
+			label: "Copy Support ID",
+			click: () => clipboard.writeText(machineIdSync()),
 		},
 		{
 			label: "Check for Updates...",
@@ -392,7 +397,7 @@ app.on("ready", async () => {
 		window.show();
 	});
 
-	window.create();
+	await window.create();
 	window.refreshMonitors();
 
 	updater.check(true);

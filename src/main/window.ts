@@ -96,6 +96,7 @@ class Window extends EventEmitter {
 			},
 			...coordinates,
 		});
+		this.data.setAlwaysOnTop(true, "pop-up-menu");
 		this.emit("window-created", this.data);
 		this.data.on("ready-to-show", () => this.emit("ready-to-show", this.data));
 		this.applyMode();

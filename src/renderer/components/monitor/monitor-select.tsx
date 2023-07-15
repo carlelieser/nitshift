@@ -40,6 +40,7 @@ const MonitorSelect = () => {
 				PaperProps={{
 					style: {
 						minHeight: 150,
+						minWidth: 150,
 					},
 				}}
 				anchorEl={anchorEl}

@@ -1,11 +1,10 @@
-import React, { createRef, useMemo, useRef } from "react";
-import { Box, IconButton, ListItemIcon, Menu, MenuItem, MenuProps } from "@mui/material";
+import React, { useMemo, useRef } from "react";
+import { Box, createTheme, Divider, IconButton, Menu, MenuProps, ThemeProvider, useTheme } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useAppSelector } from "../../hooks";
 import MonitorToggle from "./monitor-toggle";
 import MonitorModeToggle from "./monitor-mode-toggle";
 import MonitorRename from "./monitor-rename";
-import { ipcRenderer } from "electron";
 
 interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl"> {
 	disabled: boolean;
@@ -16,28 +15,41 @@ interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl"> {
 const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ open, disabled = false, onOpen, onClose, monitorId }) => {
 	const monitor = useAppSelector((state) => state.app.monitors.find((monitor) => monitor.id === monitorId));
 	const ref = useRef<HTMLButtonElement>();
+	const defaultTheme = useTheme();
+	const theme = useMemo(() => {
+		return createTheme({
+			...defaultTheme,
+			components: {
+				...defaultTheme.components,
+				MuiTooltip: {},
+			},
+		});
+	}, [defaultTheme]);
 
 	return (
-		<Box>
-			<Menu
-				autoFocus={open}
-				keepMounted={true}
-				open={open}
-				anchorEl={ref.current}
-				sx={{
-					marginLeft: process.env.CAPTURE ? -23.5 : 0,
-				}}
-				onClose={onClose}
-				onClick={() => onClose({}, "backdropClick")}
-			>
-				<MonitorRename monitorId={monitorId} currentName={monitor.nickname} />
-				<MonitorToggle variant={"menu-item"} monitorId={monitorId} disabled={monitor.disabled} />
-				<MonitorModeToggle variant={"menu-item"} monitorId={monitorId} mode={monitor.mode} />
-			</Menu>
-			<IconButton disabled={disabled} ref={ref} onClick={onOpen}>
-				<MoreVert />
-			</IconButton>
-		</Box>
+		<ThemeProvider theme={theme}>
+			<Box>
+				<Menu
+					autoFocus={open}
+					keepMounted={true}
+					open={open}
+					anchorEl={ref.current}
+					sx={{
+						marginLeft: process.env.CAPTURE ? -23.5 : 0,
+					}}
+					onClose={onClose}
+					onClick={() => onClose({}, "backdropClick")}
+				>
+					<MonitorModeToggle variant={"menu-item"} monitorId={monitorId} mode={monitor.mode} />
+					<Divider sx={{ my: 1 }} />
+					<MonitorRename monitorId={monitorId} currentName={monitor.nickname} />
+					<MonitorToggle variant={"menu-item"} monitorId={monitorId} disabled={monitor.disabled} />
+				</Menu>
+				<IconButton disabled={disabled} ref={ref} onClick={onOpen}>
+					<MoreVert />
+				</IconButton>
+			</Box>
+		</ThemeProvider>
 	);
 };
 

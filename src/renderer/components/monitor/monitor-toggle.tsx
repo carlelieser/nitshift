@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { IconButton, ListItemIcon, ListItemText, MenuItem, Tooltip, Typography } from "@mui/material";
-import { DesktopAccessDisabled, DesktopWindows, DesktopWindowsOutlined, Info, RadioButtonUnchecked, TaskAlt } from "@mui/icons-material";
+import { DesktopAccessDisabled, DesktopWindowsOutlined, InfoOutlined } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setMonitorDisabled } from "../../reducers/app";
 
@@ -32,7 +32,7 @@ const MonitorToggle: React.FC<MonitorToggleProps> = ({ variant, monitorId, disab
 			<ListItemText primary={label} />
 			<Tooltip title={<Typography>Disabled monitors are excluded from changes in global brightness</Typography>}>
 				<ListItemIcon>
-					<Info fontSize={"small"} opacity={0.7} />
+					<InfoOutlined fontSize={"small"} opacity={0.7} />
 				</ListItemIcon>
 			</Tooltip>
 		</MenuItem>
