@@ -1,1 +1,4 @@
-C:/Users/Carlos/WebstormProjects/glimmr/src/common/release.json
+{
+  "tag_name": "v0.3.5",
+  "body": "Minor bug fixes/improvements. Add tray action for copying support id to clipboard."
+}
