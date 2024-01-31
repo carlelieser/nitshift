@@ -1,0 +1,34 @@
+appId: com.glimmr.app
+productName: Glimmr
+directories:
+  buildResources: build
+files:
+  - 'out/**/*'
+  - 'node_modules/lumi-control/**/*'
+  - 'node_modules/firebase/**/*'
+  - 'node_modules/stripe/**/*'
+  - 'node_modules/nodemailer/**/*'
+  - 'node_modules/electron-store/**/*'
+  - 'node_modules/regedit/**/*'
+compression: maximum
+asar: true
+asarUnpack:
+  - resources/**
+extraResources:
+  - from: node_modules/regedit/vbs
+    to: vbs
+win:
+  executableName: Glimmr
+  icon: src/renderer/assets/img/icon.ico
+squirrelWindows:
+  iconUrl: https://www.dropbox.com/s/y0e37i0lrz4mexx/icon.ico?dl=1
+  artifactName: ${name}-setup.exe
+  loadingGif: src/renderer/assets/img/installer.gif
+  useAppIdAsId: true
+#nsis:
+#  installerIcon: src/renderer/assets/img/icon.ico
+#  artifactName: ${name}-setup.${ext}
+#  shortcutName: ${productName}
+#  uninstallDisplayName: ${productName}
+#  createDesktopShortcut: false
+npmRebuild: true

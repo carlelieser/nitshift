@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.node.json",
+  "include": [
+	"electron.vite.config.*",
+	"src/common/**/*",
+	"src/main/**/*"
+  ],
+  "compilerOptions": {
+	"target": "ES6",
+	"module": "CommonJS",
+	"paths": {
+	  "@main/*": [
+		"src/main/*"
+	  ],
+	  "@common/*": [
+		"src/common/*"
+	  ],
+	  "@assets/*": [
+		"src/renderer/assets/*"
+	  ]
+	}
+  }
+}
