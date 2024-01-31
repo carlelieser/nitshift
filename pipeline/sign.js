@@ -2,19 +2,21 @@ const { exec } = require("child_process");
 const ora = require("ora");
 const logSymbols = require("log-symbols");
 const path = require("path");
+const fg = require("fast-glob");
 
-const installerPath = path.join(__dirname, "..", "dist", "squirrel-windows", "glimmr-setup.exe");
-const toolPath = path.join(__dirname, "..", "code-sign-tool");
-const command = `./CodeSignTool.bat sign -username=devplex -password=$Olrock5567 -totp_secret=zXg0IXamGzM0gU+pZC4S78cBDAP4pbKmLQkDbm1gzEM= -input_file_path="${installerPath}"`;
+const root = path.resolve(__dirname, "..");
+const installer = path.join(root, "dist", "squirrel-windows", "glimmr-setup.exe");
+const tool = path.dirname(fg.globSync("code-sign-tool/**/CodeSignTool.bat", { cwd: root }).shift());
+const command = `./CodeSignTool.bat sign -username=devplex -password=$Olrock5567 -totp_secret=zXg0IXamGzM0gU+pZC4S78cBDAP4pbKmLQkDbm1gzEM= -input_file_path="${installer}"`;
 
-console.log(logSymbols.info, `running command "${command}"`);
+console.log(logSymbols.info, `Running command: ${command}`);
 
-const spinner = ora().start("signing installer");
+const spinner = ora().start("Signing installer");
 
-const child = exec(command, { shell: "powershell.exe", cwd: toolPath }, (error, stdout, stderr) => {
+const child = exec(command, { shell: "powershell.exe", cwd: tool }, (error, stdout, stderr) => {
 	spinner.stop();
-	if (error) console.log(logSymbols.error, "failed to sign installer\n", error);
-	else console.log(logSymbols.success, "installer signed");
+	if (error) console.log(logSymbols.error, "Signing failed\n", error);
+	else console.log(logSymbols.success, "Installer signed");
 });
 
 child.stdout.on("data", (data) => {
