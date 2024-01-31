@@ -1,0 +1,54 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
+  "include": [
+	"src/common/**/*",
+	"src/renderer/**/*"
+  ],
+  "compilerOptions": {
+	"composite": true,
+	"strictNullChecks": false,
+	"noImplicitReturns": false,
+	"baseUrl": ".",
+	"paths": {
+	  "@renderer/*": [
+		"src/renderer/*"
+	  ],
+	  "@common/*": [
+		"src/common/*"
+	  ],
+	  "@assets/*": [
+		"src/renderer/assets/*"
+	  ],
+	  "@components/*": [
+		"src/renderer/components/*"
+	  ],
+	  "@reducers/*": [
+		"src/renderer/reducers/*"
+	  ],
+	  "@hooks": [
+		"src/renderer/hooks.ts"
+	  ],
+	  "@utils": [
+		"src/renderer/utils.ts"
+	  ],
+	  "@redux": [
+		"src/renderer/redux.ts"
+	  ],
+	  "@views/*": [
+		"src/renderer/views/*"
+	  ],
+	  "@dialogs/*": [
+		"src/renderer/components/dialogs/*"
+	  ],
+	  "@buttons/*": [
+		"src/renderer/components/buttons/*"
+	  ],
+	  "@promotional/*": [
+		"src/renderer/components/promotional/*"
+	  ]
+	},
+	"types": [
+	  "vite/client.d.ts"
+	]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": [
+	"electron.vite.config.*",
+	"src/common/**/*",
+	"src/main/**/*"
+  ],
+  "compilerOptions": {
+	"composite": true,
+	"noImplicitAny": false,
+	"noImplicitReturns": false,
+	"strictNullChecks": false,
+	"allowSyntheticDefaultImports": true,
+	"paths": {
+	  "@main/*": [
+		"src/main/*"
+	  ],
+	  "@common/*": [
+		"src/common/*"
+	  ],
+	  "@assets/*": [
+		"src/renderer/assets/*"
+	  ]
+	},
+	"types": [
+	  "electron-vite/node",
+	  "vite/client.d.ts"
+	]
+  }
+}

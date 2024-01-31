@@ -1,0 +1,71 @@
+import React from "react";
+import { Paper, Stack } from "@mui/material";
+import { useAppSelector } from "@hooks";
+import MonitorToggle from "../components/monitor/monitor-toggle";
+import MonitorModeToggle from "../components/monitor/monitor-mode-toggle";
+import MonitorBrightnessSlider from "../components/monitor/monitor-brightness-slider";
+import { GLOBAL } from "@common/types";
+
+const CompactView = () => {
+	const mode = useAppSelector((state) => state.app.mode);
+	const activeMonitor = useAppSelector((state) => state.app.activeMonitor);
+	const brightness = useAppSelector((state) => state.app.brightness);
+
+	return mode === "compact" ? (
+		<Paper
+			sx={{
+				overflow: "hidden",
+				zIndex: 0,
+			}}
+			square={true}
+			elevation={0}
+			variant={"elevation"}
+		>
+			<Paper
+				sx={{
+					zIndex: 40,
+					position: "relative",
+					borderBottomLeftRadius: 16,
+					borderBottomRightRadius: 16,
+				}}
+				square={true}
+				elevation={1}
+				variant={"elevation"}
+			>
+				<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+					{activeMonitor ? (
+						<Stack direction={"row"} alignItems={"center"} spacing={1} p={1}>
+							<MonitorToggle
+								variant={"icon-button"}
+								monitorId={activeMonitor.id}
+								disabled={activeMonitor.disabled}
+							/>
+							<MonitorModeToggle
+								variant={"icon-button"}
+								monitorId={activeMonitor.id}
+								mode={activeMonitor.mode}
+							/>
+						</Stack>
+					) : null}
+					{activeMonitor ? (
+						<MonitorBrightnessSlider
+							monitorId={activeMonitor.id}
+							mode={activeMonitor.mode}
+							brightness={activeMonitor.brightness}
+							disabled={activeMonitor.disabled}
+						/>
+					) : (
+						<MonitorBrightnessSlider
+							monitorId={GLOBAL}
+							mode={"native"}
+							brightness={brightness}
+							disabled={false}
+						/>
+					)}
+				</Stack>
+			</Paper>
+		</Paper>
+	) : null;
+};
+
+export default CompactView;
