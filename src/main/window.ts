@@ -138,10 +138,10 @@ class Window extends EventEmitter {
 				...(storedMonitor ?? {}),
 				...(license === "free"
 					? {
-						mode: "native",
-						disabled: index > 1,
-						brightness,
-					}
+							mode: "native",
+							disabled: index > 1,
+							brightness,
+					  }
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
 				connected: connected,

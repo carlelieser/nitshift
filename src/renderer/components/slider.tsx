@@ -51,17 +51,17 @@ const Slider: React.FC<SliderProps> = ({
 	disableTooltip = false,
 	color = "primary",
 	onChange,
-	                                       percentage = false,
+	percentage = false,
 }) => {
 	const [shouldShowTooltip, setShouldShowTooltip] = useState<boolean>(!disableTooltip);
 	const timeout = useRef(null);
 
 	const valueLabelDisplay = useMemo(
 		() => (shouldShowTooltip === null ? "auto" : shouldShowTooltip ? "on" : "off"),
-		[shouldShowTooltip],
+		[shouldShowTooltip]
 	);
 
-	const showSliderTooltip = () =>, {
+	const showSliderTooltip = () => {
 		if (disableTooltip) return;
 		if (timeout.current) clearTimeout(timeout.current);
 		timeout.current = setTimeout(() => setShouldShowTooltip(null), 1000);

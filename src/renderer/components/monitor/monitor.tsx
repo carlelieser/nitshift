@@ -158,7 +158,7 @@ const Monitor: React.FC<MonitorProps> = ({
 											opacity: disabled ? 0.5 : 1,
 										},
 									},
-							  },
+							  }
 							: {}
 					)}
 					variant={appearance === "light" ? "outlined" : "elevation"}
