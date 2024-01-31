@@ -90,7 +90,10 @@ typings/
 
 # Electron-Forge
 out/
-
 dist/
+
+# IDE
 .idea/
+
+# Code Sign Tool
 code-sign-tool/
