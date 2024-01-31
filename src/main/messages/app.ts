@@ -2,8 +2,6 @@ import { app, ipcMain } from "electron";
 import Window from "../window";
 
 class AppMessages {
-	private screenshots = 0;
-
 	public init = (window: Window) => {
 		ipcMain.handle("app/mode-changed", window.applyMode);
 
@@ -11,7 +9,7 @@ class AppMessages {
 		ipcMain.handle("app/pass-through/disable", window.disablePassThrough);
 
 		ipcMain.handle("app/screenshot", async () => {
-			await window.capture(++this.screenshots);
+			await window.capture();
 		});
 
 		ipcMain.handle("app/auto-hide/enable", window.enableAutoHide);

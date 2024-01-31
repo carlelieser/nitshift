@@ -4,12 +4,12 @@ import lumi from "lumi-control";
 import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
 import { clamp, uniqBy } from "lodash";
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import release from "@common/release.json";
 import EventEmitter from "events";
 import * as module from "./lumi/wrapper";
-import { loadStartupSettings, saveMode } from "./storage";
+import { loadAppearance, loadStartupSettings, saveMode } from "./storage";
 
 class Window extends EventEmitter {
 	public data: BrowserWindow;
@@ -138,10 +138,10 @@ class Window extends EventEmitter {
 				...(storedMonitor ?? {}),
 				...(license === "free"
 					? {
-							mode: "native",
-							disabled: index > 1,
-							brightness,
-					  }
+						mode: "native",
+						disabled: index > 1,
+						brightness,
+					}
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
 				connected: connected,
@@ -153,7 +153,7 @@ class Window extends EventEmitter {
 		if (this.data) this.data.webContents.send("refresh-monitors");
 	};
 
-	public capture = async (id: number) => {
+	public capture = async () => {
 		const [width, height] = this.data.getSize();
 		const data = await this.data.webContents.capturePage({
 			width,
@@ -161,9 +161,9 @@ class Window extends EventEmitter {
 			x: 0,
 			y: 0,
 		});
-		await new Promise<void>((resolve) =>
-			fs.writeFile(path.resolve("screenshots", `${release.tag_name}-${id}.png`), data.toPNG(), () => resolve())
-		);
+		const name = `${loadMode()}-${loadAppearance()}.png`;
+		const output = path.resolve("screenshots", release.tag_name.split(".").join(""), name);
+		return fs.outputFile(output, data.toPNG());
 	};
 
 	private getWidth = () => {
