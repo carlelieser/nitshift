@@ -3,6 +3,7 @@ import { setBrightness, setMonitorBrightness } from "@reducers/app";
 import { useAppDispatch, useAppSelector } from "@renderer/hooks";
 import { GLOBAL, UIMonitor } from "@common/types";
 import { SlideProps } from "@mui/material";
+import Slider from "@components/slider";
 
 interface MonitorBrightnessSliderProps {
 	monitorId: string;
@@ -13,16 +14,16 @@ interface MonitorBrightnessSliderProps {
 }
 
 const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
-	                                                                         monitorId,
-	                                                                         brightness,
-	                                                                         color,
-	                                                                         disabled: monitorDisabled,
-                                                                         }) => {
+	monitorId,
+	brightness,
+	color,
+	disabled: monitorDisabled,
+}) => {
 	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
 	const disabled = useMemo(
 		() => monitorDisabled || (license === "free" && monitorId === GLOBAL),
-		[monitorId, monitorDisabled, license],
+		[monitorId, monitorDisabled, license]
 	);
 
 	const dispatchBrightness = (newBrightness: number) => {
@@ -41,15 +42,14 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	const handleBrightnessUpdate = (brightness: number) => dispatchBrightness(brightness);
 
 	return (
-	< Sl, ider;
-	color = { color };
-	value = { brightness };
-	percentage = { true };
-	disabled = { disabled };
-	onChange = { handleBrightnessUpdate };
-	/>;;;
-)
-	;
+		<Slider
+			color={color}
+			value={brightness}
+			percentage={true}
+			disabled={disabled}
+			onChange={handleBrightnessUpdate}
+		/>
+	);
 };
 
 export default MonitorBrightnessSlider;
