@@ -2,7 +2,7 @@ import SettingsCard from "../../settings-card";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setStartupSettings } from "@reducers/app";
 import update from "immutability-helper";
-import { Radio } from "@mui/material";
+import { Switch } from "@mui/material";
 import { RocketLaunchOutlined } from "mui-symbols";
 
 const StartWithWindows = () => {
@@ -16,8 +16,8 @@ const StartWithWindows = () => {
 					auto: {
 						$apply: (auto) => !auto,
 					},
-				})
-			)
+				}),
+			),
 		);
 
 	return (
@@ -25,7 +25,7 @@ const StartWithWindows = () => {
 			title={"Start with Windows"}
 			subtitle={"Automatically start Glimmr when you log in."}
 			icon={<RocketLaunchOutlined />}
-			value={<Radio checked={startup.auto} />}
+			value={<Switch checked={startup.auto} />}
 			onClick={toggle}
 			disableChip={true}
 		/>

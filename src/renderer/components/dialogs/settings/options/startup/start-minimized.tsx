@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from "@hooks";
 import { setStartupSettings } from "@reducers/app";
 import update from "immutability-helper";
 import React from "react";
-import { Radio } from "@mui/material";
 import { Hide } from "mui-symbols";
+import { Switch } from "@mui/material";
 
 const StartMinimized = () => {
 	const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ const StartMinimized = () => {
 			icon={<Hide />}
 			visible={startup.auto}
 			disableChip={true}
-			value={<Radio checked={startup.silent} />}
+			value={<Switch checked={startup.silent} />}
 			onClick={toggle}
 		/>
 	);
