@@ -6,7 +6,7 @@ import {
 	SliderValueLabelProps,
 	Stack,
 	Tooltip,
-	Typography,
+	Typography
 } from "@mui/material";
 import { Add, Remove } from "mui-symbols";
 

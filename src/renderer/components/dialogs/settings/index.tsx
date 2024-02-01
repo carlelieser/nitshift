@@ -10,6 +10,7 @@ import Schedule from "./options/schedule";
 import Refresh from "./options/refresh";
 import Appearance from "./options/appearance";
 import Startup from "./options/startup/startup";
+import AutoUpdateCheck from "./options/auto-update-check";
 
 const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 	return (
@@ -21,6 +22,7 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 				<BrightnessModes />
 				<Schedule />
 				<Refresh />
+				<AutoUpdateCheck />
 				<Startup />
 			</Stack>
 		</Dialog>

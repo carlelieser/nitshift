@@ -8,7 +8,7 @@ import {
 	Stack,
 	ThemeProvider,
 	Typography,
-	useTheme,
+	useTheme
 } from "@mui/material";
 import { DragHandle, MonitorOutlined } from "mui-symbols";
 import { GLOBAL, UIMonitor } from "@common/types";

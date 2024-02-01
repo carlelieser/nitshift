@@ -11,7 +11,7 @@ import {
 	Stack,
 	TextField,
 	Tooltip,
-	Typography,
+	Typography
 } from "@mui/material";
 import path from "node:path";
 import { Close, QuestionMark, Search } from "mui-symbols";

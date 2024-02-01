@@ -15,7 +15,7 @@ import {
 	loadTrialAvailability,
 	loadTrialStartDate,
 	loadUserEmail,
-	loadUserId,
+	loadUserId
 } from "@renderer/storage";
 import { AppState, BrightnessModeData, ScheduleItem, ScheduleItemContent, UIMonitor } from "@common/types";
 import { Draft } from "immer";

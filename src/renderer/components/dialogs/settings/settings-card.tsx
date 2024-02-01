@@ -9,7 +9,7 @@ type PopupProps = Pick<DialogProps, "title" | "icon"> & { children: React.ReactN
 
 interface SettingsCardProps {
 	title: React.ReactNode;
-	subtitle: React.ReactNode;
+	subtitle?: React.ReactNode;
 	icon: React.ReactNode;
 	onClick?: React.UIEventHandler<HTMLButtonElement>;
 	visible?: boolean;

@@ -12,7 +12,7 @@ import {
 	saveTrialAvailability,
 	saveTrialStartDate,
 	saveUserEmail,
-	saveUserId,
+	saveUserId
 } from "@main/storage";
 import EventEmitter from "events";
 import { isDev } from "@common/utils";

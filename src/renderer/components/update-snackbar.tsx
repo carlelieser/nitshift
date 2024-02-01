@@ -7,7 +7,7 @@ import {
 	Portal,
 	Snackbar,
 	Stack,
-	Typography,
+	Typography
 } from "@mui/material";
 import { common, teal } from "@mui/material/colors";
 import { createDirectory, removeDirectory } from "@common/utils";

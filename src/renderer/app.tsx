@@ -9,7 +9,7 @@ import {
 	setLicense,
 	setTransitioning,
 	setTrialStartDate,
-	syncLicenseData,
+	syncLicenseData
 } from "@reducers/app";
 import { dimensions, isNumberAroundReference } from "@common/utils";
 import FocusTrap from "@mui/material/Unstable_TrapFocus";
