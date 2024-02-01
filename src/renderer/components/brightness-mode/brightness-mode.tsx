@@ -10,7 +10,7 @@ import {
 	TextField,
 	TextFieldProps,
 	Tooltip,
-	Typography,
+	Typography
 } from "@mui/material";
 import { BrightnessModeData } from "@common/types";
 import Slider, { SliderProps } from "../slider";

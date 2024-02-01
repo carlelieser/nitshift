@@ -6,20 +6,21 @@ import TrialManager from "./trial-manager";
 import Shader from "../shader";
 import BrightnessManager from "./brightness-manager";
 import Scheduler from "../scheduler";
-import { loadLicense, loadUserId } from "@main/storage";
+import { loadAutoUpdateCheck, loadLicense, loadUserId } from "@main/storage";
 import {
 	BrowserWindow,
 	HeadersReceivedResponse,
 	ipcMain,
 	OnHeadersReceivedListenerDetails,
 	screen,
-	session,
+	session
 } from "electron";
 import process from "process";
 import path from "path";
 import { debounce } from "lodash";
 import Defender from "../defender";
 import LaunchManager from "./launch-manager";
+import { isDev } from "@common/utils";
 
 const MAIN_WINDOW_VITE_DEV_SERVER_URL = process.env["ELECTRON_RENDERER_URL"];
 const REFRESH_DEBOUNCE = 3000;
@@ -116,7 +117,7 @@ class AppManager {
 		await this.window.create();
 		await this.window.refreshMonitors();
 
-		this.updater.check(true);
+		if (loadAutoUpdateCheck() || isDev) this.updater.check(true);
 
 		this.tray.create();
 		this.brightness.apply();

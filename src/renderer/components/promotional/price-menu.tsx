@@ -8,7 +8,7 @@ import {
 	MenuItem,
 	Slide,
 	Stack,
-	Typography,
+	Typography
 } from "@mui/material";
 import { Close, RadioButtonCheckedOutlined, RadioButtonUncheckedOutlined } from "mui-symbols";
 import { ipcRenderer } from "electron";

@@ -12,7 +12,7 @@ import {
 	TextField,
 	Tooltip,
 	Typography,
-	useTheme,
+	useTheme
 } from "@mui/material";
 import { Check, Key, Mail, Refresh, Send } from "mui-symbols";
 import LoadingButton from "@mui/lab/LoadingButton";

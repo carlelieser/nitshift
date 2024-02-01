@@ -4,6 +4,7 @@ import { ipcRenderer } from "electron";
 import { AppState } from "@common/types";
 
 export const STORE = {
+	AUTO_UPDATE_CHECK: "auto-update-check",
 	ACTIVE_MONITOR: "active-monitor",
 	GLOBAL_BRIGHTNESS: "global-brightness",
 	BRIGHTNESS_MODES: "brightness-modes",

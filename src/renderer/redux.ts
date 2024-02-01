@@ -22,11 +22,13 @@ import {
 	setRefreshed,
 	setSchedule,
 	setTrialAvailability,
-	setTrialStartDate,
+	setTrialStartDate
 } from "@reducers/app";
 import {
+	remove,
 	saveActiveMonitor,
 	saveAppearance,
+	saveAutoUpdateCheck,
 	saveBrightnessModes,
 	saveGlobalBrightness,
 	saveLicense,
@@ -34,8 +36,10 @@ import {
 	saveMonitorNicknames,
 	saveMonitors,
 	saveSchedule,
+	saveStartupSettings,
 	saveTrialAvailability,
 	saveTrialStartDate,
+	STORE
 } from "@renderer/storage";
 
 import { clone, cloneDeep } from "lodash";
@@ -44,8 +48,7 @@ import { batch } from "react-redux";
 import { AppState } from "@common/types";
 
 import { ipcRenderer } from "electron";
-import { remove, saveStartupSettings, STORE } from "./storage";
-import { setBrightnessSilent, setStartupSettings } from "./reducers/app";
+import { setAutoUpdateCheck, setBrightnessSilent, setStartupSettings } from "./reducers/app";
 
 const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMiddleware();
 
@@ -280,6 +283,13 @@ listener.startListening({
 	actionCreator: setAppearance,
 	effect: (action) => {
 		saveAppearance(action.payload);
+	}
+});
+
+listener.startListening({
+	actionCreator: setAutoUpdateCheck,
+	effect: (action) => {
+		saveAutoUpdateCheck(action.payload);
 	}
 });
 
