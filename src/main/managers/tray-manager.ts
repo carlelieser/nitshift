@@ -19,21 +19,21 @@ class TrayManager extends EventEmitter {
 				icon: nativeIcon.resize({ width: 16 }),
 				label: "Glimmr",
 				sublabel: `${release.tag_name} ${devLabel}`,
-				enabled: false,
+				enabled: false
 			},
 			{
-				type: "separator",
+				type: "separator"
 			},
 			{
 				label: "Copy Support ID",
-				click: () => clipboard.writeText(machineIdSync()),
+				click: () => clipboard.writeText(machineIdSync())
 			},
 			{
 				label: "Check for Updates...",
-				click: () => this.emit("check-for-updates"),
+				click: () => this.emit("check-for-updates")
 			},
 			{
-				type: "separator",
+				type: "separator"
 			},
 			{
 				label: "Quit Glimmr",
@@ -41,8 +41,8 @@ class TrayManager extends EventEmitter {
 					this.tray.destroy();
 					app.quit();
 					process.exit();
-				},
-			},
+				}
+			}
 		]);
 		this.tray.setToolTip("Glimmr");
 		this.tray.setContextMenu(contextMenu);

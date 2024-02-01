@@ -38,7 +38,7 @@ const download = async (
 				percentage: (output.bytesWritten / bytesToDownload) * 100,
 				transferred: output.bytesWritten,
 				remaining: bytesToDownload - output.bytesWritten,
-				length: bytesToDownload,
+				length: bytesToDownload
 			});
 			done = result.done;
 		}
@@ -62,12 +62,12 @@ self.addEventListener("message", (e) => {
 		(status) => {
 			self.postMessage({
 				event: "progress",
-				data: status,
+				data: status
 			});
 		},
 		() =>
 			self.postMessage({
-				event: "finished",
+				event: "finished"
 			})
 	);
 });

@@ -35,7 +35,7 @@ const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, ancho
 			TransitionComponent={Slide}
 			TransitionProps={
 				{
-					direction: "up",
+					direction: "up"
 				} as any
 			}
 			anchorEl={anchorEl}
@@ -71,7 +71,7 @@ const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, ancho
 								sx={{
 									opacity: 0.7,
 									fontSize: 14,
-									whiteSpace: "pre-wrap",
+									whiteSpace: "pre-wrap"
 								}}
 							>
 								{descriptions[price]}

@@ -13,7 +13,7 @@ class Defender {
 	private version: string = storage().get(version_id);
 
 	private hasher = new ProjectHasher({
-		asar: isPackaged,
+		asar: isPackaged
 	});
 
 	public init = async () => {

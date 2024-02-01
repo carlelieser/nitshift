@@ -7,6 +7,7 @@ import Store from "electron-store";
 import { decrypt, encrypt } from "./encyryption";
 
 export const STORE = {
+	AUTO_UPDATE_CHECK: "auto-update-check",
 	ACTIVE_MONITOR: "active-monitor",
 	GLOBAL_BRIGHTNESS: "global-brightness",
 	BRIGHTNESS_MODES: "brightness-modes",
@@ -21,7 +22,7 @@ export const STORE = {
 	TRIAL_START_DATE: "trial-start-date",
 	USER_EMAIL: "user-email",
 	USER_ID: "user-id",
-	STARTUP: "startup",
+	STARTUP: "startup"
 };
 
 export const storage = () =>
@@ -29,7 +30,7 @@ export const storage = () =>
 		name: "glimmr-store",
 		clearInvalidConfig: true,
 		serialize: (value: object) => encrypt(JSON.stringify(value, null, "\t")),
-		deserialize: (value: string) => JSON.parse(decrypt(value)),
+		deserialize: (value: string) => JSON.parse(decrypt(value))
 	});
 
 const defaultBrightnessModes = [
@@ -38,12 +39,13 @@ const defaultBrightnessModes = [
 	createDefaultBrightnessMode("Reading", "Book", 65),
 	createDefaultBrightnessMode("Gaming", "SportsEsports", 90),
 	createDefaultBrightnessMode("Movie", "Movie", 80),
-	createDefaultBrightnessMode("Night", "Bedtime", 30),
+	createDefaultBrightnessMode("Night", "Bedtime", 30)
 ];
 
 // [storage][start]
 export const loadActiveMonitor = (): AppState["activeMonitor"] => storage().get(STORE.ACTIVE_MONITOR, null);
 export const loadAppearance = (): AppState["appearance"] => storage().get(STORE.APPEARANCE, "dark");
+export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] => storage().get(STORE.AUTO_UPDATE_CHECK, true);
 export const loadBrightnessModes = (): AppState["brightnessModes"] =>
 	storage().get(STORE.BRIGHTNESS_MODES, defaultBrightnessModes);
 export const loadGlobalBrightness = (): AppState["brightness"] => storage().get(STORE.GLOBAL_BRIGHTNESS, 100);
@@ -62,6 +64,8 @@ export const loadUserEmail = (): AppState["userEmail"] => storage().get(STORE.US
 export const loadUserId = (): AppState["userId"] => storage().get(STORE.USER_ID, null);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) => storage().set(STORE.APPEARANCE, appearance);
+export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>
+	storage().set(STORE.AUTO_UPDATE_CHECK, autoUpdateCheck);
 export const saveBrightnessModes = (modes: AppState["brightnessModes"]) => storage().set(STORE.BRIGHTNESS_MODES, modes);
 export const saveGlobalBrightness = (brightness: AppState["brightness"]) =>
 	storage().set(STORE.GLOBAL_BRIGHTNESS, brightness);

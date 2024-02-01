@@ -33,7 +33,7 @@ const WindowBar = () => {
 				zIndex: 20,
 				backdropFilter: "blur(40px)",
 				bgcolor,
-				color,
+				color
 			}}
 			variant={"elevation"}
 			elevation={appearance === "light" ? 0 : 2}

@@ -8,22 +8,22 @@ ipcMain.handle("stripe/create-price", async (_event, price) =>
 	stripe.prices.create({
 		unit_amount: price,
 		currency: "usd",
-		product: isDev ? stripe_product_test : stripe_product_live,
+		product: isDev ? stripe_product_test : stripe_product_live
 	})
 );
 
 ipcMain.handle("stripe/create-payment-link", async (_event, priceId) =>
 	stripe.paymentLinks.create({
 		metadata: {
-			id: loadUserId(),
+			id: loadUserId()
 		},
 		line_items: [
 			{
 				price: priceId,
-				quantity: 1,
-			},
+				quantity: 1
+			}
 		],
-		customer_creation: "always",
+		customer_creation: "always"
 	})
 );
 

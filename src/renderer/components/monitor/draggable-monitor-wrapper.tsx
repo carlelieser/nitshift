@@ -18,14 +18,14 @@ export const DraggableMonitorContext = createContext({
 	isDraggingOver: false,
 	disabled: false,
 	menuDisabled: false,
-	dragDisabled: false,
+	dragDisabled: false
 });
 
 const DraggableMonitorWrapper: React.FC<DraggableMonitorProps> = ({
 	monitor,
 	index,
 	isDraggingOver,
-	forceDisableDrag,
+	forceDisableDrag
 }) => {
 	const license = useAppSelector((state) => state.app.license);
 
@@ -45,7 +45,7 @@ const DraggableMonitorWrapper: React.FC<DraggableMonitorProps> = ({
 				index,
 				isDraggingOver,
 				menuDisabled,
-				monitor,
+				monitor
 			}}
 		>
 			<Draggable isDragDisabled={dragDisabled} draggableId={monitor.id} index={index}>

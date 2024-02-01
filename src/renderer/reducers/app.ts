@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	loadActiveMonitor,
 	loadAppearance,
+	loadAutoUpdateCheck,
 	loadBrightnessModes,
 	loadGlobalBrightness,
 	loadLicense,
@@ -43,6 +44,7 @@ const findMonitorIndexById = (monitors: UIMonitor[], id: string) => monitors.fin
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
 	appearance: loadAppearance(),
+	autoUpdateCheck: loadAutoUpdateCheck(),
 	brightness: loadGlobalBrightness(),
 	brightnessModes: loadBrightnessModes(),
 	license: loadLicense(),
@@ -59,7 +61,7 @@ const initialState: AppState = {
 	userId: loadUserId(),
 	startup: loadStartupSettings(),
 	focused: false,
-	release: null,
+	release: null
 };
 
 const createReducer =
@@ -82,10 +84,11 @@ export const appSlice = createSlice({
 			let index = state.brightnessModes.findIndex((mode) => mode.id === action.payload.id);
 			state.brightnessModes = update(state.brightnessModes, {
 				[index]: {
-					$merge: action.payload,
-				},
+					$merge: action.payload
+				}
 			});
 		},
+		setAutoUpdateCheck: createReducer<AppState["autoUpdateCheck"]>("autoUpdateCheck"),
 		setBrightnessModes: (state, action: PayloadAction<Array<BrightnessModeData>>) => {
 			state.brightnessModes = action.payload;
 		},
@@ -111,7 +114,7 @@ export const appSlice = createSlice({
 			action: PayloadAction<{ id: string; silent?: boolean; disableBrightness?: boolean }>
 		) => {
 			state.brightnessModes = update(state.brightnessModes, {
-				$apply: (value) => value.map((mode) => ({ ...mode, active: mode.id === action.payload.id })),
+				$apply: (value) => value.map((mode) => ({ ...mode, active: mode.id === action.payload.id }))
 			});
 		},
 		setActiveMonitor: (state, action: PayloadAction<AppState["activeMonitor"]["id"]>) => {
@@ -167,8 +170,8 @@ export const appSlice = createSlice({
 			state.trialStartDate = loadTrialStartDate();
 			state.trialAvailability = loadTrialAvailability();
 			state.license = loadLicense();
-		},
-	},
+		}
+	}
 });
 
 export const {
@@ -182,6 +185,7 @@ export const {
 	setActiveBrightnessMode,
 	setActiveMonitor,
 	setAppearance,
+	setAutoUpdateCheck,
 	setBrightness,
 	setBrightnessModes,
 	setBrightnessSilent,
@@ -201,7 +205,7 @@ export const {
 	syncLicenseData,
 	setFocused,
 	setRelease,
-	setStartupSettings,
+	setStartupSettings
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -43,7 +43,7 @@ const MonitorList = () => {
 				position: "relative",
 				flex: 1,
 				height: "100%",
-				overflowX: "hidden",
+				overflowX: "hidden"
 			}}
 			variant={"elevation"}
 			elevation={0}

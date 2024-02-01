@@ -77,9 +77,9 @@ class Window extends EventEmitter {
 				nodeIntegration: true,
 				nodeIntegrationInWorker: true,
 				webSecurity: false,
-				devTools: isDev,
+				devTools: isDev
 			},
-			...coordinates,
+			...coordinates
 		});
 		this.data.setAlwaysOnTop(true, "pop-up-menu");
 
@@ -97,7 +97,7 @@ class Window extends EventEmitter {
 		if (isDev) {
 			setTimeout(() => {
 				this.data.webContents.openDevTools({
-					mode: "detach",
+					mode: "detach"
 				});
 			}, 1000);
 		}
@@ -140,11 +140,11 @@ class Window extends EventEmitter {
 					? {
 							mode: "native",
 							disabled: index > 1,
-							brightness,
+							brightness
 					  }
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
-				connected: connected,
+				connected: connected
 			};
 		});
 
@@ -159,7 +159,7 @@ class Window extends EventEmitter {
 			width,
 			height,
 			x: 0,
-			y: 0,
+			y: 0
 		});
 		const name = `${loadMode()}-${loadAppearance()}.png`;
 		const output = path.resolve("screenshots", release.tag_name.split(".").join(""), name);
@@ -183,7 +183,7 @@ class Window extends EventEmitter {
 
 		return {
 			x: right - width - dimensions.padding,
-			y: bottom - height - dimensions.padding,
+			y: bottom - height - dimensions.padding
 		};
 	};
 }

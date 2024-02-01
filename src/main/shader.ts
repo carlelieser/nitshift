@@ -35,7 +35,7 @@ class Shader extends EventEmitter {
 			closable: false,
 			focusable: true,
 			show: false,
-			titleBarStyle: "hidden",
+			titleBarStyle: "hidden"
 		});
 		this.shades[id].setContentProtection(true);
 		this.shades[id].on("blur", () => {

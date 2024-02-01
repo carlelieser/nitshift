@@ -30,7 +30,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 			onClick = stubFalse,
 			popup = null,
 			disable = false,
-			disableChip = false,
+			disableChip = false
 		},
 		ref
 	) => {
@@ -54,7 +54,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						px: 3,
 						textAlign: "left",
 						justifyContent: "start",
-						bgcolor: appearance === "light" ? alpha(common.black, 0.03) : alpha(common.white, 0.02),
+						bgcolor: appearance === "light" ? alpha(common.black, 0.03) : alpha(common.white, 0.02)
 					}}
 					disabled={disable}
 					onClick={(e) => {

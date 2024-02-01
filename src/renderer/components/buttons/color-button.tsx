@@ -18,8 +18,8 @@ const ColorButton = styled(Button)<ColorButtonProps>(({ theme, colour }) => {
 		color: textColor,
 		backgroundColor: selectedColor,
 		"&:hover": {
-			backgroundColor: hoverColor,
-		},
+			backgroundColor: hoverColor
+		}
 	};
 });
 

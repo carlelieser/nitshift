@@ -161,8 +161,8 @@ class AppManager {
 		callback({
 			responseHeaders: {
 				...details.responseHeaders,
-				"Content-Security-Policy": ["connect-src 'self' * 'unsafe-eval'"],
-			},
+				"Content-Security-Policy": ["connect-src 'self' * 'unsafe-eval'"]
+			}
 		});
 	};
 }

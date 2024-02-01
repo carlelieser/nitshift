@@ -23,7 +23,7 @@ const DraggableMonitor: React.FC<DraggableMonitorProps> = ({ provided, snapshot 
 			style={{
 				...provided.draggableProps.style,
 				pointerEvents: pointerEvents,
-				marginBottom: 16,
+				marginBottom: 16
 			}}
 		>
 			<Monitor

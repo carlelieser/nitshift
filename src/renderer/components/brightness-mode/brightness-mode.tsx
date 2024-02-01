@@ -40,7 +40,7 @@ const BrightnessMode: React.FC<BrightnessModeData> = (props) => {
 		dispatch(
 			editBrightnessMode({
 				...props,
-				label: e.target.value.toLowerCase().includes("custom") ? e.target.value.slice(-1) : e.target.value,
+				label: e.target.value.toLowerCase().includes("custom") ? e.target.value.slice(-1) : e.target.value
 			})
 		);
 	};
@@ -66,15 +66,15 @@ const BrightnessMode: React.FC<BrightnessModeData> = (props) => {
 						buttonProps={{
 							sx: {
 								width: 64,
-								height: 64,
+								height: 64
 							},
 							color: "primary",
-							size: "large",
+							size: "large"
 						}}
 						iconProps={{
 							sx: {
-								fontSize: 36,
-							},
+								fontSize: 36
+							}
 						}}
 						value={props.icon}
 						onChange={handleIconChange}
@@ -86,7 +86,7 @@ const BrightnessMode: React.FC<BrightnessModeData> = (props) => {
 								<InputAdornment position={"start"}>
 									<EditOutlined />
 								</InputAdornment>
-							),
+							)
 						}}
 						value={props.label}
 						disabled={props.label.toLowerCase() === "custom"}

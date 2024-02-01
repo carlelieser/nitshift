@@ -14,14 +14,14 @@ const BrightnessModeMenu: React.FC<MenuProps> = (props) => {
 			{...props}
 			anchorOrigin={{
 				horizontal: "center",
-				vertical: "bottom",
+				vertical: "bottom"
 			}}
 			PaperProps={{
 				sx: {
 					ml: -6,
 					mt: 1,
-					minWidth: 150,
-				},
+					minWidth: 150
+				}
 			}}
 		>
 			{modes.map((mode) => {

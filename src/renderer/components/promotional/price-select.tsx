@@ -43,7 +43,7 @@ const PriceSelect: React.FC<PriceSelectProps> = ({ onChange }) => {
 						px: 4,
 						borderRadius: 4,
 						borderTopLeftRadius: 0,
-						borderTopRightRadius: 0,
+						borderTopRightRadius: 0
 					}}
 					endIcon={<ArrowDropDown />}
 					onClick={openPriceMenu}

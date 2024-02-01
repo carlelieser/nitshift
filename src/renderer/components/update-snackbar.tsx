@@ -57,9 +57,9 @@ const UpdateSnackbar: React.FC = () => {
 			options: {
 				headers: {
 					Authorization: `Bearer ${ipcRenderer.sendSync("key/path", "git")}`,
-					Accept: "application/octet-stream",
-				},
-			},
+					Accept: "application/octet-stream"
+				}
+			}
 		});
 	};
 
@@ -108,12 +108,12 @@ const UpdateSnackbar: React.FC = () => {
 								sx={{
 									width: "100%",
 									[`&.${linearProgressClasses.colorPrimary}`]: {
-										backgroundColor: "rgba(255, 255, 255, 0.3)",
+										backgroundColor: "rgba(255, 255, 255, 0.3)"
 									},
 									[`& .${linearProgressClasses.bar}`]: {
 										borderRadius: 5,
-										backgroundColor: teal[900],
-									},
+										backgroundColor: teal[900]
+									}
 								}}
 								variant={"determinate"}
 								value={progress.percentage}

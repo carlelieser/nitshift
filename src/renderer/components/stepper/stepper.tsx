@@ -17,7 +17,7 @@ interface StepperProps {
 
 export const StepperContext = createContext({
 	steps: [],
-	activeStep: 0,
+	activeStep: 0
 });
 
 const Stepper: React.FC<StepperProps> = ({ steps, activeStep, onChange }) => {
@@ -30,7 +30,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, activeStep, onChange }) => {
 		<StepperContext.Provider
 			value={{
 				steps,
-				activeStep,
+				activeStep
 			}}
 		>
 			<Stack spacing={2} height={"100%"}>

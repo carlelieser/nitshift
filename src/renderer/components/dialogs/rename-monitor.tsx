@@ -31,7 +31,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 		dispatch(
 			setMonitorName({
 				id: monitorId,
-				nickname: name,
+				nickname: name
 			})
 		);
 		onClose();
@@ -41,7 +41,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 		dispatch(
 			setMonitorName({
 				id: monitorId,
-				nickname: name,
+				nickname: name
 			})
 		);
 		onClose();
@@ -61,7 +61,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 		dispatch(
 			setMonitorName({
 				id: monitorId,
-				nickname: defaultName,
+				nickname: defaultName
 			})
 		);
 		onClose();
@@ -84,17 +84,17 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 			actions={[
 				{
 					label: "Cancel",
-					onClick: handleCancel,
+					onClick: handleCancel
 				},
 				{
 					label: "Reset",
-					onClick: handleResetName,
+					onClick: handleResetName
 				},
 				{
 					label: "Confirm",
 					disabled: !name,
-					onClick: handleConfirmNameChange,
-				},
+					onClick: handleConfirmNameChange
+				}
 			]}
 			onExited={stubFalse}
 			open={open}
@@ -117,7 +117,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 								width: "100%",
 								position: "sticky",
 								bottom: 0,
-								py: 2,
+								py: 2
 							}}
 							elevation={0}
 						>
@@ -128,8 +128,8 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 								placeholder={"Left monitor"}
 								inputProps={{
 									style: {
-										textTransform: "uppercase",
-									},
+										textTransform: "uppercase"
+									}
 								}}
 								inputRef={ref}
 								value={name}

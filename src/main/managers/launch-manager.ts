@@ -40,7 +40,7 @@ class LaunchManager {
 					if (item.value.toLowerCase().includes(app.getName().toLowerCase())) {
 						items.push({
 							name,
-							value: item,
+							value: item
 						});
 					}
 				}
@@ -61,7 +61,7 @@ class LaunchManager {
 		} catch (err) {
 			console.log({
 				message: "Error removing duplicate launch keys from registry.",
-				err,
+				err
 			});
 		}
 	};
@@ -72,14 +72,14 @@ class LaunchManager {
 				[this.hive]: {
 					[app.getName()]: {
 						type: "REG_SZ",
-						value: app.getPath("exe"),
-					},
-				},
+						value: app.getPath("exe")
+					}
+				}
 			});
 		} catch (err) {
 			console.log({
 				message: "Error enabling auto launch.",
-				err,
+				err
 			});
 		}
 	};
@@ -92,7 +92,7 @@ class LaunchManager {
 		} catch (err) {
 			console.log({
 				message: "Error disabling auto launch.",
-				err,
+				err
 			});
 		}
 	};

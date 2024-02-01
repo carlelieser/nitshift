@@ -14,6 +14,9 @@ ipcMain.on("storage/load-active-monitor", (e) => {
 ipcMain.on("storage/load-appearance", (e) => {
 	e.returnValue = storage.loadAppearance();
 });
+ipcMain.on("storage/load-auto-update-check", (e) => {
+	e.returnValue = storage.loadAutoUpdateCheck();
+});
 ipcMain.on("storage/load-brightness-modes", (e) => {
 	e.returnValue = storage.loadBrightnessModes();
 });
@@ -58,6 +61,9 @@ ipcMain.on("storage/save-active-monitor", (e, monitor) => {
 });
 ipcMain.on("storage/save-appearance", (e, appearance) => {
 	e.returnValue = storage.saveAppearance(appearance);
+});
+ipcMain.on("storage/save-auto-update-check", (e, autoUpdateCheck) => {
+	e.returnValue = storage.saveAutoUpdateCheck(autoUpdateCheck);
 });
 ipcMain.on("storage/save-brightness-modes", (e, modes) => {
 	e.returnValue = storage.saveBrightnessModes(modes);

@@ -20,7 +20,7 @@ const MonitorToggle: React.FC<MonitorToggleProps> = ({ variant, monitorId, disab
 		dispatch(
 			setMonitorDisabled({
 				id: monitorId,
-				disabled: !disabled,
+				disabled: !disabled
 			})
 		);
 	};

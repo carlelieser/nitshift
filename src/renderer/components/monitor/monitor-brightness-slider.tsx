@@ -17,7 +17,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	monitorId,
 	brightness,
 	color,
-	disabled: monitorDisabled,
+	disabled: monitorDisabled
 }) => {
 	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 			dispatch(
 				setMonitorBrightness({
 					id: monitorId,
-					brightness: newBrightness,
+					brightness: newBrightness
 				})
 			);
 		}

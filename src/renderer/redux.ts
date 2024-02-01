@@ -77,7 +77,7 @@ listener.startListening({
 		}
 
 		await ipcRenderer.invoke("sync-user");
-	},
+	}
 });
 
 listener.startListening({
@@ -94,7 +94,7 @@ listener.startListening({
 		}
 
 		await ipcRenderer.invoke("sync-user");
-	},
+	}
 });
 
 listener.startListening({
@@ -102,7 +102,7 @@ listener.startListening({
 	effect: async (action) => {
 		saveTrialAvailability(action.payload);
 		await ipcRenderer.invoke("sync-user");
-	},
+	}
 });
 
 listener.startListening({
@@ -111,7 +111,7 @@ listener.startListening({
 		const monitor = api.getState().app.activeMonitor;
 		if (monitor) saveActiveMonitor(monitor);
 		else remove(STORE.ACTIVE_MONITOR);
-	},
+	}
 });
 
 listener.startListening({
@@ -119,7 +119,7 @@ listener.startListening({
 	effect: (action) => {
 		saveMode(action.payload);
 		ipcRenderer.invoke("app/mode-changed", action.payload);
-	},
+	}
 });
 
 listener.startListening({
@@ -136,7 +136,7 @@ listener.startListening({
 				api.dispatch(
 					setActiveBrightnessMode({
 						id: customMode.id,
-						disableBrightness: true,
+						disableBrightness: true
 					})
 				);
 			}
@@ -146,7 +146,7 @@ listener.startListening({
 
 		saveGlobalBrightness(action.payload);
 		ipcRenderer.invoke("global-brightness-changed");
-	},
+	}
 });
 
 listener.startListening({
@@ -154,7 +154,7 @@ listener.startListening({
 	effect: (action) => {
 		saveGlobalBrightness(action.payload);
 		ipcRenderer.invoke("global-brightness-changed");
-	},
+	}
 });
 
 listener.startListening({
@@ -175,7 +175,7 @@ listener.startListening({
 				api.dispatch(editSchedule(schedule));
 			});
 		}
-	},
+	}
 });
 
 listener.startListening({
@@ -183,35 +183,35 @@ listener.startListening({
 	effect: (action, api) => {
 		api.dispatch(setActiveMonitor(action.payload.id));
 		saveMonitors(api.getState().app.monitors);
-	},
+	}
 });
 
 listener.startListening({
 	actionCreator: setMonitorBrightness,
 	effect: () => {
 		ipcRenderer.invoke("monitor-brightness-changed");
-	},
+	}
 });
 
 listener.startListening({
 	actionCreator: setMonitorMode,
 	effect: () => {
 		ipcRenderer.invoke("monitor-mode-changed");
-	},
+	}
 });
 
 listener.startListening({
 	actionCreator: setMonitorDisabled,
 	effect: () => {
 		ipcRenderer.invoke("monitor-availability-changed");
-	},
+	}
 });
 
 listener.startListening({
 	actionCreator: setMonitors,
 	effect: (action) => {
 		saveMonitors(action.payload);
-	},
+	}
 });
 
 listener.startListening({
@@ -220,7 +220,7 @@ listener.startListening({
 		saveMonitors(api.getState().app.monitors);
 		ipcRenderer.invoke("monitors-refreshed");
 		if (action.payload) api.dispatch(setRefreshed(true));
-	},
+	}
 });
 
 listener.startListening({
@@ -242,14 +242,14 @@ listener.startListening({
 		saveSchedule(schedule);
 		api.dispatch(setSchedule(schedule));
 		ipcRenderer.invoke("schedule-changed");
-	},
+	}
 });
 
 listener.startListening({
 	matcher: isAnyOf(addBrightnessMode, editBrightnessMode, removeBrightnessMode),
 	effect: (_action, api) => {
 		saveBrightnessModes(api.getState().app.brightnessModes);
-	},
+	}
 });
 
 listener.startListening({
@@ -258,7 +258,7 @@ listener.startListening({
 		const state = api.getState();
 		saveStartupSettings(state.app.startup);
 		ipcRenderer.send("launch/update");
-	},
+	}
 });
 
 listener.startListening({
@@ -273,21 +273,21 @@ listener.startListening({
 			}
 		}
 		saveBrightnessModes(api.getState().app.brightnessModes);
-	},
+	}
 });
 
 listener.startListening({
 	actionCreator: setAppearance,
 	effect: (action) => {
 		saveAppearance(action.payload);
-	},
+	}
 });
 
 export const redux = configureStore({
 	reducer: {
-		app: appSlice.reducer,
+		app: appSlice.reducer
 	},
-	middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(listener.middleware),
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(listener.middleware)
 });
 
 export type RootState = ReturnType<typeof redux.getState>;

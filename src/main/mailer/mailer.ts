@@ -11,8 +11,8 @@ const config: SMTPTransport.Options = {
 	port: 587,
 	auth: {
 		user: "support@glimmr.app",
-		pass: "qvogrsdhexznjjmk",
-	},
+		pass: "qvogrsdhexznjjmk"
+	}
 };
 
 const getEmailVerificationConfig = (email: string, code: string): Mailer.Options => ({
@@ -22,8 +22,8 @@ const getEmailVerificationConfig = (email: string, code: string): Mailer.Options
 	html: emailVerificationTemplate.replace("[CODE]", code),
 	headers: {
 		"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
-		"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1",
-	},
+		"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1"
+	}
 });
 
 const getLicenseVerifiedConfig = (email: string): Mailer.Options => ({
@@ -34,8 +34,8 @@ const getLicenseVerifiedConfig = (email: string): Mailer.Options => ({
 	html: licenseVerifiedTemplate,
 	headers: {
 		"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
-		"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1",
-	},
+		"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1"
+	}
 });
 
 ipcMain.handle("mailer/send-email-verification", async (_event, { email, code }) => {

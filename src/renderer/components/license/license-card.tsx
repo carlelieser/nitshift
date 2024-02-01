@@ -34,7 +34,7 @@ const LicenseCard = () => {
 				color: appearance === "light" ? "white" : "inherit",
 				position: "relative",
 				overflow: "hidden",
-				p: 1,
+				p: 1
 			}}
 		>
 			<Box
@@ -98,7 +98,7 @@ const LicenseCard = () => {
 					left: 0,
 					position: "absolute",
 					zIndex: 0,
-					opacity: 0.2,
+					opacity: 0.2
 				}}
 			/>
 		</Paper>

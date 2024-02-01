@@ -19,7 +19,7 @@ const Startup = () => {
 						<StartWithWindows />
 						<StartMinimized />
 					</>
-				),
+				)
 			}}
 		/>
 	);

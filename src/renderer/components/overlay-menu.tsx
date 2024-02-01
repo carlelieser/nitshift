@@ -12,13 +12,13 @@ const OverlayMenu: React.FC<OverlayMenuProps> = (props) => {
 			TransitionComponent={Slide}
 			TransitionProps={
 				{
-					direction: "up",
+					direction: "up"
 				} as any
 			}
 			PaperProps={{
 				sx: {
-					width: "100%",
-				},
+					width: "100%"
+				}
 			}}
 			slotProps={{
 				root: {
@@ -26,11 +26,11 @@ const OverlayMenu: React.FC<OverlayMenuProps> = (props) => {
 						backdrop: {
 							sx: {
 								bgcolor: (theme) => alpha(theme.palette.common.black, 0.4),
-								borderRadius: 4,
-							},
-						},
-					},
-				},
+								borderRadius: 4
+							}
+						}
+					}
+				}
 			}}
 		>
 			{props.children}

@@ -50,15 +50,15 @@ const IconMenu: React.FC<IconMenuProps> = (props) => {
 				paper: {
 					style: {
 						width: 400,
-						height: 300,
-					},
-				},
+						height: 300
+					}
+				}
 			}}
 			MenuListProps={{
 				sx: {
-					height: 300,
+					height: 300
 				},
-				disablePadding: true,
+				disablePadding: true
 			}}
 		>
 			<Stack height={"100%"}>
@@ -73,8 +73,8 @@ const IconMenu: React.FC<IconMenuProps> = (props) => {
 						inputProps={{
 							style: {
 								paddingBottom: 12,
-								paddingTop: 12,
-							},
+								paddingTop: 12
+							}
 						}}
 						InputProps={{
 							startAdornment: (
@@ -88,7 +88,7 @@ const IconMenu: React.FC<IconMenuProps> = (props) => {
 										<Close fontSize={"small"} />
 									</IconButton>
 								</InputAdornment>
-							) : null,
+							) : null
 						}}
 					/>
 				</Stack>
@@ -117,7 +117,7 @@ const IconMenu: React.FC<IconMenuProps> = (props) => {
 													...style,
 													display: "flex",
 													alignItems: "center",
-													justifyContent: "center",
+													justifyContent: "center"
 												}}
 											>
 												<Tooltip title={icon.replace("RoundedFilled", "")}>
@@ -128,7 +128,7 @@ const IconMenu: React.FC<IconMenuProps> = (props) => {
 																	? theme.palette.primary.main
 																	: alpha(theme.palette.common.white, 0.1),
 															width: 48,
-															height: 48,
+															height: 48
 														}}
 														onClick={() => {
 															props.onChange(icon);

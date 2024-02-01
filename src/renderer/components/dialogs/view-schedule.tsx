@@ -39,7 +39,7 @@ const ViewScheduleDialog: React.FC<DialogComponentProps> = ({ open, onClose }) =
 										width: 140,
 										height: 140,
 										minWidth: 140,
-										minHeight: 140,
+										minHeight: 140
 									}}
 								/>
 								<Stack spacing={1}>
