@@ -15,8 +15,8 @@ const StartMinimized = () => {
 			setStartupSettings(
 				update(startup, {
 					silent: {
-						$apply: (silent) => !silent,
-					},
+						$apply: (silent) => !silent
+					}
 				})
 			)
 		);

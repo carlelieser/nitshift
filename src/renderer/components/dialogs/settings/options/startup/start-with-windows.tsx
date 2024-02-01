@@ -14,10 +14,10 @@ const StartWithWindows = () => {
 			setStartupSettings(
 				update(startup, {
 					auto: {
-						$apply: (auto) => !auto,
-					},
-				}),
-			),
+						$apply: (auto) => !auto
+					}
+				})
+			)
 		);
 
 	return (
