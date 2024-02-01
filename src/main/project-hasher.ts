@@ -11,17 +11,17 @@ class ProjectHasher {
 	private readonly config = {
 		root: path.join(__dirname, "..", "renderer"),
 		files: "**/*",
-		asar: false,
+		asar: false
 	};
 
 	private queue = new PQueue({
-		concurrency: 3,
+		concurrency: 3
 	});
 
 	constructor(config = {}) {
 		this.config = {
 			...this.config,
-			...config,
+			...config
 		};
 	}
 
@@ -66,7 +66,7 @@ class ProjectHasher {
 					...result,
 					...this.getAsarFileHashes(
 						value as unknown as Record<string, asar.DirectoryRecord | asar.FileRecord>
-					),
+					)
 				];
 			}
 		}

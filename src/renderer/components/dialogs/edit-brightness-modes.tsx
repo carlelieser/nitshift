@@ -29,7 +29,7 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 			dispatch(
 				setActiveBrightnessMode({
 					id: defaultBrightnessModes.find(({ active }) => active).id,
-					silent: true,
+					silent: true
 				})
 			);
 		});
@@ -43,7 +43,7 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 	const handleAddBrightnessMode = () => {
 		const mode = {
 			...createDefaultBrightnessMode("Mode", "LightMode", activeBrightnessMode.brightness, false),
-			removable: true,
+			removable: true
 		};
 		dispatch(setBrightnessModes([...modes, mode]));
 		setModeIndex(modes.length);
@@ -67,16 +67,16 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 			actions={[
 				{
 					label: "Cancel",
-					onClick: handleCancel,
+					onClick: handleCancel
 				},
 				{
 					label: "Reset",
-					onClick: resetModes,
+					onClick: resetModes
 				},
 				{
 					label: "Confirm",
-					onClick: handleConfirm,
-				},
+					onClick: handleConfirm
+				}
 			]}
 			{...props}
 		>
@@ -101,7 +101,7 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 									icon={<Icon name={mode.icon} />}
 									value={index}
 									sx={{
-										minWidth: 40,
+										minWidth: 40
 									}}
 								/>
 							</Tooltip>

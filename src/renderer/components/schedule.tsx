@@ -37,7 +37,7 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 										px: 2,
 										py: 1,
 										borderRadius: 2,
-										bgcolor: lighten(theme.palette.background.paper, 6 * 0.025),
+										bgcolor: lighten(theme.palette.background.paper, 6 * 0.025)
 									}}
 									variant={"outlined"}
 								>

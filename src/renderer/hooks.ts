@@ -21,77 +21,77 @@ export const useAppTheme = () => {
 				mode: appearance,
 				primary: teal,
 				secondary: {
-					main: "#ec407a",
-				},
+					main: "#ec407a"
+				}
 			},
 			typography: {
 				fontFamily: "roboto",
 				button: {
 					textTransform: "none",
 					fontSize: "medium",
-					fontWeight: 500,
+					fontWeight: 500
 				},
 				h1: {
-					fontFamily: "sofia-pro",
+					fontFamily: "sofia-pro"
 				},
 				h4: {
-					fontFamily: "sofia-pro",
+					fontFamily: "sofia-pro"
 				},
 				h5: {
-					fontFamily: "sofia-pro",
+					fontFamily: "sofia-pro"
 				},
 				h6: {
-					fontFamily: "sofia-pro",
-				},
+					fontFamily: "sofia-pro"
+				}
 			},
 			components: {
 				MuiSnackbar: {
 					defaultProps: {
 						sx: {
-							m: 2,
+							m: 2
 						},
 						TransitionComponent: Grow,
 						ContentProps: {
-							variant: "elevation",
-						},
+							variant: "elevation"
+						}
 					},
 					styleOverrides: {
 						root: {
-							boxShadow: shadows[20],
-						},
-					},
+							boxShadow: shadows[20]
+						}
+					}
 				},
 				MuiChip: {
 					defaultProps: {
 						sx: {
-							color: "inherit",
-						},
-					},
+							color: "inherit"
+						}
+					}
 				},
 				MuiIconButton: {
 					defaultProps: {
 						disableFocusRipple: !!process.env.CAPTURE,
-						color: "inherit",
+						color: "inherit"
 					},
 					styleOverrides: {
 						root: {
-							opacity: 0.9,
-						},
-					},
+							opacity: 0.9
+						}
+					}
 				},
 				MuiButton: {
 					defaultProps: {
 						disableFocusRipple: !!process.env.CAPTURE,
-						color: appearance === "light" ? "inherit" : "primary",
+						color: appearance === "light" ? "inherit" : "primary"
 					},
 					styleOverrides: {
 						root: {
 							display: "flex",
 							flexDirection: "row",
 							alignItems: "center",
-							px: 2,
-						},
-					},
+							px: 2
+						}
+					}
 				},
 				MuiTooltip: {
 					defaultProps: {
@@ -100,40 +100,40 @@ export const useAppTheme = () => {
 						disableInteractive: true,
 						PopperProps: {
 							disablePortal: transitioning,
-							hidden: transitioning,
-						},
-					},
+							hidden: transitioning
+						}
+					}
 				},
 				MuiMenu: {
 					defaultProps: {
 						disableEnforceFocus: transitioning,
 						disablePortal: transitioning,
-						hidden: transitioning,
+						hidden: transitioning
 					},
 					styleOverrides: {
 						paper: {
 							border: "none",
-							boxShadow: shadows[4],
-						},
-					},
+							boxShadow: shadows[4]
+						}
+					}
 				},
 				MuiPaper: {
 					defaultProps: {
-						variant: appearance === "light" ? "outlined" : "elevation",
-					},
+						variant: appearance === "light" ? "outlined" : "elevation"
+					}
 				},
 				MuiAlert: {
 					styleOverrides: {
 						message: {
-							width: "100%",
+							width: "100%"
 						},
 						root: {
 							border: 0,
-							boxShadow: shadows[1],
-						},
-					},
-				},
-			},
+							boxShadow: shadows[1]
+						}
+					}
+				}
+			}
 		});
 	}, [mode, appearance, transitioning]);
 };

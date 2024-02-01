@@ -44,7 +44,7 @@ class Auth extends EventEmitter {
 					email,
 					license,
 					trialStartDate,
-					trialAvailability,
+					trialAvailability
 				},
 				{ merge: true }
 			);
@@ -100,7 +100,7 @@ class Auth extends EventEmitter {
 		const id = machineIdSync();
 		return {
 			id,
-			email: `${id}@glimmr.com`,
+			email: `${id}@glimmr.com`
 		};
 	};
 }

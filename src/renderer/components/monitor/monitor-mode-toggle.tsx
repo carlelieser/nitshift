@@ -23,7 +23,7 @@ const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorI
 		dispatch(
 			setMonitorMode({
 				id: monitorId,
-				mode: mode === "native" ? "shade" : "native",
+				mode: mode === "native" ? "shade" : "native"
 			})
 		);
 	};

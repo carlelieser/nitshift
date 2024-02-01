@@ -36,7 +36,7 @@ const Dialog: React.FC<DialogProps> = ({
 	scrollContent = "x-hidden",
 	onClose,
 	onEntered = stubFalse,
-	onExited = stubFalse,
+	onExited = stubFalse
 }) => {
 	const appearance = useAppSelector((state) => state.app.appearance);
 	const focused = useAppSelector((state) => state.app.focused);
@@ -69,7 +69,7 @@ const Dialog: React.FC<DialogProps> = ({
 							width: "100%",
 							height: "100%",
 							outline: "none",
-							overflow: "hidden",
+							overflow: "hidden"
 						}}
 						style={maskStyles}
 						variant={"outlined"}
@@ -85,7 +85,7 @@ const Dialog: React.FC<DialogProps> = ({
 								py={1}
 								justifyContent={"space-between"}
 								sx={{
-									zIndex: 20,
+									zIndex: 20
 								}}
 								variant={"elevation"}
 								elevation={1}
@@ -98,7 +98,7 @@ const Dialog: React.FC<DialogProps> = ({
 												bgcolor: alpha(appearance === "light" ? teal[500] : common.white, 0.08),
 												color: teal[500],
 												width: 36,
-												height: 36,
+												height: 36
 											}}
 										>
 											<Stack alignItems={"center"} sx={{ opacity: 0.7 }}>
@@ -130,7 +130,7 @@ const Dialog: React.FC<DialogProps> = ({
 									p={2}
 									py={1}
 									sx={{
-										zIndex: 20,
+										zIndex: 20
 									}}
 									elevation={2}
 									variant={"elevation"}

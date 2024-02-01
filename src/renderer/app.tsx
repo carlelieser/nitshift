@@ -111,7 +111,7 @@ const App = () => {
 						width: "100%",
 						height: "100%",
 						position: "relative",
-						overflow: "hidden",
+						overflow: "hidden"
 					}}
 					onMouseOver={handleMouseOver}
 				>
@@ -124,7 +124,7 @@ const App = () => {
 						unmountOnExit={true}
 						timeout={148}
 						style={{
-							transitionDelay: `${firstTransition ? 500 : 0}ms`,
+							transitionDelay: `${firstTransition ? 500 : 0}ms`
 						}}
 						onExited={() => {
 							setFirstTransition(false);
@@ -141,7 +141,7 @@ const App = () => {
 									sx={{
 										borderRadius: 4,
 										mt: "auto",
-										height: mode === "compact" ? "auto" : "100%",
+										height: mode === "compact" ? "auto" : "100%"
 									}}
 									variant={"elevation"}
 									elevation={8}
@@ -151,7 +151,7 @@ const App = () => {
 											borderRadius: 4,
 											height: "100%",
 											overflow: "hidden",
-											position: "relative",
+											position: "relative"
 										}}
 										style={maskStyles}
 										variant={"outlined"}
@@ -163,7 +163,7 @@ const App = () => {
 												height: "100%",
 												display: "flex",
 												flexDirection: "column",
-												position: "relative",
+												position: "relative"
 											}}
 											variant={"elevation"}
 											elevation={0}

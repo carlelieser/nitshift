@@ -18,13 +18,15 @@ export const STORE = {
 	TRIAL_START_DATE: "trial-start-date",
 	USER_EMAIL: "user-email",
 	USER_ID: "user-id",
-	STARTUP: "startup",
+	STARTUP: "startup"
 };
 
 export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);
 
 export const loadActiveMonitor = (): AppState["activeMonitor"] => ipcRenderer.sendSync("storage/load-active-monitor");
 export const loadAppearance = (): AppState["appearance"] => ipcRenderer.sendSync("storage/load-appearance");
+export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] =>
+	ipcRenderer.sendSync("storage/load-auto-update-check");
 export const loadBrightnessModes = (): AppState["brightnessModes"] =>
 	ipcRenderer.sendSync("storage/load-brightness-modes");
 export const loadGlobalBrightness = (): AppState["brightness"] =>
@@ -47,6 +49,8 @@ export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) =>
 	ipcRenderer.sendSync("storage/save-active-monitor", monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) =>
 	ipcRenderer.sendSync("storage/save-appearance", appearance);
+export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>
+	ipcRenderer.sendSync("storage/save-auto-update-check", autoUpdateCheck);
 export const saveBrightnessModes = (modes: AppState["brightnessModes"]) =>
 	ipcRenderer.sendSync("storage/save-brightness-modes", modes);
 export const saveGlobalBrightness = (brightness: AppState["brightness"]) =>

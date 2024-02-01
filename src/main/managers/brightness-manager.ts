@@ -21,7 +21,7 @@ class BrightnessManager {
 						nativeMonitors,
 						(prevMonitors, monitor) => ({
 							...prevMonitors,
-							[monitor.id]: normalizeBrightness(monitor.brightness, brightness),
+							[monitor.id]: normalizeBrightness(monitor.brightness, brightness)
 						}),
 						{}
 					)

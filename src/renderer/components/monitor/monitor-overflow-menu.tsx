@@ -17,7 +17,7 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({
 	disabled = false,
 	onOpen,
 	onClose,
-	monitorId,
+	monitorId
 }) => {
 	const monitor = useAppSelector((state) => state.app.monitors.find((monitor) => monitor.id === monitorId));
 	const ref = useRef<HTMLButtonElement>();
@@ -27,8 +27,8 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({
 			...defaultTheme,
 			components: {
 				...defaultTheme.components,
-				MuiTooltip: {},
-			},
+				MuiTooltip: {}
+			}
 		});
 	}, [defaultTheme]);
 
@@ -41,7 +41,7 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({
 					open={open}
 					anchorEl={ref.current}
 					sx={{
-						marginLeft: process.env.CAPTURE ? -23.5 : 0,
+						marginLeft: process.env.CAPTURE ? -23.5 : 0
 					}}
 					onClose={onClose}
 					onClick={() => onClose({}, "backdropClick")}

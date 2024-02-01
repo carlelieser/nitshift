@@ -8,7 +8,7 @@ const firebaseConfig = {
 	storageBucket: "blinder-73755.appspot.com",
 	messagingSenderId: "966990150901",
 	appId: "1:966990150901:web:cfe3f758a602d5dcc519bc",
-	measurementId: "G-W3JM6JRF9Y",
+	measurementId: "G-W3JM6JRF9Y"
 };
 
 export const app = initializeApp(firebaseConfig);

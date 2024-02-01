@@ -52,7 +52,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 		updateCode();
 		const succeeded = await ipcRenderer.invoke("mailer/send-email-verification", {
 			email,
-			code: code.current,
+			code: code.current
 		});
 		if (!succeeded) return setError("Error sending email. Please try again.");
 		setEmailSent(true);
@@ -60,7 +60,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	const sendEmailVerificationSuccess = () =>
 		ipcRenderer.invoke("mailer/send-email-verification-success", {
-			email,
+			email
 		});
 
 	const sendVerificationEmail = async () => {
@@ -246,7 +246,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 											alignItems: "center",
 											justifyContent: "center",
 											borderColor: index === codeCharIndex ? "primary.main" : "",
-											transition: theme.transitions.create(["border-color"]),
+											transition: theme.transitions.create(["border-color"])
 										}}
 										onClick={() => setCodeCharIndex(index)}
 									>
@@ -297,7 +297,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 							type={"email"}
 							placeholder={"johnyappleseed@gmail.com"}
 							sx={{
-								minWidth: 300,
+								minWidth: 300
 							}}
 							InputProps={{
 								startAdornment: (
@@ -313,7 +313,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 											</IconButton>
 										</Tooltip>
 									</InputAdornment>
-								) : null,
+								) : null
 							}}
 							onKeyUp={handleEmailKeyUp}
 							value={email}

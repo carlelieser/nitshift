@@ -8,7 +8,7 @@ import { GetResponseTypeFromEndpointMethod } from "@octokit/types";
 import { git } from "./keys";
 
 const API_CONFIG = {
-	auth: git,
+	auth: git
 };
 
 type ExtractChildType<T> = T extends Array<infer R> ? R : never;
@@ -23,7 +23,7 @@ class Updater extends EventEmitter {
 		try {
 			const response = await this.api.rest.repos.listReleases({
 				owner: "carlelieser",
-				repo: "glimmr",
+				repo: "glimmr"
 			});
 
 			if (isDev) return response.data.shift();
@@ -31,7 +31,7 @@ class Updater extends EventEmitter {
 		} catch (err) {
 			console.log({
 				message: "Failed to get latest release.",
-				err,
+				err
 			});
 			return null;
 		}

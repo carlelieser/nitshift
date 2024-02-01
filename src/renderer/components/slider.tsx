@@ -22,7 +22,7 @@ export interface SliderProps {
 
 export const SliderContext = createContext({
 	percentage: false,
-	value: 0,
+	value: 0
 });
 
 const CustomValueLabel = (props: SliderValueLabelProps) => {
@@ -51,7 +51,7 @@ const Slider: React.FC<SliderProps> = ({
 	disableTooltip = false,
 	color = "primary",
 	onChange,
-	percentage = false,
+	percentage = false
 }) => {
 	const [shouldShowTooltip, setShouldShowTooltip] = useState<boolean>(!disableTooltip);
 	const timeout = useRef(null);
@@ -84,7 +84,7 @@ const Slider: React.FC<SliderProps> = ({
 		<SliderContext.Provider
 			value={{
 				percentage,
-				value,
+				value
 			}}
 		>
 			<Stack direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
@@ -96,10 +96,10 @@ const Slider: React.FC<SliderProps> = ({
 					min={0}
 					max={100}
 					slots={{
-						valueLabel: CustomValueLabel,
+						valueLabel: CustomValueLabel
 					}}
 					sx={{
-						color,
+						color
 					}}
 					disabled={disabled}
 					valueLabelDisplay={valueLabelDisplay}

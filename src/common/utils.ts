@@ -26,7 +26,7 @@ export const createDefaultBrightnessMode = (
 		label,
 		icon,
 		brightness,
-		active,
+		active
 	};
 };
 
@@ -37,11 +37,11 @@ export const modes: Array<AppState["mode"]> = ["compact", "expanded"];
 export const dimensions = {
 	expanded: {
 		width: 400,
-		height: 450,
+		height: 450
 	},
 	compact: {
 		width: 520,
-		height: 220,
+		height: 220
 	},
-	padding: 4,
+	padding: 4
 };

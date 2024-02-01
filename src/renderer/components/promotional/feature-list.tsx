@@ -7,24 +7,24 @@ const content = [
 	{
 		icon: Monitor,
 		title: "Unlimited Monitors",
-		subtitle: "Adjust as many monitors as you want, without limits.",
+		subtitle: "Adjust as many monitors as you want, without limits."
 	},
 	{
 		icon: WbSunny,
 		title: "Global Brightness",
 		subtitle:
-			"Effortlessly adjust the brightness of all connected displays with a single slider – perfect for simultaneous dimming of multiple monitors.",
+			"Effortlessly adjust the brightness of all connected displays with a single slider – perfect for simultaneous dimming of multiple monitors."
 	},
 	{
 		icon: DonutSmall,
 		title: "Shade Mode",
-		subtitle: "Artificially adjust brightness for monitors that don't natively support it.",
+		subtitle: "Artificially adjust brightness for monitors that don't natively support it."
 	},
 	{
 		icon: Schedule,
 		title: "Schedule",
-		subtitle: "Set brightness levels for different monitors at specific times.",
-	},
+		subtitle: "Set brightness levels for different monitors at specific times."
+	}
 ];
 
 const FeatureList: React.FC<StackProps> = (props) => {
@@ -42,7 +42,7 @@ const FeatureList: React.FC<StackProps> = (props) => {
 							<Paper
 								sx={{
 									p: 2,
-									position: "relative",
+									position: "relative"
 								}}
 								square={true}
 								variant={"elevation"}
@@ -55,7 +55,7 @@ const FeatureList: React.FC<StackProps> = (props) => {
 												width: 48,
 												height: 48,
 												bgcolor: alpha(yellow[900], 0.2),
-												color: amber[700],
+												color: amber[700]
 											}}
 										>
 											<Icon />

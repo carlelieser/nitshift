@@ -37,7 +37,7 @@ const Monitor: React.FC<MonitorProps> = ({
 	disabled,
 	menuDisabled = false,
 	dragHandleProps = null,
-	dragDisabled = true,
+	dragDisabled = true
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
@@ -56,24 +56,24 @@ const Monitor: React.FC<MonitorProps> = ({
 								MuiTooltip: {
 									defaultProps: {
 										arrow: false,
-										disableInteractive: true,
+										disableInteractive: true
 									},
 									styleOverrides: {
 										tooltip: {
 											backgroundColor: darkTeal,
-											backdropFilter: "blur(40px)",
-										},
-									},
+											backdropFilter: "blur(40px)"
+										}
+									}
 								},
 								MuiSlider: {
 									styleOverrides: {
 										valueLabel: {
 											backgroundColor: darkTeal,
-											backdropFilter: "blur(40px)",
-										},
-									},
-								},
-						  }),
+											backdropFilter: "blur(40px)"
+										}
+									}
+								}
+						  })
 			}),
 		[theme, id, disabled]
 	);
@@ -103,9 +103,9 @@ const Monitor: React.FC<MonitorProps> = ({
 						bgcolor: teal[500],
 						color: common.white,
 						"& .brightness-slider": {
-							color: common.white,
-						},
-					},
+							color: common.white
+						}
+					}
 			  };
 	}, [disabled, id, dragDisabled, theme]);
 
@@ -138,12 +138,12 @@ const Monitor: React.FC<MonitorProps> = ({
 								"background-color",
 								"color",
 								"box-shadow",
-								"transform",
+								"transform"
 							]),
 							"& .drag-handle": {
-								display: "none",
+								display: "none"
 							},
-							"&:hover": hoverStyles,
+							"&:hover": hoverStyles
 						},
 						isHovered ? hoverStyles : {},
 						appearance === "light"
@@ -155,9 +155,9 @@ const Monitor: React.FC<MonitorProps> = ({
 										color: disabled ? common.black : common.white,
 										"& .brightness-slider": {
 											color: disabled ? common.black : common.white,
-											opacity: disabled ? 0.5 : 1,
-										},
-									},
+											opacity: disabled ? 0.5 : 1
+										}
+									}
 							  }
 							: {}
 					)}
@@ -215,8 +215,8 @@ const Monitor: React.FC<MonitorProps> = ({
 								borderRadius: 3,
 								transition: theme.transitions.create(["background-color"]),
 								"& .brightness-slider": {
-									transition: theme.transitions.create(["color"]),
-								},
+									transition: theme.transitions.create(["color"])
+								}
 							}}
 							variant={"elevation"}
 							elevation={appearance === "light" ? 0 : 1}

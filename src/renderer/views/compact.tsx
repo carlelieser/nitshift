@@ -15,7 +15,7 @@ const CompactView = () => {
 		<Paper
 			sx={{
 				overflow: "hidden",
-				zIndex: 0,
+				zIndex: 0
 			}}
 			square={true}
 			elevation={0}
@@ -26,7 +26,7 @@ const CompactView = () => {
 					zIndex: 40,
 					position: "relative",
 					borderBottomLeftRadius: 16,
-					borderBottomRightRadius: 16,
+					borderBottomRightRadius: 16
 				}}
 				square={true}
 				elevation={1}

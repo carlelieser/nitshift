@@ -13,8 +13,8 @@ export const price = {
 		"2.99": "Change you can find in your sofa cushions!",
 		"3.99": "Sometimes the best things in life aren't free, they're three ninety-nine.",
 		"4.99": "Less than your morning latte!",
-		"5.99": "The cost of happiness, possibly.",
-	},
+		"5.99": "The cost of happiness, possibly."
+	}
 };
 export const version_id = "version-id";
 export const main_id = "project-hash";

@@ -72,6 +72,7 @@ export interface StartupSettings {
 export interface AppState {
 	activeMonitor: UIMonitor | null;
 	appearance: Appearance;
+	autoUpdateCheck: boolean;
 	brightness: number;
 	brightnessModes: Array<BrightnessModeData>;
 	license: "free" | "trial" | "premium";

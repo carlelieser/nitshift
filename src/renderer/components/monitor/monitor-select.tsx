@@ -40,7 +40,7 @@ const MonitorSelect = () => {
 					fullWidth={true}
 					onClick={handleClick}
 					sx={{
-						px: 1,
+						px: 1
 					}}
 				>
 					<Typography
@@ -61,8 +61,8 @@ const MonitorSelect = () => {
 				PaperProps={{
 					style: {
 						minHeight: 150,
-						minWidth: 200,
-					},
+						minWidth: 200
+					}
 				}}
 				anchorEl={anchorEl}
 				open={open}

@@ -91,7 +91,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 				<StepView variant={"elevation"}>
 					<MonitorMultiSelectList value={selectedMonitors} onChange={handleMonitorSelectChange} />
 				</StepView>
-			),
+			)
 		},
 		{
 			title: "Time",
@@ -122,7 +122,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 						</Button>
 					</Stack>
 				</StepView>
-			),
+			)
 		},
 		{
 			title: "Brightness",
@@ -151,7 +151,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 											mountOnEnter={true}
 											unmountOnExit={true}
 											sx={{
-												display: "inline-block",
+												display: "inline-block"
 											}}
 										>
 											<Typography variant={"h3"} fontWeight={800} display={"inline-block"}>
@@ -172,8 +172,8 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 						/>
 					</Stack>
 				</StepView>
-			),
-		},
+			)
+		}
 	];
 
 	const canAdd = useMemo(() => selectedMonitors.length !== 0, [selectedMonitors]);
@@ -184,7 +184,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 			dispatch(
 				setMonitorBrightness({
 					id: monitor.id,
-					brightness,
+					brightness
 				})
 			);
 		});
@@ -220,14 +220,14 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 						const content = {
 							monitors: selectedMonitors,
 							time: time.format("hh:mm A"),
-							brightness,
+							brightness
 						};
 
 						if (edit) {
 							dispatch(
 								editSchedule({
 									...edit,
-									...content,
+									...content
 								})
 							);
 						} else {
@@ -235,8 +235,8 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 						}
 
 						onClose();
-					},
-				},
+					}
+				}
 			]}
 			scrollContent={"y"}
 			onClose={onClose}

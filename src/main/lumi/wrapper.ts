@@ -18,7 +18,7 @@ const executeAndWaitForResponse = <T>(name: string, args: Array<any>, defaultVal
 
 		thread.postMessage({
 			method: name,
-			args,
+			args
 		});
 	});
 };

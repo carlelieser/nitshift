@@ -21,8 +21,8 @@ const Mode = () => {
 			setStartupSettings(
 				update(startup, {
 					mode: {
-						$set: mode,
-					},
+						$set: mode
+					}
 				})
 			)
 		);
