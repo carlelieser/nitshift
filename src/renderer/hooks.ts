@@ -58,7 +58,7 @@ export const useAppTheme = () => {
 					},
 					styleOverrides: {
 						root: {
-							boxShadow: shadows[20]
+							border: 0
 						}
 					}
 				},
@@ -129,8 +129,7 @@ export const useAppTheme = () => {
 							width: "100%"
 						},
 						root: {
-							border: 0,
-							boxShadow: shadows[1]
+							border: 0
 						}
 					}
 				}
