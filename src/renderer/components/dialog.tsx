@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
-import { alpha, Avatar, Box, Button, IconButton, Modal, Paper, Portal, Slide, Stack, Typography } from "@mui/material";
+import { alpha, Avatar, Box, IconButton, Modal, Paper, Portal, Slide, Stack, Typography } from "@mui/material";
 import { Close, KeyboardArrowRight } from "mui-symbols";
 import { stubFalse } from "lodash";
 import { common, teal } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
 import { maskStyles } from "../utils";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export interface DialogComponentProps {
 	open: boolean;
@@ -13,6 +14,7 @@ export interface DialogComponentProps {
 
 interface Action {
 	label: string;
+	loading?: boolean;
 	disabled?: boolean;
 	onClick: () => void;
 }
@@ -136,21 +138,22 @@ const Dialog: React.FC<DialogProps> = ({
 									variant={"elevation"}
 									square={true}
 								>
-									{actions.map(({ label, disabled = false, onClick }, index) => {
+									{actions.map(({ label, loading = false, disabled = false, onClick }, index) => {
 										const isPrimary = index === actions.length - 1;
 										const color = isPrimary ? "primary" : "inherit";
 										return (
-											<Button
+											<LoadingButton
 												key={`dialog-action-${label}`}
 												size={"small"}
 												color={color}
+												loading={loading}
 												endIcon={isPrimary ? <KeyboardArrowRight /> : null}
 												sx={{ opacity: isPrimary ? 1 : 0.5 }}
 												disabled={disabled}
 												onClick={onClick}
 											>
 												{label}
-											</Button>
+											</LoadingButton>
 										);
 									})}
 								</Stack>
