@@ -223,10 +223,13 @@ listener.startListening({
 		const state = api.getState();
 		const monitors = state.app.monitors;
 		const prevActiveMonitor = state.app.activeMonitor;
-		const firstConnectedMonitor = monitors.find((monitor) => monitor.connected);
-		const newActiveMonitor = monitors.find((monitor) => monitor.id === prevActiveMonitor?.id);
 
-		if (!newActiveMonitor?.connected) api.dispatch(setActiveMonitor(firstConnectedMonitor.id));
+		if (prevActiveMonitor) {
+			const firstConnectedMonitor = monitors.find((monitor) => monitor.connected);
+			const newActiveMonitor = monitors.find((monitor) => monitor.id === prevActiveMonitor.id);
+
+			if (!newActiveMonitor?.connected) api.dispatch(setActiveMonitor(firstConnectedMonitor.id));
+		}
 
 		saveMonitors(monitors);
 		ipcRenderer.invoke("monitors/refreshed");
