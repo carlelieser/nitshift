@@ -5,6 +5,8 @@ import * as nodemailer from "nodemailer";
 import emailVerificationTemplate from "./templates/email-verification.html?raw";
 import licenseVerifiedTemplate from "./templates/license-verified.html?raw";
 import { ipcMain } from "electron";
+import { storage } from "../storage";
+import systemInformation from "systeminformation";
 
 const config: SMTPTransport.Options = {
 	host: "smtp.gmail.com",
@@ -35,6 +37,32 @@ const getLicenseVerifiedConfig = (email: string): Mailer.Options => ({
 	headers: {
 		"X-Face": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=0",
 		"X-Image-URL": "https://www.dropbox.com/s/9gbfmdypq6bzm7k/icon-email-compressed.png?dl=1"
+	}
+});
+
+const getBugReportConfig = async (title: string, description: string) => {
+	const info = await systemInformation.getAllData();
+	return {
+		from: "Glimmr <support@glimmr.app>",
+		to: "support@glimmr.app",
+		subject: `[BUG REPORT]: ${title}`,
+		text: [
+			`storage:\n${JSON.stringify(storage().store)}`,
+			`machine:\n${JSON.stringify(info)}`,
+			`description:\n${description}`
+		].join("\n\n")
+	};
+};
+
+ipcMain.handle("app/bug/report", async (_event, { title, description }) => {
+	try {
+		const transporter = nodemailer.createTransport(config);
+		const options = await getBugReportConfig(title, description);
+		await transporter.sendMail(options);
+		return true;
+	} catch (err) {
+		console.log(err);
+		return false;
 	}
 });
 
