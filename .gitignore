@@ -97,3 +97,5 @@ dist/
 
 # Code Sign Tool
 code-sign-tool/
+
+**/safe.ts
