@@ -33,7 +33,7 @@ const Mode = () => {
 			<ModeMenu open={open} onClose={closeMenu} value={startup.mode} onChange={handleModeChange} />
 			<SettingsCard
 				title={"Default view"}
-				subtitle={"Change the default view mode."}
+				subtitle={"Change the default view mode"}
 				icon={<Wysiwyg />}
 				value={capitalize(startup.mode)}
 				onClick={openMenu}
