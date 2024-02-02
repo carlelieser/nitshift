@@ -7,7 +7,7 @@
   "description": "The best multi-monitor brightness tool.",
   "main": "out/main/index.js",
   "overrides": { "graceful-fs": "^4.2.11" },
-  "precommit": ["format", "build"],
+  "precommit": ["format"],
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron-vite dev",
     "bridge": "node ./pipeline/bridge/storage/generate.js",
