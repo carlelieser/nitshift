@@ -82,9 +82,11 @@ const UpdateSnackbar: React.FC = () => {
 	useEffect(() => {
 		if (release) {
 			setOpen(true);
-			setReleaseCopy((prevReleaseCopy) => update(prevReleaseCopy, {
-				$set: release
-			}));
+			setReleaseCopy((prevReleaseCopy) =>
+				update(prevReleaseCopy, {
+					$set: release
+				})
+			);
 		}
 	}, [release]);
 
