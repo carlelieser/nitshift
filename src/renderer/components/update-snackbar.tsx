@@ -21,6 +21,8 @@ import { execFile } from "child_process";
 import { ipcRenderer } from "electron";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { setRelease } from "@reducers/app";
+import { Release } from "@common/types";
+import update from "immutability-helper";
 
 const worker = new DownloadWorker();
 
@@ -28,6 +30,7 @@ const UpdateSnackbar: React.FC = () => {
 	const release = useAppSelector((state) => state.app.release);
 	const dispatch = useAppDispatch();
 	const [open, setOpen] = useState<boolean>(false);
+	const [releaseCopy, setReleaseCopy] = useState<Release>();
 
 	const [progress, setProgress] = useState<TransferStatus>(null);
 	const [finished, setFinished] = useState<boolean>(false);
@@ -77,7 +80,12 @@ const UpdateSnackbar: React.FC = () => {
 	}, [finished]);
 
 	useEffect(() => {
-		if (release) setOpen(true);
+		if (release) {
+			setOpen(true);
+			setReleaseCopy((prevReleaseCopy) => update(prevReleaseCopy, {
+				$set: release
+			}));
+		}
 	}, [release]);
 
 	useEffect(() => {
@@ -94,7 +102,7 @@ const UpdateSnackbar: React.FC = () => {
 					severity={"info"}
 					icon={<Info sx={{ color: common.white }} />}
 					onClose={handleClose}
-					sx={{ width: "100%", bgcolor: teal[500], color: common.white }}
+					sx={{ width: "100%", height: "100%", bgcolor: teal[500], color: common.white }}
 					action={
 						<LoadingButton loading={downloading} color={"inherit"} onClick={startDownload}>
 							Update
@@ -124,9 +132,9 @@ const UpdateSnackbar: React.FC = () => {
 						</Stack>
 					) : (
 						<Stack>
-							{release?.body}
+							{releaseCopy?.body}
 							<Typography variant={"overline"} sx={{ opacity: 0.7 }}>
-								{release?.tag_name}
+								{releaseCopy?.tag_name}
 							</Typography>
 						</Stack>
 					)}
