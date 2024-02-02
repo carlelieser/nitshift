@@ -8,7 +8,7 @@ const Startup = () => {
 	return (
 		<SettingsCard
 			title={"Startup"}
-			subtitle={"Configure initial launch behavior."}
+			subtitle={"Configure launch behavior"}
 			icon={<PowerSettingsNew />}
 			popup={{
 				title: "Startup",

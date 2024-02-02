@@ -22,7 +22,7 @@ const Appearance = () => {
 			<AppearanceMenu open={open} value={appearance} onChange={handleAppearanceChange} onClose={closeMenu} />
 			<SettingsCard
 				title={"Appearance"}
-				subtitle={`Switch between light and dark themes.`}
+				subtitle={`Switch between light and dark themes`}
 				icon={<Palette />}
 				value={capitalize(appearance)}
 				onClick={openMenu}

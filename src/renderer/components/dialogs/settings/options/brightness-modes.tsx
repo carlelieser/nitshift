@@ -15,7 +15,7 @@ const BrightnessModes = () => {
 			<SettingsCard
 				icon={<LightMode />}
 				title={"Brightness Modes"}
-				subtitle={"Customize existing brightness modes or add new ones."}
+				subtitle={"Customize existing brightness modes or add new ones"}
 				onClick={openModal}
 			/>
 		</>
