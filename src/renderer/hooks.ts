@@ -14,6 +14,7 @@ export const useAppTheme = () => {
 	const appearance = useAppSelector((state) => state.app.appearance);
 	const transitioning = useAppSelector((state) => state.app.transitioning);
 	const mode = useAppSelector((state) => state.app.mode);
+	const focused = useAppSelector((state) => state.app.focused);
 
 	return useMemo(() => {
 		return createTheme({
@@ -100,7 +101,7 @@ export const useAppTheme = () => {
 						disableInteractive: true,
 						PopperProps: {
 							disablePortal: transitioning,
-							hidden: transitioning
+							hidden: transitioning || !focused
 						}
 					}
 				},
@@ -108,7 +109,7 @@ export const useAppTheme = () => {
 					defaultProps: {
 						disableEnforceFocus: transitioning,
 						disablePortal: transitioning,
-						hidden: transitioning
+						hidden: transitioning || !focused
 					},
 					styleOverrides: {
 						paper: {
@@ -135,5 +136,5 @@ export const useAppTheme = () => {
 				}
 			}
 		});
-	}, [mode, appearance, transitioning]);
+	}, [mode, appearance, transitioning, focused]);
 };
