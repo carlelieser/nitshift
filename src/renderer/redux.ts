@@ -148,7 +148,7 @@ listener.startListening({
 		});
 
 		saveGlobalBrightness(action.payload);
-		ipcRenderer.invoke("global-brightness-changed");
+		ipcRenderer.invoke("monitors/brightness/global/changed");
 	}
 });
 
@@ -156,7 +156,7 @@ listener.startListening({
 	actionCreator: setBrightnessSilent,
 	effect: (action) => {
 		saveGlobalBrightness(action.payload);
-		ipcRenderer.invoke("global-brightness-changed");
+		ipcRenderer.invoke("monitors/brightness/global/changed");
 	}
 });
 
@@ -192,21 +192,21 @@ listener.startListening({
 listener.startListening({
 	actionCreator: setMonitorBrightness,
 	effect: () => {
-		ipcRenderer.invoke("monitor-brightness-changed");
+		ipcRenderer.invoke("monitors/brightness/change");
 	}
 });
 
 listener.startListening({
 	actionCreator: setMonitorMode,
 	effect: () => {
-		ipcRenderer.invoke("monitor-mode-changed");
+		ipcRenderer.invoke("monitors/mode/change");
 	}
 });
 
 listener.startListening({
 	actionCreator: setMonitorDisabled,
 	effect: () => {
-		ipcRenderer.invoke("monitor-availability-changed");
+		ipcRenderer.invoke("monitors/availability/change");
 	}
 });
 
@@ -220,8 +220,16 @@ listener.startListening({
 listener.startListening({
 	actionCreator: refreshAvailableMonitors,
 	effect: (action, api) => {
-		saveMonitors(api.getState().app.monitors);
-		ipcRenderer.invoke("monitors-refreshed");
+		const state = api.getState();
+		const monitors = state.app.monitors;
+		const prevActiveMonitor = state.app.activeMonitor;
+		const firstConnectedMonitor = monitors.find((monitor) => monitor.connected);
+		const newActiveMonitor = monitors.find((monitor) => monitor.id === prevActiveMonitor?.id);
+
+		if (!newActiveMonitor?.connected) api.dispatch(setActiveMonitor(firstConnectedMonitor.id));
+
+		saveMonitors(monitors);
+		ipcRenderer.invoke("monitors/refreshed");
 		if (action.payload) api.dispatch(setRefreshed(true));
 	}
 });

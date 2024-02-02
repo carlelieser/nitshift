@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
 	IconButton,
 	Slider as MUISlider,
@@ -20,27 +20,10 @@ export interface SliderProps {
 	percentage?: boolean;
 }
 
-export const SliderContext = createContext({
-	percentage: false,
-	value: 0
-});
-
-const CustomValueLabel = (props: SliderValueLabelProps) => {
-	const { children, value } = props;
-	const context = useContext(SliderContext);
-
+const CustomValueLabel: React.FC<SliderValueLabelProps> = (props) => {
 	return (
-		<Tooltip
-			enterTouchDelay={0}
-			placement="top"
-			title={
-				<Typography>
-					{value}
-					{context.percentage ? "%" : null}
-				</Typography>
-			}
-		>
-			{children}
+		<Tooltip placement={"top"} enterDelay={0} title={<Typography>{props.value}</Typography>}>
+			{props.children}
 		</Tooltip>
 	);
 };
@@ -53,7 +36,7 @@ const Slider: React.FC<SliderProps> = ({
 	onChange,
 	percentage = false
 }) => {
-	const [shouldShowTooltip, setShouldShowTooltip] = useState<boolean>(!disableTooltip);
+	const [shouldShowTooltip, setShouldShowTooltip] = useState<boolean>(disableTooltip ? false : null);
 	const timeout = useRef(null);
 
 	const valueLabelDisplay = useMemo(
@@ -81,36 +64,30 @@ const Slider: React.FC<SliderProps> = ({
 	const handleChange: SliderOwnProps["onChange"] = (_event, value) => onChange(value as number);
 
 	return (
-		<SliderContext.Provider
-			value={{
-				percentage,
-				value
-			}}
-		>
-			<Stack direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
-				<IconButton disabled={value === 0 || disabled} onClick={decrement} color={"inherit"}>
-					<Remove />
-				</IconButton>
-				<MUISlider
-					className={"brightness-slider"}
-					min={0}
-					max={100}
-					slots={{
-						valueLabel: CustomValueLabel
-					}}
-					sx={{
-						color
-					}}
-					disabled={disabled}
-					valueLabelDisplay={valueLabelDisplay}
-					value={value}
-					onChange={handleChange}
-				/>
-				<IconButton disabled={value === 100 || disabled} onClick={increment} color={"inherit"}>
-					<Add />
-				</IconButton>
-			</Stack>
-		</SliderContext.Provider>
+		<Stack direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
+			<IconButton disabled={value === 0 || disabled} onClick={decrement} color={"inherit"}>
+				<Remove />
+			</IconButton>
+			<MUISlider
+				className={"brightness-slider"}
+				min={0}
+				max={100}
+				sx={{
+					color
+				}}
+				slots={{
+					valueLabel: CustomValueLabel
+				}}
+				disabled={disabled}
+				valueLabelDisplay={valueLabelDisplay}
+				valueLabelFormat={(value) => (percentage ? `${value}%` : value)}
+				value={value}
+				onChange={handleChange}
+			/>
+			<IconButton disabled={value === 100 || disabled} onClick={increment} color={"inherit"}>
+				<Add />
+			</IconButton>
+		</Stack>
 	);
 };
 
