@@ -24,6 +24,7 @@ class Defender {
 	public defend = () => {
 		if (this.id !== this.version && !isDev) {
 			app.quit();
+			process.exit();
 		}
 	};
 
