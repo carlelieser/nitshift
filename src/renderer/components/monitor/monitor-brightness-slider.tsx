@@ -2,8 +2,11 @@ import React, { useMemo } from "react";
 import { setBrightness, setMonitorBrightness } from "@reducers/app";
 import { useAppDispatch, useAppSelector } from "@renderer/hooks";
 import { GLOBAL, UIMonitor } from "@common/types";
-import { SlideProps } from "@mui/material";
+import { createTheme, SlideProps, Theme, ThemeProvider, useTheme } from "@mui/material";
 import Slider from "@components/slider";
+import { merge } from "lodash";
+import Color from "color";
+import { teal } from "@mui/material/colors";
 
 interface MonitorBrightnessSliderProps {
 	monitorId: string;
@@ -12,6 +15,8 @@ interface MonitorBrightnessSliderProps {
 	disabled: boolean;
 	color?: SlideProps["color"];
 }
+
+const darkTeal = Color(teal[900]).darken(0.1).hexa();
 
 const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	monitorId,
@@ -24,6 +29,34 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	const disabled = useMemo(
 		() => monitorDisabled || (license === "free" && monitorId === GLOBAL),
 		[monitorId, monitorDisabled, license]
+	);
+
+	const baseTheme = useTheme();
+	const theme = useMemo(
+		() =>
+			createTheme({
+				...baseTheme,
+				components: monitorDisabled
+					? baseTheme.components
+					: merge({}, baseTheme.components, {
+							MuiTooltip: {
+								defaultProps: {
+									arrow: true
+								},
+								styleOverrides: {
+									tooltip: {
+										backgroundColor: darkTeal
+									},
+									arrow: {
+										"&:before": {
+											backgroundColor: darkTeal
+										}
+									}
+								}
+							}
+					  } as Theme["components"])
+			}),
+		[baseTheme, monitorDisabled]
 	);
 
 	const dispatchBrightness = (newBrightness: number) => {
@@ -42,13 +75,15 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	const handleBrightnessUpdate = (brightness: number) => dispatchBrightness(brightness);
 
 	return (
-		<Slider
-			color={color}
-			value={brightness}
-			percentage={true}
-			disabled={disabled}
-			onChange={handleBrightnessUpdate}
-		/>
+		<ThemeProvider theme={theme}>
+			<Slider
+				color={color}
+				value={brightness}
+				percentage={true}
+				disabled={disabled}
+				onChange={handleBrightnessUpdate}
+			/>
+		</ThemeProvider>
 	);
 };
 

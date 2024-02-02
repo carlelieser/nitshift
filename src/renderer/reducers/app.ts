@@ -127,10 +127,10 @@ export const appSlice = createSlice({
 		setMode: createReducer<AppState["mode"]>("mode"),
 		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
 			const { id, brightness } = action.payload;
-			const monitorIndex = findMonitorIndexById(state.monitors, id);
-			if (monitorIndex > -1) {
-				state.monitors[monitorIndex].brightness = brightness;
-			}
+			state.monitors = update(state.monitors, {
+				$apply: (monitors) =>
+					monitors.map((monitor) => (monitor.id === id ? { ...monitor, brightness } : monitor))
+			});
 		},
 		setMonitorDisabled: (state, action: PayloadAction<SetMonitorDisabledAction>) => {
 			const { id, disabled } = action.payload;
