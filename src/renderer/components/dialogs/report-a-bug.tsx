@@ -1,6 +1,6 @@
 import Dialog from "@components/dialog";
 import { BugReport, Check, Exclamation } from "mui-symbols";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { DialogComponentProps } from "../dialog";
 import { Box, Grow, Stack, TextField, TextFieldProps, Typography } from "@mui/material";
 import { ipcRenderer } from "electron";
@@ -19,7 +19,7 @@ const ReportABugDialog: React.FC<DialogComponentProps> = (props) => {
 
 	const handleDescriptionChange: TextFieldProps["onChange"] = (e) => setDescription(e.target.value);
 
-	const handleConfirm = async () => {
+	const handleConfirm = useCallback(async () => {
 		if (succeeded) return handleCancel();
 		setLoading(true);
 		const result = await ipcRenderer.invoke("app/bug/report", {
@@ -29,7 +29,7 @@ const ReportABugDialog: React.FC<DialogComponentProps> = (props) => {
 		setSucceeded(result);
 		setError(!result);
 		setLoading(false);
-	};
+	}, [succeeded, title, description]);
 
 	const reset = () => {
 		setTitle("");
@@ -85,7 +85,7 @@ const ReportABugDialog: React.FC<DialogComponentProps> = (props) => {
 			});
 
 		return actions;
-	}, [succeeded, error, loading]);
+	}, [succeeded, error, loading, handleConfirm]);
 
 	return (
 		<Dialog title={"Report a Bug"} icon={<BugReport />} actions={actions} onExited={handleExited} {...props}>
