@@ -599,8 +599,8 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.4.1";
-const body = "Minor bug fixes/improvements. You can now report a bug, leave a review, or just send us an email right from the settings panel.";
+const tag_name = "v0.4.4";
+const body = "Implement hotfix for bug reporting and make it so future updates don't reset tray icon placement.";
 const release = {
   tag_name,
   body
