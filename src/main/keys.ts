@@ -16,5 +16,6 @@ export const price = {
 		"5.99": "The cost of happiness, possibly."
 	}
 };
+export const mail_id = "qvogrsdhexznjjmk";
 export const version_id = "version-id";
 export const main_id = "project-hash";
