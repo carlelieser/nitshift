@@ -4,7 +4,7 @@ import fs from "fs";
 import logSymbols from "log-symbols";
 import { createDefaultBrightnessMode } from "../common/utils";
 import Store from "electron-store";
-import { decrypt, encrypt } from "./encyryption";
+import { decrypt, encrypt } from "./encryption";
 
 export const STORE = {
 	AUTO_UPDATE_CHECK: "auto-update-check",
