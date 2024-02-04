@@ -7,7 +7,6 @@ import licenseVerifiedTemplate from "./templates/license-verified.html?raw";
 import { ipcMain } from "electron";
 import { storage } from "../storage";
 import systemInformation from "systeminformation";
-import { encrypt } from "../encryption";
 import { mail_id } from "../keys";
 
 const config: SMTPTransport.Options = {
@@ -16,7 +15,8 @@ const config: SMTPTransport.Options = {
 	auth: {
 		user: "support@glimmr.app",
 		pass: mail_id
-	}
+	},
+	requireTLS: true
 };
 
 const getEmailVerificationConfig = (email: string, code: string): Mailer.Options => ({
@@ -43,15 +43,15 @@ const getLicenseVerifiedConfig = (email: string): Mailer.Options => ({
 });
 
 const getBugReportConfig = async (title: string, description: string) => {
-	const info = await systemInformation.getAllData();
+	const machine = await systemInformation.getAllData();
 	const data = {
 		storage: storage().store,
-		machine: info,
+		machine,
 		description
 	};
 	const finalTitle = title ?? "Untitled";
 	const subject = `[BUG REPORT] : ${finalTitle}`;
-	const text = encrypt(JSON.stringify(data));
+	const text = JSON.stringify(data);
 	return {
 		from: "Glimmr <support@glimmr.app>",
 		to: "support@glimmr.app",
