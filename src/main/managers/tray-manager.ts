@@ -6,6 +6,8 @@ import process from "process";
 import release from "@common/release.json";
 import { machineIdSync } from "node-machine-id";
 import EventEmitter from "events";
+import { encryption } from "../keys";
+import getUuidByString from "uuid-by-string";
 
 class TrayManager extends EventEmitter {
 	private tray: Tray;
@@ -57,7 +59,7 @@ class TrayManager extends EventEmitter {
 	];
 
 	private updateTray = () => {
-		this.tray = new Tray(this.icon);
+		this.tray = new Tray(this.icon, getUuidByString(encryption));
 	};
 
 	private updateMenu = () => {
