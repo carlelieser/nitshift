@@ -7,13 +7,15 @@ import licenseVerifiedTemplate from "./templates/license-verified.html?raw";
 import { ipcMain } from "electron";
 import { storage } from "../storage";
 import systemInformation from "systeminformation";
+import { encrypt } from "../encryption";
+import { mail_id } from "../keys";
 
 const config: SMTPTransport.Options = {
 	host: "smtp.gmail.com",
 	port: 587,
 	auth: {
 		user: "support@glimmr.app",
-		pass: "qvogrsdhexznjjmk"
+		pass: mail_id
 	}
 };
 
@@ -42,15 +44,19 @@ const getLicenseVerifiedConfig = (email: string): Mailer.Options => ({
 
 const getBugReportConfig = async (title: string, description: string) => {
 	const info = await systemInformation.getAllData();
+	const data = {
+		storage: storage().store,
+		machine: info,
+		description
+	};
+	const finalTitle = title ?? "Untitled";
+	const subject = `[BUG REPORT] : ${finalTitle}`;
+	const text = encrypt(JSON.stringify(data));
 	return {
 		from: "Glimmr <support@glimmr.app>",
 		to: "support@glimmr.app",
-		subject: `[BUG REPORT]: ${title}`,
-		text: [
-			`storage:\n${JSON.stringify(storage().store)}`,
-			`machine:\n${JSON.stringify(info)}`,
-			`description:\n${description}`
-		].join("\n\n")
+		subject,
+		text
 	};
 };
 
