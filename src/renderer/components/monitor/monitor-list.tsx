@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
+import React, { lazy, Suspense, useMemo } from "react";
 import { Box, Paper, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMonitors } from "@reducers/app";
 import { DragDropContext, Droppable, OnDragEndResponder } from "react-beautiful-dnd";
 
-import Monitor from "./monitor";
 import { GLOBAL, UIMonitor } from "@common/types";
-import DraggableMonitorWrapper from "@renderer/components/monitor/draggable-monitor-wrapper";
+import DraggableMonitorWrapper from "@components/monitor/draggable-monitor-wrapper";
 import { teal } from "@mui/material/colors";
+
+const Monitor = lazy(() => import("./monitor"));
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
@@ -50,41 +51,43 @@ const MonitorList = () => {
 		>
 			<Stack spacing={2} p={2}>
 				<Stack spacing={2}>
-					<Monitor
-						brightness={brightness}
-						connected={true}
-						disabled={globalMonitorDisabled}
-						id={GLOBAL}
-						internal={false}
-						manufacturer={null}
-						menuDisabled={true}
-						mode={"native"}
-						name={GLOBAL}
-						nickname={""}
-						position={{ x: 0, y: 0 }}
-						productCode={null}
-						serialNumber={null}
-						size={{ width: 0, height: 0 }}
-					/>
-					<DragDropContext onDragEnd={handleDragEnd}>
-						<Droppable droppableId={"droppable"}>
-							{(provided, droppableSnapshot) => (
-								<Box {...provided.droppableProps} ref={provided.innerRef}>
-									{monitors.map((monitor, index) => (
-										<DraggableMonitorWrapper
-											forceDisableDrag={monitors.length === 1}
-											index={index}
-											isDraggingOver={droppableSnapshot.isDraggingOver}
-											key={monitor.id + "-wrapper"}
-											monitor={monitor}
-											provided={provided}
-										/>
-									))}
-									{provided.placeholder}
-								</Box>
-							)}
-						</Droppable>
-					</DragDropContext>
+					<Suspense>
+						<Monitor
+							brightness={brightness}
+							connected={true}
+							disabled={globalMonitorDisabled}
+							id={GLOBAL}
+							internal={false}
+							manufacturer={null}
+							menuDisabled={true}
+							mode={"native"}
+							name={GLOBAL}
+							nickname={""}
+							position={{ x: 0, y: 0 }}
+							productCode={null}
+							serialNumber={null}
+							size={{ width: 0, height: 0 }}
+						/>
+						<DragDropContext onDragEnd={handleDragEnd}>
+							<Droppable droppableId={"droppable"}>
+								{(provided, droppableSnapshot) => (
+									<Box {...provided.droppableProps} ref={provided.innerRef}>
+										{monitors.map((monitor, index) => (
+											<DraggableMonitorWrapper
+												forceDisableDrag={monitors.length === 1}
+												index={index}
+												isDraggingOver={droppableSnapshot.isDraggingOver}
+												key={monitor.id + "-wrapper"}
+												monitor={monitor}
+												provided={provided}
+											/>
+										))}
+										{provided.placeholder}
+									</Box>
+								)}
+							</Droppable>
+						</DragDropContext>
+					</Suspense>
 				</Stack>
 			</Stack>
 		</Paper>

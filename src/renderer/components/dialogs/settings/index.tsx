@@ -1,17 +1,17 @@
 import Dialog, { DialogComponentProps } from "../../dialog";
 import { Divider, Stack } from "@mui/material";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { SettingsRoundedFilled } from "mui-symbols";
 import Upgrade from "@promotional/buttons/upgrade-button";
 import LicenseCard from "@components/license/license-card";
 
-import BrightnessModes from "./options/brightness-modes";
-import Schedule from "./options/schedule";
-import Refresh from "./options/refresh";
-import Appearance from "./options/appearance";
-import Startup from "./options/startup/startup";
-import AutoUpdateCheck from "./options/auto-update-check";
-import Footer from "./footer";
+const BrightnessModes = lazy(() => import("./options/brightness-modes"));
+const Schedule = lazy(() => import("./options/schedule"));
+const Refresh = lazy(() => import("./options/refresh"));
+const Appearance = lazy(() => import("./options/appearance"));
+const Startup = lazy(() => import("./options/startup/startup"));
+const AutoUpdateCheck = lazy(() => import("./options/auto-update-check"));
+const Footer = lazy(() => import("./footer"));
 
 const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 	return (
@@ -20,12 +20,14 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 				<Stack spacing={2} p={2}>
 					<Upgrade context={"main"} fullWidth={true} />
 					<LicenseCard />
-					<Appearance />
-					<BrightnessModes />
-					<Schedule />
-					<Refresh />
-					<AutoUpdateCheck />
-					<Startup />
+					<Suspense>
+						<Appearance />
+						<BrightnessModes />
+						<Schedule />
+						<Refresh />
+						<AutoUpdateCheck />
+						<Startup />
+					</Suspense>
 				</Stack>
 				<Divider />
 				<Footer />
