@@ -13,18 +13,18 @@ import {
 } from "@reducers/app";
 import { dimensions, isNumberAroundReference } from "@common/utils";
 import FocusTrap from "@mui/material/Unstable_TrapFocus";
-import WindowBar from "@components/window-bar";
 
 import { ipcRenderer } from "electron";
 import { maskStyles } from "./utils";
-import PassThrough from "@components/pass-through";
-import MonitorsRefreshed from "@components/monitors-refreshed";
-import ReceivedPremium from "@components/received-premium";
 import { setRelease } from "./reducers/app";
-import UpdateSnackbar from "@components/update-snackbar";
 
+const WindowBar = lazy(() => import("@components/window-bar"));
 const ExpandedView = lazy(() => import("./views/expanded"));
 const CompactView = lazy(() => import("./views/compact"));
+const PassThrough = lazy(() => import("@components/pass-through"));
+const MonitorsRefreshed = lazy(() => import("@components/monitors-refreshed"));
+const ReceivedPremium = lazy(() => import("@components/received-premium"));
+const UpdateSnackbar = lazy(() => import("@components/update-snackbar"));
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -132,51 +132,51 @@ const App = () => {
 						}}
 					>
 						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>
-							<MonitorsRefreshed />
-							<ReceivedPremium />
-							<UpdateSnackbar />
-							<Stack height={"100%"} justifyContent={"end"}>
-								<PassThrough />
-								<Paper
-									sx={{
-										borderRadius: 4,
-										mt: "auto",
-										height: mode === "compact" ? "auto" : "100%"
-									}}
-									variant={"elevation"}
-									elevation={8}
-								>
+							<Suspense>
+								<MonitorsRefreshed />
+								<ReceivedPremium />
+								<UpdateSnackbar />
+								<Stack height={"100%"} justifyContent={"end"}>
+									<PassThrough />
 									<Paper
 										sx={{
 											borderRadius: 4,
-											height: "100%",
-											overflow: "hidden",
-											position: "relative"
+											mt: "auto",
+											height: mode === "compact" ? "auto" : "100%"
 										}}
-										style={maskStyles}
-										variant={"outlined"}
-										elevation={0}
+										variant={"elevation"}
+										elevation={8}
 									>
 										<Paper
 											sx={{
 												borderRadius: 4,
 												height: "100%",
-												display: "flex",
-												flexDirection: "column",
+												overflow: "hidden",
 												position: "relative"
 											}}
-											variant={"elevation"}
+											style={maskStyles}
+											variant={"outlined"}
 											elevation={0}
 										>
-											<WindowBar />
-											<Suspense>
+											<Paper
+												sx={{
+													borderRadius: 4,
+													height: "100%",
+													display: "flex",
+													flexDirection: "column",
+													position: "relative"
+												}}
+												variant={"elevation"}
+												elevation={0}
+											>
+												<WindowBar />
 												<ExpandedView />
 												<CompactView />
-											</Suspense>
+											</Paper>
 										</Paper>
 									</Paper>
-								</Paper>
-							</Stack>
+								</Stack>
+							</Suspense>
 						</Box>
 					</Slide>
 				</div>

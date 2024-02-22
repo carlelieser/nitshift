@@ -1,7 +1,8 @@
 import { Button } from "@mui/material";
 import { BugReport } from "mui-symbols";
-import ReportABugDialog from "@dialogs/report-a-bug";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
+
+const ReportABugDialog = lazy(() => import("@dialogs/report-a-bug"));
 
 const ReportABug = () => {
 	const [open, setOpen] = useState<boolean>(false);
@@ -11,7 +12,9 @@ const ReportABug = () => {
 
 	return (
 		<>
-			<ReportABugDialog open={open} onClose={closeDialog} />
+			<Suspense>
+				<ReportABugDialog open={open} onClose={closeDialog} />
+			</Suspense>
 			<Button startIcon={<BugReport />} color={"error"} onClick={openDialog}>
 				Report a Bug
 			</Button>
