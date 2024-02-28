@@ -7,7 +7,7 @@ import { ipcRenderer } from "electron";
 
 const BrightnessModeButton = lazy(() => import("../brightness-mode/brightness-mode-button"));
 const SettingsButton = lazy(() => import("./settings-button"));
-const Upgrade = lazy(() => import("@promotional/buttons/upgrade-button"))
+const Upgrade = lazy(() => import("@promotional/buttons/upgrade-button"));
 
 const WindowButtons = () => {
 	const dispatch = useAppDispatch();
