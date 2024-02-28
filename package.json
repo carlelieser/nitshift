@@ -17,6 +17,7 @@
     "bridge": "node ./pipeline/bridge/storage/generate.js",
     "clear": "ts-node -P ./tsconfig.script.json src/main/storage.ts -- --clear",
     "clean": "npx rimraf ./dist && npx rimraf ./out",
+    "check-expired-trials": "node ./pipeline/check-expired-trials.mjs",
     "capture": "cross-env CAPTURE=true NODE_ENV=development electron-vite dev",
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "update:cst": "ts-node-esm pipeline/update-code-sign-tool.mjs",
@@ -35,7 +36,8 @@
     "publish:auto": "npm run release:prepare && npm run release:auto",
     "release": "npm run release:create && npm run upload",
     "publish": "npm run release:prepare && npm run release",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "postpublish": "npm run check-expired-trials"
   },
   "author": "Glimmr",
   "dependencies": {
@@ -83,6 +85,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "cli-progress": "^3.12.0",
     "cli-spinners": "^2.9.0",
+    "cli-table": "^0.3.11",
     "color": "^4.2.3",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.10",
@@ -90,6 +93,7 @@
     "electron-builder": "^24.9.1",
     "electron-builder-squirrel-windows": "^24.11.0",
     "electron-vite": "^2.0.0",
+    "firebase-admin": "^12.0.0",
     "flat": "^6.0.1",
     "gh-release-assets": "^2.0.1",
     "immutability-helper": "^3.1.1",
