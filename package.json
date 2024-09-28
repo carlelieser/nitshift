@@ -3,21 +3,17 @@
   "productName": "Glimmr",
   "homepage": "https://glimmr.app",
   "target": "node",
-  "version": "0.4.4",
+  "version": "0.4.3",
   "description": "The best multi-monitor brightness tool.",
   "main": "out/main/index.js",
-  "overrides": {
-    "graceful-fs": "^4.2.11"
-  },
-  "precommit": [
-    "format"
-  ],
+  "overrides": { "graceful-fs": "^4.2.11" },
+  "precommit": ["format"],
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron-vite dev",
     "bridge": "node ./pipeline/bridge/storage/generate.js",
     "clear": "ts-node -P ./tsconfig.script.json src/main/storage.ts -- --clear",
     "clean": "npx rimraf ./dist && npx rimraf ./out",
-    "check-expired-trials": "node ./pipeline/check-expired-trials.mjs",
+    "license-integrity-check": "node ./pipeline/license-integrity-check.mjs",
     "capture": "cross-env CAPTURE=true NODE_ENV=development electron-vite dev",
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "update:cst": "ts-node-esm pipeline/update-code-sign-tool.mjs",

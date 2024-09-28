@@ -14,6 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const spinner = ora().start();
+const isSilent = process.argv.includes("--silent");
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
@@ -36,7 +37,7 @@ const getUsersWithExpiredTrials = (users) => users.filter((user) => {
 
 const getDaysSinceTrialStart = (users) => users.map((user) => dayjs().diff(dayjs(user.trialStartDate), "days"));
 
-const endTrial = async (user) => {
+const revokeTrial = async (user) => {
 	const ref = db.collection("users").doc(user.email);
 	const updatedUser = update(user, {
 		trialStartDate: {
@@ -73,40 +74,51 @@ const getStats = async () => {
 };
 
 const displayStats = (stats) => {
-	var table = new Table({
-		head: ["Total", "Expired", "Min", "Max", "Mean"]
+	const table = new Table({
+		head: ["Total Users", "Expired Trials", "Shortest Trial (Days)", "Longest Trial (Days)"]
 	});
 
-	table.push([stats.counts.total, stats.counts.expired, stats.expired.min, stats.expired.max, stats.expired.mean]);
+	table.push([stats.counts.total, stats.counts.expired, stats.expired.min, stats.expired.max]);
 
-	console.log(table.toString())
+	console.log(table.toString());
 };
 
-const handleExpiredTrials = async () => {
+const revokeTrialForUnauthorizedUsers = async (stats) => {
+	await fs.outputFile(path.join(__dirname, "users.json"), JSON.stringify(stats.expired.source));
+	const promises = stats.expired.source.map(revokeTrial);
+	await Promise.all(promises);
+	spinner.succeed(`Successfully revoked trials for ${stats.counts.expired} users.`);
+};
+
+// An unauthorized user refers to a user who has exceeded the 7-day trial period.
+const runIntegrityCheck = async () => {
 	try {
-		spinner.info("Grabbing stats...");
+		spinner.info("Fetching user data...");
 
 		const stats = await getStats();
 
 		if (stats.counts.expired) {
 			displayStats(stats);
 
-			spinner.fail(`${stats.counts.expired} expired trials!`);
+			spinner.fail(`Found ${stats.counts.expired} users with expired trials.`);
 
-			const shouldEnforceExpiredTrials = await new Confirm("Enforce expired trials?").run();
+			if (isSilent) {
+				spinner.start("Revoking expired trials...");
+				await revokeTrialForUnauthorizedUsers(stats);
+			} else {
+				const shouldEnforceExpiredTrials = await new Confirm("Do you want to revoke trials for users with expired access?").run();
 
-			if (shouldEnforceExpiredTrials) {
-				await fs.outputFile(path.join(__dirname, "expired-trials.json"), JSON.stringify(stats.expired.source));
-				const promises = stats.expired.source.map((user) => endTrial(user));
-				await Promise.all(promises);
-				spinner.succeed(`Ended trials for ${stats.counts.expired} users`);
+				if (shouldEnforceExpiredTrials) {
+					spinner.start("Revoking expired trials...");
+					await revokeTrialForUnauthorizedUsers(stats);
+				}
 			}
 		} else {
-			spinner.succeed("No users with expired trials!");
+			spinner.succeed("No unauthorized users with expired trials detected.");
 		}
 	} catch (err) {
-		spinner.fail(`Failed to handle expired trials:\n${err}`);
+		spinner.fail(`An error occurred while processing expired trials:\n${err}`);
 	}
 };
 
-handleExpiredTrials();
+runIntegrityCheck();
