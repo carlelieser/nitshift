@@ -13,7 +13,9 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const spinner = ora().start();
+const spinner = ora({
+	prefixText: () => `[${new Date().toLocaleString()}]`
+}).start();
 const isSilent = process.argv.includes("--silent");
 
 admin.initializeApp({
