@@ -13,7 +13,7 @@
     "bridge": "node ./pipeline/bridge/storage/generate.js",
     "clear": "ts-node -P ./tsconfig.script.json src/main/storage.ts -- --clear",
     "clean": "npx rimraf ./dist && npx rimraf ./out",
-    "license-integrity-check": "node ./pipeline/license-integrity-check.mjs",
+    "license-integrity-check": "node ./pipeline/license-integrity-check.mjs --silent",
     "capture": "cross-env CAPTURE=true NODE_ENV=development electron-vite dev",
     "format": "prettier ./src/**/*.{ts,tsx} --write",
     "update:cst": "ts-node-esm pipeline/update-code-sign-tool.mjs",
