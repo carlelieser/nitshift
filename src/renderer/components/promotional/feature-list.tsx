@@ -28,7 +28,8 @@ const content = [
 	{
 		icon: FeaturedSeasonalAndGiftsRoundedFilled,
 		title: "Show Your Support",
-		subtitle: "Glimmr was made with love. (And a lot of coffee.) Support the developer and help keep the project alive."
+		subtitle:
+			"Glimmr was made with love. (And a lot of coffee.) Support the developer and help keep the project alive."
 	}
 ];
 

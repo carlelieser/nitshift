@@ -68,7 +68,7 @@ const Dialog: React.FC<DialogProps> = ({
 							width: "100%",
 							height: "100%",
 							outline: "none",
-							overflow: "hidden",
+							overflow: "hidden"
 						}}
 						variant={"outlined"}
 						elevation={1}

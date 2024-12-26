@@ -185,7 +185,7 @@ listener.startListening({
 
 listener.startListening({
 	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode, setMonitorName),
-	effect: (action , api) => {
+	effect: (action, api) => {
 		// @ts-ignore
 		api.dispatch(setActiveMonitor(action.payload.id));
 		saveMonitors(api.getState().app.monitors);
