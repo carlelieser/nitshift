@@ -9,10 +9,10 @@ import path from "path";
 import release from "@common/release.json";
 import EventEmitter from "events";
 import * as module from "./lumi/wrapper";
-import { loadAppearance, loadStartupSettings, saveMode } from "./storage";
+import { loadAppearance, loadNative, loadStartupSettings, saveMode } from "./storage";
 
 class Window extends EventEmitter {
-	public data: BrowserWindow;
+	public ref: BrowserWindow;
 	public mode = loadMode();
 	public autoHide = true;
 	private readonly entry: any;
@@ -34,30 +34,30 @@ class Window extends EventEmitter {
 	}
 
 	public readjust = () => {
-		if (this.data) {
+		if (this.ref) {
 			const { x, y } = this.getCoordinates();
-			this.data.setPosition(x, y);
+			this.ref.setPosition(x, y);
 		}
 	};
 
 	public applyMode = () => {
-		if (this.data) {
+		if (this.ref) {
 			this.mode = loadMode();
 
 			const width = this.getWidth();
 			const height = this.getHeight();
-			this.data.setResizable(true);
-			this.data.setMaximumSize(width, height);
-			this.data.setSize(width, height, true);
-			this.data.setResizable(false);
+			this.ref.setResizable(true);
+			this.ref.setMaximumSize(width, height);
+			this.ref.setSize(width, height, true);
+			this.ref.setResizable(false);
 			this.readjust();
 		}
 	};
 
 	public create = async () => {
 		const coordinates = this.getCoordinates();
-		if (this.data) this.data.destroy();
-		this.data = new BrowserWindow({
+		if (this.ref) this.ref.destroy();
+		this.ref = new BrowserWindow({
 			focusable: true,
 			transparent: true,
 			show: false,
@@ -81,22 +81,25 @@ class Window extends EventEmitter {
 			},
 			...coordinates
 		});
-		this.data.setAlwaysOnTop(true, "pop-up-menu");
+		this.ref.setAlwaysOnTop(true, "pop-up-menu");
 
-		this.data.on("ready-to-show", () => this.emit("ready-to-show", this.data));
+		this.ref.on("ready-to-show", () => {
+			this.applyMode();
+			this.emit("ready-to-show", this.ref);
+		});
 
-		this.emit("window-created", this.data);
+		this.emit("window-created", this.ref);
 
 		saveMode(loadStartupSettings().mode);
 
 		this.applyMode();
 
-		if (this.entry.startsWith("http")) await this.data.loadURL(this.entry);
-		else await this.data.loadFile(this.entry);
+		if (this.entry.startsWith("http")) await this.ref.loadURL(this.entry);
+		else await this.ref.loadFile(this.entry);
 
 		if (isDev) {
 			setTimeout(() => {
-				this.data.webContents.openDevTools({
+				this.ref.webContents.openDevTools({
 					mode: "detach"
 				});
 			}, 1000);
@@ -104,11 +107,11 @@ class Window extends EventEmitter {
 	};
 
 	public enablePassThrough = () => {
-		if (this.data) this.data.setIgnoreMouseEvents(true, { forward: true });
+		if (this.ref) this.ref.setIgnoreMouseEvents(true, { forward: true });
 	};
 
 	public disablePassThrough = () => {
-		if (this.data) this.data.setIgnoreMouseEvents(false);
+		if (this.ref) this.ref.setIgnoreMouseEvents(false);
 	};
 
 	public enableAutoHide = () => (this.autoHide = true);
@@ -150,12 +153,12 @@ class Window extends EventEmitter {
 
 		saveMonitors(uniqBy(monitors, "id") as Array<UIMonitor>);
 
-		if (this.data) this.data.webContents.send("refresh-monitors");
+		if (this.ref) this.ref.webContents.send("refresh-monitors");
 	};
 
 	public capture = async () => {
-		const [width, height] = this.data.getSize();
-		const data = await this.data.webContents.capturePage({
+		const [width, height] = this.ref.getSize();
+		const data = await this.ref.webContents.capturePage({
 			width,
 			height,
 			x: 0,
@@ -167,11 +170,11 @@ class Window extends EventEmitter {
 	};
 
 	private getWidth = () => {
-		return dimensions[this.mode].width * (process.env.CAPTURE ? 2 : 1);
+		return dimensions[this.mode][loadNative() ? "native" : "default"].width * (process.env.CAPTURE ? 2 : 1);
 	};
 
 	private getHeight = () => {
-		return dimensions[this.mode].height * (process.env.CAPTURE ? 2 : 1);
+		return dimensions[this.mode][loadNative() ? "native" : "default"].height * (process.env.CAPTURE ? 2 : 1);
 	};
 
 	private getCoordinates = () => {

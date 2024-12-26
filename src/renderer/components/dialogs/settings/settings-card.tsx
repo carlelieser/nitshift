@@ -1,9 +1,7 @@
 import React, { forwardRef, useState } from "react";
-import { alpha, Button, Chip, Stack, Typography } from "@mui/material";
+import { Button, Chip, Stack, Typography } from "@mui/material";
 import Dialog, { DialogProps } from "@components/dialog";
 import { stubFalse } from "lodash";
-import { useAppSelector } from "@hooks";
-import { common } from "@mui/material/colors";
 
 type PopupProps = Pick<DialogProps, "title" | "icon"> & { children: React.ReactNode };
 
@@ -35,7 +33,6 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 		ref
 	) => {
 		const [open, setOpen] = useState<boolean>(false);
-		const appearance = useAppSelector((state) => state.app.appearance);
 
 		const handleClose = () => setOpen(false);
 
@@ -54,7 +51,6 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						px: 3,
 						textAlign: "left",
 						justifyContent: "start",
-						bgcolor: appearance === "light" ? alpha(common.black, 0.03) : alpha(common.white, 0.02)
 					}}
 					disabled={disable}
 					onClick={(e) => {
@@ -80,7 +76,6 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 							</Stack>
 						) : null
 					}
-					disableElevation={true}
 					ref={ref}
 				>
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>

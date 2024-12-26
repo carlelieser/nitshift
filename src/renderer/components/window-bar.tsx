@@ -4,7 +4,6 @@ import { useAppSelector } from "@hooks";
 import { capitalize } from "lodash";
 import icon from "@assets/img/icon.svg";
 import release from "@common/release.json";
-import { teal } from "@mui/material/colors";
 
 const WindowButtons = lazy(() => import("./buttons/window-buttons"));
 const MonitorSelect = lazy(() => import("./monitor/monitor-select"));
@@ -12,16 +11,12 @@ const MonitorSelect = lazy(() => import("./monitor/monitor-select"));
 const WindowBar = () => {
 	const theme = useTheme();
 	const mode = useAppSelector((state) => state.app.mode);
-	const appearance = useAppSelector((state) => state.app.appearance);
 	const license = useAppSelector((state) => state.app.license);
+	const isNative = useAppSelector((state) => state.app.native);
 
 	const bgcolor = useMemo(
-		() =>
-			alpha(
-				appearance === "light" ? teal[100] : theme.palette.background.paper,
-				appearance === "light" ? 1 : 0.4
-			),
-		[appearance, theme]
+		() => alpha(theme.palette.background.paper, isNative ? 0.71 : 1),
+		[isNative, theme.palette.background.paper]
 	);
 
 	const color = useMemo(() => theme.palette.getContrastText(bgcolor), [bgcolor]);
@@ -32,12 +27,11 @@ const WindowBar = () => {
 				position: "sticky",
 				top: 0,
 				zIndex: 20,
-				backdropFilter: "blur(40px)",
 				bgcolor,
-				color
+				color,
 			}}
 			variant={"elevation"}
-			elevation={appearance === "light" ? 0 : 2}
+			elevation={0}
 			square={true}
 		>
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} px={2} py={1} spacing={2}>

@@ -44,6 +44,7 @@ class Shader extends EventEmitter {
 		});
 		this.shades[id].show();
 		this.shades[id].setIgnoreMouseEvents(true);
+		this.shades[id].setSkipTaskbar(true);
 	};
 
 	public anyFocused = () => !!Object.values(this.shades).find((window) => window.isFocused());

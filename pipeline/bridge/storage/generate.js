@@ -7,8 +7,8 @@ const root = path.join(__dirname, "..", "..", "..");
 
 const paths = {
 	prettier: path.join(root, ".prettierrc"),
-	rendererTemplate: path.join(__dirname, "templates", "renderer.js"),
-	mainTemplate: path.join(__dirname, "templates", "main.js"),
+	rendererTemplate: path.join(__dirname, "templates", "renderer.txt"),
+	mainTemplate: path.join(__dirname, "templates", "main.txt"),
 	storage: path.join(root, "src", "main", "storage.ts"),
 	rendererStorage: path.join(root, "src", "renderer", "storage.ts"),
 	mainStorage: path.join(root, "src", "main", "messages", "storage.ts"),

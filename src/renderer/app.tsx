@@ -15,8 +15,8 @@ import { dimensions, isNumberAroundReference } from "@common/utils";
 import FocusTrap from "@mui/material/Unstable_TrapFocus";
 
 import { ipcRenderer } from "electron";
-import { maskStyles } from "./utils";
 import { setRelease } from "./reducers/app";
+import { isDev } from "../common/utils";
 
 const WindowBar = lazy(() => import("@components/window-bar"));
 const ExpandedView = lazy(() => import("./views/expanded"));
@@ -50,8 +50,8 @@ const App = () => {
 			const nextMode = mode === "compact" ? "expanded" : "compact";
 			const [width, height] = ipcRenderer.sendSync("app/window/size");
 			if (
-				isNumberAroundReference(width, dimensions[nextMode].width, 5) &&
-				isNumberAroundReference(height, dimensions[nextMode].height, 5)
+				isNumberAroundReference(width, dimensions[nextMode].native?.width, 5) &&
+				isNumberAroundReference(height, dimensions[nextMode].native?.height, 5)
 			) {
 				dispatch(setTransitioning(false));
 			}
@@ -86,7 +86,7 @@ const App = () => {
 		ipcRenderer.on("refresh-monitors", () => dispatch(refreshAvailableMonitors()));
 
 		ipcRenderer.on("focused", () => dispatch(setFocused(true)));
-		ipcRenderer.on("blurred", () => dispatch(setFocused(false)));
+		if (!isDev) ipcRenderer.on("blurred", () => dispatch(setFocused(false)));
 
 		ipcRenderer.on("update-available", (_event, release) => dispatch(setRelease(release)));
 
@@ -111,7 +111,7 @@ const App = () => {
 						width: "100%",
 						height: "100%",
 						position: "relative",
-						overflow: "hidden"
+						overflow: "hidden",
 					}}
 					onMouseOver={handleMouseOver}
 				>
@@ -138,33 +138,27 @@ const App = () => {
 								<UpdateSnackbar />
 								<Stack height={"100%"} justifyContent={"end"}>
 									<PassThrough />
-									<Paper
+									<Box
 										sx={{
-											borderRadius: 4,
 											mt: "auto",
 											height: mode === "compact" ? "auto" : "100%"
 										}}
-										variant={"elevation"}
-										elevation={8}
 									>
-										<Paper
+										<Box
 											sx={{
-												borderRadius: 4,
 												height: "100%",
-												overflow: "hidden",
 												position: "relative"
 											}}
-											style={maskStyles}
-											variant={"outlined"}
-											elevation={0}
 										>
 											<Paper
 												sx={{
-													borderRadius: 4,
 													height: "100%",
 													display: "flex",
 													flexDirection: "column",
-													position: "relative"
+													position: "relative",
+													overflow: "hidden",
+													zIndex: 10,
+													borderRadius: 4
 												}}
 												variant={"elevation"}
 												elevation={0}
@@ -173,8 +167,8 @@ const App = () => {
 												<ExpandedView />
 												<CompactView />
 											</Paper>
-										</Paper>
-									</Paper>
+										</Box>
+									</Box>
 								</Stack>
 							</Suspense>
 						</Box>

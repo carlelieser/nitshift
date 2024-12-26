@@ -19,7 +19,6 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 			<Stack spacing={3}>
 				<Stack spacing={2} p={2}>
 					<Upgrade context={"main"} fullWidth={true} />
-					<LicenseCard />
 					<Suspense>
 						<Appearance />
 						<BrightnessModes />
@@ -28,6 +27,7 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 						<AutoUpdateCheck />
 						<Startup />
 					</Suspense>
+					<LicenseCard />
 				</Stack>
 				<Divider />
 				<Footer />

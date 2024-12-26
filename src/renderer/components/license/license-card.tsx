@@ -61,10 +61,10 @@ const LicenseCard = () => {
 						<Chip
 							label={
 								<Stack spacing={0.5} direction={"row"}>
-									<Typography sx={{ opacity: 0.7 }}>License</Typography>
 									<Typography textTransform={"capitalize"}>{license}</Typography>
 								</Stack>
 							}
+							color={"primary"}
 						></Chip>
 						{license === "trial" ? (
 							<Chip
@@ -76,7 +76,7 @@ const LicenseCard = () => {
 							></Chip>
 						) : null}
 						{license === "premium" ? null : (
-							<Tooltip title={<Typography>Activate license</Typography>}>
+							<Tooltip title={<Typography>Activate a lifetime license with your email address</Typography>}>
 								<ColorButton
 									colour={appearance === "light" ? "teal.900" : "blue.500"}
 									size={"small"}
@@ -84,7 +84,7 @@ const LicenseCard = () => {
 									startIcon={<Key />}
 									onClick={openActivationDialog}
 								>
-									Activate
+									Activate License
 								</ColorButton>
 							</Tooltip>
 						)}

@@ -22,7 +22,7 @@ export interface SliderProps {
 
 const CustomValueLabel: React.FC<SliderValueLabelProps> = (props) => {
 	return (
-		<Tooltip placement={"top"} enterDelay={0} title={<Typography>{props.value}</Typography>}>
+		<Tooltip placement={"top"} enterDelay={0} {...props} title={<Typography>{props.value}</Typography>}>
 			{props.children}
 		</Tooltip>
 	);
@@ -64,7 +64,7 @@ const Slider: React.FC<SliderProps> = ({
 	const handleChange: SliderOwnProps["onChange"] = (_event, value) => onChange(value as number);
 
 	return (
-		<Stack direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
+		<Stack flex={1} direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
 			<IconButton disabled={value === 0 || disabled} onClick={decrement} color={"inherit"}>
 				<Remove />
 			</IconButton>

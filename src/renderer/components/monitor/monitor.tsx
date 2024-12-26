@@ -110,8 +110,8 @@ const Monitor: React.FC<MonitorProps> = ({
 						  }
 						: {}
 				)}
-				variant={appearance === "light" ? "outlined" : "elevation"}
-				elevation={disabled ? 1 : 4}
+				variant={appearance === "light" || disabled ? "outlined" : "elevation"}
+				elevation={disabled ? 0 : 1}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
@@ -158,7 +158,7 @@ const Monitor: React.FC<MonitorProps> = ({
 							}
 						}}
 						variant={"elevation"}
-						elevation={appearance === "light" ? 0 : 1}
+						elevation={appearance === "light" ? 0 : 6}
 					>
 						<MonitorBrightnessSlider
 							monitorId={id}

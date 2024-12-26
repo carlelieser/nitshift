@@ -119,6 +119,7 @@ const RenameMonitorDialog: React.FC<RenameMonitorDialogProps> = ({ open, monitor
 								bottom: 0,
 								py: 2
 							}}
+							variant={"elevation"}
 							elevation={0}
 						>
 							<TextField

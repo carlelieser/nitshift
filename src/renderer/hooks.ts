@@ -17,13 +17,14 @@ export const useAppTheme = () => {
 	const focused = useAppSelector((state) => state.app.focused);
 
 	return useMemo(() => {
+		const bg = appearance === "light" ? "#F1F5F2" : "#151515";
 		return createTheme({
 			palette: {
 				mode: appearance,
 				primary: teal,
 				secondary: {
 					main: "#ec407a"
-				}
+				},
 			},
 			typography: {
 				fontFamily: "roboto",
@@ -121,6 +122,11 @@ export const useAppTheme = () => {
 				MuiPaper: {
 					defaultProps: {
 						variant: appearance === "light" ? "outlined" : "elevation"
+					},
+					styleOverrides: {
+						root: {
+							backgroundColor: bg
+						}
 					}
 				},
 				MuiAlert: {

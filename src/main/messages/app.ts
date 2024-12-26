@@ -26,12 +26,12 @@ class AppMessages {
 		});
 
 		ipcMain.on("app/window/size", (e) => {
-			e.returnValue = window.data.getSize();
+			e.returnValue = window.ref.getSize();
 		});
 
-		ipcMain.handle("app/window/show", () => window.data.show());
-		ipcMain.handle("app/window/blur", () => window.data.blur());
-		ipcMain.handle("app/window/minimize", () => window.data.minimize());
+		ipcMain.handle("app/window/show", () => window.ref.show());
+		ipcMain.handle("app/window/blur", () => window.ref.blur());
+		ipcMain.handle("app/window/minimize", () => window.ref.minimize());
 
 		ipcMain.handle("app/quit", () => app.exit());
 	};
