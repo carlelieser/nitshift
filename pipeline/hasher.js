@@ -10,8 +10,7 @@ var eventemitter3 = { exports: {} };
   }
   if (Object.create) {
     Events.prototype = /* @__PURE__ */ Object.create(null);
-    if (!new Events().__proto__)
-      prefix = false;
+    if (!new Events().__proto__) prefix = false;
   }
   function EE(fn, context, once) {
     this.fn = fn;
@@ -23,19 +22,14 @@ var eventemitter3 = { exports: {} };
       throw new TypeError("The listener must be a function");
     }
     var listener = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
-    if (!emitter._events[evt])
-      emitter._events[evt] = listener, emitter._eventsCount++;
-    else if (!emitter._events[evt].fn)
-      emitter._events[evt].push(listener);
-    else
-      emitter._events[evt] = [emitter._events[evt], listener];
+    if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+    else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+    else emitter._events[evt] = [emitter._events[evt], listener];
     return emitter;
   }
   function clearEvent(emitter, evt) {
-    if (--emitter._eventsCount === 0)
-      emitter._events = new Events();
-    else
-      delete emitter._events[evt];
+    if (--emitter._eventsCount === 0) emitter._events = new Events();
+    else delete emitter._events[evt];
   }
   function EventEmitter2() {
     this._events = new Events();
@@ -43,11 +37,9 @@ var eventemitter3 = { exports: {} };
   }
   EventEmitter2.prototype.eventNames = function eventNames() {
     var names = [], events, name;
-    if (this._eventsCount === 0)
-      return names;
+    if (this._eventsCount === 0) return names;
     for (name in events = this._events) {
-      if (has.call(events, name))
-        names.push(prefix ? name.slice(1) : name);
+      if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
     }
     if (Object.getOwnPropertySymbols) {
       return names.concat(Object.getOwnPropertySymbols(events));
@@ -56,10 +48,8 @@ var eventemitter3 = { exports: {} };
   };
   EventEmitter2.prototype.listeners = function listeners(event) {
     var evt = prefix ? prefix + event : event, handlers = this._events[evt];
-    if (!handlers)
-      return [];
-    if (handlers.fn)
-      return [handlers.fn];
+    if (!handlers) return [];
+    if (handlers.fn) return [handlers.fn];
     for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
       ee[i] = handlers[i].fn;
     }
@@ -67,20 +57,16 @@ var eventemitter3 = { exports: {} };
   };
   EventEmitter2.prototype.listenerCount = function listenerCount(event) {
     var evt = prefix ? prefix + event : event, listeners = this._events[evt];
-    if (!listeners)
-      return 0;
-    if (listeners.fn)
-      return 1;
+    if (!listeners) return 0;
+    if (listeners.fn) return 1;
     return listeners.length;
   };
   EventEmitter2.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
     var evt = prefix ? prefix + event : event;
-    if (!this._events[evt])
-      return false;
+    if (!this._events[evt]) return false;
     var listeners = this._events[evt], len = arguments.length, args, i;
     if (listeners.fn) {
-      if (listeners.once)
-        this.removeListener(event, listeners.fn, void 0, true);
+      if (listeners.once) this.removeListener(event, listeners.fn, void 0, true);
       switch (len) {
         case 1:
           return listeners.fn.call(listeners.context), true;
@@ -102,8 +88,7 @@ var eventemitter3 = { exports: {} };
     } else {
       var length = listeners.length, j;
       for (i = 0; i < length; i++) {
-        if (listeners[i].once)
-          this.removeListener(event, listeners[i].fn, void 0, true);
+        if (listeners[i].once) this.removeListener(event, listeners[i].fn, void 0, true);
         switch (len) {
           case 1:
             listeners[i].fn.call(listeners[i].context);
@@ -118,10 +103,9 @@ var eventemitter3 = { exports: {} };
             listeners[i].fn.call(listeners[i].context, a1, a2, a3);
             break;
           default:
-            if (!args)
-              for (j = 1, args = new Array(len - 1); j < len; j++) {
-                args[j - 1] = arguments[j];
-              }
+            if (!args) for (j = 1, args = new Array(len - 1); j < len; j++) {
+              args[j - 1] = arguments[j];
+            }
             listeners[i].fn.apply(listeners[i].context, args);
         }
       }
@@ -136,8 +120,7 @@ var eventemitter3 = { exports: {} };
   };
   EventEmitter2.prototype.removeListener = function removeListener(event, fn, context, once) {
     var evt = prefix ? prefix + event : event;
-    if (!this._events[evt])
-      return this;
+    if (!this._events[evt]) return this;
     if (!fn) {
       clearEvent(this, evt);
       return this;
@@ -153,10 +136,8 @@ var eventemitter3 = { exports: {} };
           events.push(listeners[i]);
         }
       }
-      if (events.length)
-        this._events[evt] = events.length === 1 ? events[0] : events;
-      else
-        clearEvent(this, evt);
+      if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+      else clearEvent(this, evt);
     }
     return this;
   };
@@ -164,8 +145,7 @@ var eventemitter3 = { exports: {} };
     var evt;
     if (event) {
       evt = prefix ? prefix + event : event;
-      if (this._events[evt])
-        clearEvent(this, evt);
+      if (this._events[evt]) clearEvent(this, evt);
     } else {
       this._events = new Events();
       this._eventsCount = 0;
@@ -599,7 +579,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.4.3";
+const tag_name = "v0.4.4";
 const body = "Implement hotfix for bug reporting and make it so future updates don't reset tray icon placement.";
 const release = {
   tag_name,
@@ -629,8 +609,7 @@ class ProjectHasher {
       return crypto.createHash("sha256").update(string, "utf-8").digest("hex");
     };
     this.runHash = (useVersion) => {
-      if (this.config.asar)
-        return this.runAsarHash(useVersion);
+      if (this.config.asar) return this.runAsarHash(useVersion);
       return this.runStandardHash(useVersion);
     };
     this.getCompositeHash = (hashes, useVersion = true) => {
@@ -641,8 +620,7 @@ class ProjectHasher {
     this.getAsarFileHashes = (files) => {
       let result = [];
       for (const value of Object.values(files)) {
-        if (typeof value !== "object")
-          return;
+        if (typeof value !== "object") return;
         if ("integrity" in value) {
           result.push(value.integrity.hash);
         } else {

@@ -16,7 +16,7 @@ const FeaturesDialog: React.FC<DialogComponentProps> = (props) => {
 
 	return (
 		<FeaturesDialogScrollContext.Provider value={scrollTop}>
-			<Dialog title={"Upgrade to Pro"} icon={<RocketLaunchRoundedFilled />} {...props}>
+			<Dialog title={"Get Pro License"} icon={<RocketLaunchRoundedFilled />} {...props}>
 				<Stack height={"100%"}>
 					<FeatureList onScroll={updateScrollTop} />
 					<PriceSelectAndCheckout />

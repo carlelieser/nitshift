@@ -61,11 +61,11 @@ class AppManager {
 					await this.auth.updateUser();
 				}
 			}
-			this.window.data.webContents.send("sync-license");
+			this.window.ref.webContents.send("sync-license");
 		});
 
 		this.tray.on("click", () => {
-			if (this.window.data) this.window.data.show();
+			if (this.window.ref) this.window.ref.show();
 			else this.window.create();
 		});
 
@@ -75,20 +75,20 @@ class AppManager {
 
 		this.updater.on("update-available", (release) => {
 			this.window.disablePassThrough();
-			this.window.data.show();
-			this.window.data.webContents.send("update-available", release);
+			this.window.ref.show();
+			this.window.ref.webContents.send("update-available", release);
 		});
 
 		this.trial.on("expired", (job) => {
 			this.window.refreshMonitors();
 			this.auth.updateUser().finally(() => {
 				job.stop();
-				this.window.data.webContents.send("trial-ended");
+				this.window.ref.webContents.send("trial-ended");
 			});
 		});
 
 		this.shades.on("blurred", (shade: BrowserWindow) => {
-			if (!this.window.data.webContents.isFocused()) shade.focus();
+			if (!this.window.ref.webContents.isFocused()) shade.focus();
 		});
 
 		this.scheduler.on("ready", () => {
@@ -99,6 +99,12 @@ class AppManager {
 		ipcMain.handle("schedule-changed", this.scheduler.check);
 		ipcMain.handle("free-trial-started", this.handleFreeTrialStarted);
 		ipcMain.handle("sync-user", this.auth.updateUser);
+		ipcMain.on("screen/size", (e) => {
+			const { size, scaleFactor } = screen.getPrimaryDisplay();
+			const width = size.width * scaleFactor;
+			const height = size.height * scaleFactor;
+			e.returnValue = { width, height };
+		});
 
 		this.window.on("window-created", (window: BrowserWindow) => {
 			window.on("show", this.handleWindowShown);
@@ -131,7 +137,7 @@ class AppManager {
 
 	public restart = () => {
 		this.window.create();
-		this.window.data.show();
+		this.window.ref.show();
 	};
 
 	private handleFreeTrialStarted = async () => {
@@ -140,19 +146,19 @@ class AppManager {
 	};
 
 	private handleWindowFocused = () => {
-		this.window.data.webContents.send("focused");
+		this.window.ref.webContents.send("focused");
 		this.updater.check();
 		this.window.applyMode();
 	};
 
 	private handleWindowBlurred = () => {
 		if (!this.window.autoHide || this.shades.anyFocused() || process.env.CAPTURE) return;
-		if (!this.window.data.isMinimized()) this.window.data.webContents.send("blurred");
+		if (!this.window.ref.isMinimized()) this.window.ref.webContents.send("blurred");
 	};
 
 	private handleWindowShown = () => {
 		this.auth.storeUser();
-		this.window.data.webContents.send("focused");
+		this.window.ref.webContents.send("focused");
 	};
 
 	private handleHeaderReceived = (

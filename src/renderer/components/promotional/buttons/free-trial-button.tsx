@@ -20,7 +20,7 @@ const FreeTrialButton: React.FC<Partial<ButtonProps>> = (props) => {
 			}
 		>
 			<ColorButton colour={"indigo.500"} startIcon={<StarRoundedFilled />} onClick={startFreeTrial} {...props}>
-				<Typography variant={"button"}>Start free trial</Typography>
+				<Typography variant={"button"}>Start Free Trial</Typography>
 			</ColorButton>
 		</Tooltip>
 	) : null;

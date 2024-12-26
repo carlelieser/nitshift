@@ -20,7 +20,10 @@ const WindowButtons = () => {
 
 	const toggleMode = () => {
 		dispatch(setTransitioning(true));
-		setTimeout(() => dispatch(setMode(mode === "compact" ? "expanded" : "compact")), 250);
+		setTimeout(() => {
+			dispatch(setMode(mode === "compact" ? "expanded" : "compact"));
+			dispatch(setTransitioning(false));
+		}, 250);
 	};
 
 	return (

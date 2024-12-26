@@ -11,7 +11,7 @@
 	"noImplicitReturns": false,
 	"strictNullChecks": false,
 	"allowSyntheticDefaultImports": true,
-	"paths": {
+	  "paths": {
 	  "@main/*": [
 		"src/main/*"
 	  ],

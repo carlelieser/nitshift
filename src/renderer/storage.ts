@@ -1,7 +1,8 @@
 // THIS FILE IS AUTO-GENERATED. DO NOT EDIT.
+// noinspection ES6UnusedImports
 
-import { ipcRenderer } from "electron";
 import { AppState } from "@common/types";
+import { ipcRenderer } from "electron";
 
 export const STORE = {
 	AUTO_UPDATE_CHECK: "auto-update-check",
@@ -14,6 +15,7 @@ export const STORE = {
 	MODE: "mode",
 	MONITORS: "monitors",
 	MONITOR_NICKNAMES: "monitor-nicknames",
+	NATIVE: "native",
 	SCHEDULE: "schedule",
 	TRIAL_AVAILABILITY: "trail-availability",
 	TRIAL_START_DATE: "trial-start-date",
@@ -38,6 +40,7 @@ export const loadMode = (): AppState["mode"] => ipcRenderer.sendSync("storage/lo
 export const loadMonitors = (): AppState["monitors"] => ipcRenderer.sendSync("storage/load-monitors");
 export const loadMonitorNicknames = (): AppState["monitorNicknames"] =>
 	ipcRenderer.sendSync("storage/load-monitor-nicknames");
+export const loadNative = (): AppState["native"] => ipcRenderer.sendSync("storage/load-native");
 export const loadSchedule = (): AppState["schedule"] => ipcRenderer.sendSync("storage/load-schedule");
 export const loadStartupSettings = (): AppState["startup"] => ipcRenderer.sendSync("storage/load-startup-settings");
 export const loadTrialAvailability = (): AppState["trialAvailability"] =>
@@ -62,6 +65,7 @@ export const saveMode = (mode: AppState["mode"]) => ipcRenderer.sendSync("storag
 export const saveMonitors = (monitors: AppState["monitors"]) => ipcRenderer.sendSync("storage/save-monitors", monitors);
 export const saveMonitorNicknames = (monitors: AppState["monitorNicknames"]) =>
 	ipcRenderer.sendSync("storage/save-monitor-nicknames", monitors);
+export const saveNative = (isNative: boolean) => ipcRenderer.sendSync("storage/save-native", isNative);
 export const saveSchedule = (schedule: AppState["schedule"]) => ipcRenderer.sendSync("storage/save-schedule", schedule);
 export const saveStartupSettings = (settings: AppState["startup"]) =>
 	ipcRenderer.sendSync("storage/save-startup-settings", settings);

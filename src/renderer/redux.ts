@@ -19,6 +19,7 @@ import {
 	setMonitorMode,
 	setMonitorName,
 	setMonitors,
+	setNative,
 	setRefreshed,
 	setSchedule,
 	setTrialAvailability,
@@ -35,6 +36,7 @@ import {
 	saveMode,
 	saveMonitorNicknames,
 	saveMonitors,
+	saveNative,
 	saveSchedule,
 	saveStartupSettings,
 	saveTrialAvailability,
@@ -183,7 +185,8 @@ listener.startListening({
 
 listener.startListening({
 	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode, setMonitorName),
-	effect: (action, api) => {
+	effect: (action , api) => {
+		// @ts-ignore
 		api.dispatch(setActiveMonitor(action.payload.id));
 		saveMonitors(api.getState().app.monitors);
 	}
@@ -214,6 +217,13 @@ listener.startListening({
 	actionCreator: setMonitors,
 	effect: (action) => {
 		saveMonitors(action.payload);
+	}
+});
+
+listener.startListening({
+	actionCreator: setNative,
+	effect: (action) => {
+		saveNative(action.payload);
 	}
 });
 

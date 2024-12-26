@@ -17,6 +17,7 @@ export const STORE = {
 	MODE: "mode",
 	MONITORS: "monitors",
 	MONITOR_NICKNAMES: "monitor-nicknames",
+	NATIVE: "native",
 	SCHEDULE: "schedule",
 	TRIAL_AVAILABILITY: "trail-availability",
 	TRIAL_START_DATE: "trial-start-date",
@@ -54,6 +55,7 @@ export const loadLicense = (): AppState["license"] => storage().get(STORE.LICENS
 export const loadMode = (): AppState["mode"] => storage().get(STORE.MODE, "expanded");
 export const loadMonitors = (): AppState["monitors"] => storage().get(STORE.MONITORS, []);
 export const loadMonitorNicknames = (): AppState["monitorNicknames"] => storage().get(STORE.MONITOR_NICKNAMES, []);
+export const loadNative = (): AppState["native"] => storage().get(STORE.NATIVE, false);
 export const loadSchedule = (): AppState["schedule"] => storage().get(STORE.SCHEDULE, []);
 export const loadStartupSettings = (): AppState["startup"] =>
 	storage().get(STORE.STARTUP, { mode: "compact", auto: true, silent: false });
@@ -75,6 +77,7 @@ export const saveMode = (mode: AppState["mode"]) => storage().set(STORE.MODE, mo
 export const saveMonitors = (monitors: AppState["monitors"]) => storage().set(STORE.MONITORS, monitors);
 export const saveMonitorNicknames = (monitors: AppState["monitorNicknames"]) =>
 	storage().set(STORE.MONITOR_NICKNAMES, monitors);
+export const saveNative = (isNative: boolean) => storage().set(STORE.NATIVE, isNative);
 export const saveSchedule = (schedule: AppState["schedule"]) => storage().set(STORE.SCHEDULE, schedule);
 export const saveStartupSettings = (settings: AppState["startup"]) => storage().set(STORE.STARTUP, settings);
 export const saveTrialAvailability = (available: AppState["trialAvailability"]) =>

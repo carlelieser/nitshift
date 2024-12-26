@@ -35,7 +35,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ price }) => {
 		<>
 			<PreCheckoutSnackbar open={snackbarOpen} onClose={() => setSnackbarOpen(false)} />
 			<ActivateLicenseDialog open={activationDialogOpen} onClose={() => setActivationDialogOpen(false)} />
-			<Tooltip title={<Typography>Start secure checkout with Stripe</Typography>}>
+			<Tooltip title={<Typography>Open secure checkout with Stripe</Typography>}>
 				<ColorButton
 					colour={"blue.500"}
 					fullWidth={true}

@@ -25,7 +25,7 @@ const UpgradeButton: React.FC<Partial<ButtonProps> & { context: "window-bar" | "
 		<>
 			<FeaturesDialog open={open} onClose={closeDialog} />
 			{mode === "compact" && license !== "premium" && props.context === "window-bar" ? (
-				<Tooltip title={<Typography>Upgrade to Pro</Typography>}>
+				<Tooltip title={<Typography>Go PRO</Typography>}>
 					<IconButton onClick={openDialog} {...props}>
 						<RocketLaunchRoundedFilled />
 					</IconButton>
@@ -34,12 +34,12 @@ const UpgradeButton: React.FC<Partial<ButtonProps> & { context: "window-bar" | "
 			{mode === "expanded" && license !== "premium" && props.context === "main" ? (
 				<ColorButton
 					sx={{ px: 2 }}
-					colour={"amber.500"}
+					colour={"blue.500"}
 					startIcon={<RocketLaunchRoundedFilled />}
 					onClick={openDialog}
 					{...(props as ButtonProps)}
 				>
-					<Typography variant={"button"}>Upgrade to Pro</Typography>
+					<Typography variant={"button"}>Go PRO</Typography>
 				</ColorButton>
 			) : null}
 		</>

@@ -196,7 +196,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	}, [codeChars]);
 
 	return (
-		<Dialog open={open} icon={<Key />} title={"Activate"} onClose={onClose} onExited={handleReset}>
+		<Dialog open={open} icon={<Key />} title={"Activate License"} onClose={onClose} onExited={handleReset}>
 			<Stack height={"100%"} alignItems={"center"} justifyContent={"center"}>
 				<Collapse in={emailSent}>
 					<Stack alignItems={"center"} justifyContent={"center"} spacing={2}>

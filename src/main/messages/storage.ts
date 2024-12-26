@@ -38,6 +38,9 @@ ipcMain.on("storage/load-monitors", (e) => {
 ipcMain.on("storage/load-monitor-nicknames", (e) => {
 	e.returnValue = storage.loadMonitorNicknames();
 });
+ipcMain.on("storage/load-native", (e) => {
+	e.returnValue = storage.loadNative();
+});
 ipcMain.on("storage/load-schedule", (e) => {
 	e.returnValue = storage.loadSchedule();
 });
@@ -85,6 +88,9 @@ ipcMain.on("storage/save-monitors", (e, monitors) => {
 });
 ipcMain.on("storage/save-monitor-nicknames", (e, monitors) => {
 	e.returnValue = storage.saveMonitorNicknames(monitors);
+});
+ipcMain.on("storage/save-native", (e, isNative) => {
+	e.returnValue = storage.saveNative(isNative);
 });
 ipcMain.on("storage/save-schedule", (e, schedule) => {
 	e.returnValue = storage.saveSchedule(schedule);

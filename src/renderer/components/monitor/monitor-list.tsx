@@ -6,14 +6,12 @@ import { DragDropContext, Droppable, OnDragEndResponder } from "react-beautiful-
 
 import { GLOBAL, UIMonitor } from "@common/types";
 import DraggableMonitorWrapper from "@components/monitor/draggable-monitor-wrapper";
-import { teal } from "@mui/material/colors";
 
 const Monitor = lazy(() => import("./monitor"));
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
 	const monitors = useAppSelector((state) => state.app.monitors.filter((monitor) => monitor.connected));
-	const appearance = useAppSelector((state) => state.app.appearance);
 	const license = useAppSelector((state) => state.app.license);
 	const brightness = useAppSelector((state) => state.app.brightness);
 
@@ -38,7 +36,6 @@ const MonitorList = () => {
 	return (
 		<Paper
 			sx={{
-				bgcolor: appearance === "light" ? teal[50] : "inherit",
 				borderRadius: 0,
 				zIndex: 0,
 				position: "relative",
@@ -49,7 +46,7 @@ const MonitorList = () => {
 			variant={"elevation"}
 			elevation={0}
 		>
-			<Stack spacing={2} p={2}>
+			<Stack spacing={2} p={2} pb={8}>
 				<Stack spacing={2}>
 					<Suspense>
 						<Monitor

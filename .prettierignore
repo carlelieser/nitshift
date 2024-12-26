@@ -1,2 +1,2 @@
-main.js
-renderer.js
+pipeline/bridge/storage/templates/main.txt
+pipeline/bridge/storage/templates/renderer.txt

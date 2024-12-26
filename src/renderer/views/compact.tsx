@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Stack } from "@mui/material";
+import { Box, Paper, Stack } from "@mui/material";
 import { useAppSelector } from "@hooks";
 import MonitorToggle from "../components/monitor/monitor-toggle";
 import MonitorModeToggle from "../components/monitor/monitor-mode-toggle";
@@ -12,21 +12,16 @@ const CompactView = () => {
 	const brightness = useAppSelector((state) => state.app.brightness);
 
 	return mode === "compact" ? (
-		<Paper
+		<Box
 			sx={{
 				overflow: "hidden",
 				zIndex: 0
 			}}
-			square={true}
-			elevation={0}
-			variant={"elevation"}
 		>
 			<Paper
 				sx={{
 					zIndex: 40,
-					position: "relative",
-					borderBottomLeftRadius: 16,
-					borderBottomRightRadius: 16
+					position: "relative"
 				}}
 				square={true}
 				elevation={1}
@@ -64,7 +59,7 @@ const CompactView = () => {
 					)}
 				</Stack>
 			</Paper>
-		</Paper>
+		</Box>
 	) : null;
 };
 

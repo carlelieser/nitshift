@@ -15,7 +15,7 @@ const PriceSelectAndCheckout = () => {
 		<Stack>
 			<Collapse in={shouldShowAlert} mountOnEnter={true} unmountOnExit={true}>
 				<Alert elevation={1} square={true} severity={"success"}>
-					Select a price that feels right for you.
+					Select a price that feels right for you
 				</Alert>
 			</Collapse>
 			<Stack zIndex={10} direction={"row"} alignItems={"center"} spacing={1} sx={{ bgcolor: blue["500"] }}>

@@ -36,12 +36,24 @@ export const modes: Array<AppState["mode"]> = ["compact", "expanded"];
 
 export const dimensions = {
 	expanded: {
-		width: 400,
-		height: 450
+		native: {
+			width: 400,
+			height: 450
+		},
+		default: {
+			width: 400,
+			height: 450
+		}
 	},
 	compact: {
-		width: 520,
-		height: 220
+		native: {
+			width: 520,
+			height: 220
+		},
+		default: {
+			width: 520,
+			height: 220
+		}
 	},
 	padding: 4
 };

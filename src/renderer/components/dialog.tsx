@@ -2,9 +2,8 @@ import React, { useMemo } from "react";
 import { alpha, Avatar, Box, IconButton, Modal, Paper, Portal, Slide, Stack, Typography } from "@mui/material";
 import { Close, KeyboardArrowRight } from "mui-symbols";
 import { stubFalse } from "lodash";
-import { common, teal } from "@mui/material/colors";
+import { teal } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
-import { maskStyles } from "../utils";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export interface DialogComponentProps {
@@ -40,9 +39,7 @@ const Dialog: React.FC<DialogProps> = ({
 	onEntered = stubFalse,
 	onExited = stubFalse
 }) => {
-	const appearance = useAppSelector((state) => state.app.appearance);
 	const focused = useAppSelector((state) => state.app.focused);
-
 	const isOpen = useMemo(() => (focused ? open : false), [open, focused]);
 
 	return (
@@ -71,11 +68,10 @@ const Dialog: React.FC<DialogProps> = ({
 							width: "100%",
 							height: "100%",
 							outline: "none",
-							overflow: "hidden"
+							overflow: "hidden",
 						}}
-						style={maskStyles}
 						variant={"outlined"}
-						elevation={0}
+						elevation={1}
 					>
 						<Box width={"100%"} height={"100%"} display={"flex"} flexDirection={"column"}>
 							<Stack
@@ -90,14 +86,14 @@ const Dialog: React.FC<DialogProps> = ({
 									zIndex: 20
 								}}
 								variant={"elevation"}
-								elevation={1}
+								elevation={0}
 								square={true}
 							>
 								<Stack direction={"row"} alignItems={"center"} spacing={2}>
 									{icon ? (
 										<Avatar
 											sx={{
-												bgcolor: alpha(appearance === "light" ? teal[500] : common.white, 0.08),
+												bgcolor: alpha(teal[100], 0.08),
 												color: teal[500],
 												width: 36,
 												height: 36
