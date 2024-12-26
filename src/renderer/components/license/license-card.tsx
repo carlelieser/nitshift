@@ -76,7 +76,9 @@ const LicenseCard = () => {
 							></Chip>
 						) : null}
 						{license === "premium" ? null : (
-							<Tooltip title={<Typography>Activate a lifetime license with your email address</Typography>}>
+							<Tooltip
+								title={<Typography>Activate a lifetime license with your email address</Typography>}
+							>
 								<ColorButton
 									colour={appearance === "light" ? "teal.900" : "blue.500"}
 									size={"small"}

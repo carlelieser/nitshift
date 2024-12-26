@@ -50,7 +50,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						borderRadius: 3,
 						px: 3,
 						textAlign: "left",
-						justifyContent: "start",
+						justifyContent: "start"
 					}}
 					disabled={disable}
 					onClick={(e) => {

@@ -24,7 +24,7 @@ export const useAppTheme = () => {
 				primary: teal,
 				secondary: {
 					main: "#ec407a"
-				},
+				}
 			},
 			typography: {
 				fontFamily: "roboto",

@@ -28,7 +28,7 @@ const WindowBar = () => {
 				top: 0,
 				zIndex: 20,
 				bgcolor,
-				color,
+				color
 			}}
 			variant={"elevation"}
 			elevation={0}
