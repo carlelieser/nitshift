@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { CSSProperties, lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Paper, Slide, Stack, ThemeProvider } from "@mui/material";
 import { batch, Provider } from "react-redux";
 import { redux } from "@redux";
@@ -36,16 +36,16 @@ const App = () => {
 
 	const theme = useAppTheme();
 
-	const handleMouseOver: React.MouseEventHandler<HTMLDivElement> = (e) => {
+	const handleMouseOver: React.MouseEventHandler<HTMLDivElement> = useCallback((e) => {
 		const target = e.target as HTMLDivElement;
 		if (target.id === "click-through-container" || target.dataset.enablePassThrough || transitioning) {
 			ipcRenderer.invoke("app/pass-through/enable");
 		} else {
 			ipcRenderer.invoke("app/pass-through/disable");
 		}
-	};
+	}, [transitioning]);
 
-	const handleWindowResize = () => {
+	const handleWindowResize = useCallback(() => {
 		if (transitioning) {
 			const nextMode = mode === "compact" ? "expanded" : "compact";
 			const [width, height] = ipcRenderer.sendSync("app/window/size");
@@ -56,7 +56,7 @@ const App = () => {
 				dispatch(setTransitioning(false));
 			}
 		}
-	};
+	}, [transitioning, mode, dispatch]);
 
 	useEffect(() => {
 		window.addEventListener("resize", handleWindowResize);
@@ -102,34 +102,43 @@ const App = () => {
 		}
 	}, []);
 
+	const clickThroughContainerStyle = useMemo<CSSProperties>(() => ({
+		width: "100%",
+		height: "100%",
+		position: "relative",
+		overflow: "hidden"
+	}), []);
+
+	const renderCapture = useCallback(() => process.env.CAPTURE ? <style>{"body { zoom: 2; }"}</style> : null, []);
+
+	const transitionIn = useMemo(() => transitioning ? !transitioning : focused, [transitioning, focused]);
+	const transitionDelay = useMemo(() => ({
+		transitionDelay: `${firstTransition ? 500 : 0}ms`
+	}), [firstTransition]);
+
+	const handleTransitionExited = useCallback(() => {
+		setFirstTransition(false);
+		if (!focused) ipcRenderer.invoke("app/window/minimize");
+	}, [focused]);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<FocusTrap open={transitioning}>
 				<div
 					id={"click-through-container"}
-					style={{
-						width: "100%",
-						height: "100%",
-						position: "relative",
-						overflow: "hidden"
-					}}
+					style={clickThroughContainerStyle}
 					onMouseOver={handleMouseOver}
 				>
-					{process.env.CAPTURE ? <style>{"body { zoom: 2; }"}</style> : null}
+					{renderCapture()}
 					<Slide
 						direction={"up"}
-						in={transitioning ? !transitioning : focused}
+						in={transitionIn}
 						appear={false}
 						mountOnEnter={true}
 						unmountOnExit={true}
 						timeout={148}
-						style={{
-							transitionDelay: `${firstTransition ? 500 : 0}ms`
-						}}
-						onExited={() => {
-							setFirstTransition(false);
-							if (!focused) ipcRenderer.invoke("app/window/minimize");
-						}}
+						style={transitionDelay}
+						onExited={handleTransitionExited}
 					>
 						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>
 							<Suspense>
@@ -155,7 +164,6 @@ const App = () => {
 													height: "100%",
 													display: "flex",
 													flexDirection: "column",
-													position: "relative",
 													overflow: "hidden",
 													zIndex: 10,
 													borderRadius: 4

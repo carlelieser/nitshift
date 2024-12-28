@@ -151,9 +151,13 @@ class Window extends EventEmitter {
 			};
 		});
 
-		saveMonitors(uniqBy(monitors, "id") as Array<UIMonitor>);
+		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>
+
+		saveMonitors(uniqueMonitors);
 
 		if (this.ref) this.ref.webContents.send("refresh-monitors");
+
+		return uniqueMonitors;
 	};
 
 	public capture = async () => {

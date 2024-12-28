@@ -197,8 +197,12 @@ function pTimeout(promise, options) {
       if (signal.aborted) {
         reject(getAbortedReason(signal));
       }
-      signal.addEventListener("abort", () => {
+      const abortHandler = () => {
         reject(getAbortedReason(signal));
+      };
+      signal.addEventListener("abort", abortHandler, { once: true });
+      promise.finally(() => {
+        signal.removeEventListener("abort", abortHandler);
       });
     }
     if (milliseconds === Number.POSITIVE_INFINITY) {

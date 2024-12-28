@@ -18,7 +18,8 @@ const PriceSelectAndCheckout = () => {
 					Select a price that feels right for you
 				</Alert>
 			</Collapse>
-			<Stack zIndex={10} direction={"row"} alignItems={"center"} spacing={1} sx={{ bgcolor: blue["500"] }}>
+			<Stack zIndex={10} direction={"row"} alignItems={"center"} spacing={1}
+				   sx={{ bgcolor: blue["500"], borderRadius: 4, overflow: "hidden" }}>
 				<PriceSelect onChange={setPrice} />
 				<CheckoutButton price={price} />
 			</Stack>

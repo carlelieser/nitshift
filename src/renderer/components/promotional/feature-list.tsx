@@ -59,8 +59,8 @@ const FeatureList: React.FC<StackProps> = (props) => {
 											sx={{
 												width: 48,
 												height: 48,
-												bgcolor: alpha(yellow[900], 0.2),
-												color: amber[700]
+												bgcolor: alpha(yellow[500], 0.1),
+												color: amber[500]
 											}}
 										>
 											<Icon />
