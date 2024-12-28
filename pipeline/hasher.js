@@ -583,7 +583,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.4.5";
+const tag_name = "v0.4.6";
 const body = "Implement hotfix for bug reporting and make it so future updates don't reset tray icon placement.";
 const release = {
   tag_name,
