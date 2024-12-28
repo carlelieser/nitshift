@@ -60,7 +60,7 @@ class Shader extends EventEmitter {
 			this.shades[id].setPosition(monitor.position.x, monitor.position.y);
 			this.shades[id].setSize(monitor.size.width, monitor.size.height);
 		}
-	}
+	};
 
 	public destroy = (id: string) => {
 		if (this.shades[id]) {
