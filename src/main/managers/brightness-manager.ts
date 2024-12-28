@@ -36,6 +36,7 @@ class BrightnessManager {
 		if (monitors.length) {
 			monitors.forEach((monitor) => {
 				this.shades.update(monitor.id, normalizeBrightness(monitor.brightness, brightness));
+				this.shades.place(monitor.id, monitor);
 			});
 		}
 	};

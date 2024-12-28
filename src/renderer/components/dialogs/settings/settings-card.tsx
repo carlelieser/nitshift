@@ -77,6 +77,8 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						) : null
 					}
 					ref={ref}
+					variant={"text"}
+					color={"inherit"}
 				>
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>
 						<Stack justifyContent={"flex-start"} sx={{ textTransform: "none" }}>

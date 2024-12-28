@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import { alpha, Avatar, Box, IconButton, Modal, Paper, Portal, Slide, Stack, Typography } from "@mui/material";
 import { Close, KeyboardArrowRight } from "mui-symbols";
 import { stubFalse } from "lodash";
-import { teal } from "@mui/material/colors";
 import { useAppSelector } from "../hooks";
 import LoadingButton from "@mui/lab/LoadingButton";
 
@@ -40,6 +39,7 @@ const Dialog: React.FC<DialogProps> = ({
 	onExited = stubFalse
 }) => {
 	const focused = useAppSelector((state) => state.app.focused);
+	const appearance = useAppSelector((state) => state.app.appearance);
 	const isOpen = useMemo(() => (focused ? open : false), [open, focused]);
 
 	return (
@@ -71,7 +71,6 @@ const Dialog: React.FC<DialogProps> = ({
 							overflow: "hidden"
 						}}
 						variant={"outlined"}
-						elevation={1}
 					>
 						<Box width={"100%"} height={"100%"} display={"flex"} flexDirection={"column"}>
 							<Stack
@@ -83,18 +82,21 @@ const Dialog: React.FC<DialogProps> = ({
 								py={1}
 								justifyContent={"space-between"}
 								sx={{
-									zIndex: 20
+									zIndex: 20,
+									borderRadius: 4,
+									position: "absolute",
+									width: "100%",
+									boxShadow: "0 4px 24px 0 rgba(0,0,0,0.1)"
 								}}
 								variant={"elevation"}
 								elevation={0}
-								square={true}
 							>
 								<Stack direction={"row"} alignItems={"center"} spacing={2}>
 									{icon ? (
 										<Avatar
 											sx={{
-												bgcolor: alpha(teal[100], 0.08),
-												color: teal[500],
+												bgcolor: alpha(appearance === "dark" ? "#fff" : "#000", 0.05),
+												color: "inherit",
 												width: 36,
 												height: 36
 											}}
@@ -114,6 +116,7 @@ const Dialog: React.FC<DialogProps> = ({
 							</Stack>
 							<Box
 								flex={1}
+								pt={8}
 								sx={scrollContent === "y" ? { overflowY: "scroll" } : { overflowX: "hidden" }}
 							>
 								{children}

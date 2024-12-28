@@ -6,7 +6,7 @@ import TrialManager from "./trial-manager";
 import Shader from "../shader";
 import BrightnessManager from "./brightness-manager";
 import Scheduler from "../scheduler";
-import { loadAutoUpdateCheck, loadLicense, loadUserId } from "@main/storage";
+import { loadAutoUpdateCheck, loadLicense, loadMonitors, loadUserId } from "@main/storage";
 import {
 	BrowserWindow,
 	HeadersReceivedResponse,
@@ -128,9 +128,22 @@ class AppManager {
 		this.tray.create();
 		this.brightness.apply();
 
-		screen.on("display-metrics-changed", this.refresh);
-		screen.on("display-added", this.refresh);
-		screen.on("display-removed", this.refresh);
+		screen.on("display-metrics-changed", async () => {
+			await this.refresh();
+			this.brightness.apply();
+		});
+
+		screen.on("display-added", async () => {
+			await this.refresh();
+			this.brightness.apply();
+		});
+
+		screen.on("display-removed", debounce(async () => {
+			const oldMonitors = loadMonitors().filter(({connected}) => connected);
+			const newMonitors = (await this.window.refreshMonitors()).filter(({connected}) => connected);
+			const removedMonitors = oldMonitors.filter((oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id));
+			removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
+		}, REFRESH_DEBOUNCE));
 
 		session.defaultSession.webRequest.onHeadersReceived(this.handleHeaderReceived);
 	};

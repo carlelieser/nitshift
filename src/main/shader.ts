@@ -2,6 +2,7 @@ import { BrowserWindow } from "electron";
 import lumi from "lumi-control";
 import { max, min } from "lodash";
 import EventEmitter from "events";
+import { UIMonitor } from "@common/types";
 
 export interface Shades {
 	[monitorId: string]: BrowserWindow;
@@ -53,6 +54,13 @@ class Shader extends EventEmitter {
 		if (this.shades[id]) this.shades[id].setBackgroundColor(this.generateColorForBrightness(brightness));
 		else this.create(id, brightness);
 	};
+
+	public place = (id: string, monitor: UIMonitor) => {
+		if (this.shades[id]) {
+			this.shades[id].setPosition(monitor.position.x, monitor.position.y);
+			this.shades[id].setSize(monitor.size.width, monitor.size.height);
+		}
+	}
 
 	public destroy = (id: string) => {
 		if (this.shades[id]) {
