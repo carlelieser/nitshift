@@ -130,7 +130,8 @@ class Window extends EventEmitter {
 		monitors.forEach((monitor, index) => {
 			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1];
 			const storedMonitor = storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id);
-			const connected = !!availableMonitors.find(({ id }) => id === monitor.id);
+			const connectedMonitor = availableMonitors.find(({ id }) => id === monitor.id);
+			const connected = connectedMonitor && connectedMonitor.size.width > 0 && connectedMonitor.size.height > 0;
 			const brightness = index > 1 ? 100 : clamp(storedMonitor?.brightness ?? 100, 0, 100);
 
 			monitors[index] = {
@@ -147,7 +148,8 @@ class Window extends EventEmitter {
 					  }
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
-				connected: connected
+				connected: connected,
+				position: monitor.position || storedMonitor.position || { x: 0, y: 0 },
 			};
 		});
 
