@@ -17,11 +17,16 @@ const LicenseBar = () => {
 				width: "100%",
 				position: "absolute",
 				backgroundColor: "transparent",
-				bottom: 0,
+				bottom: 0
 			}}
 		>
-			<Stack direction={"row"} justifyContent={"space-between"} width={"100%"} height={50}
-				   sx={{ overflow: "hidden", borderRadius: 4, border: "1px solid inherit"}}>
+			<Stack
+				direction={"row"}
+				justifyContent={"space-between"}
+				width={"100%"}
+				height={50}
+				sx={{ overflow: "hidden", borderRadius: 4, border: "1px solid inherit" }}
+			>
 				<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
 				<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />
 			</Stack>

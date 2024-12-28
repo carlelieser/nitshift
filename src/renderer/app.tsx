@@ -36,14 +36,17 @@ const App = () => {
 
 	const theme = useAppTheme();
 
-	const handleMouseOver: React.MouseEventHandler<HTMLDivElement> = useCallback((e) => {
-		const target = e.target as HTMLDivElement;
-		if (target.id === "click-through-container" || target.dataset.enablePassThrough || transitioning) {
-			ipcRenderer.invoke("app/pass-through/enable");
-		} else {
-			ipcRenderer.invoke("app/pass-through/disable");
-		}
-	}, [transitioning]);
+	const handleMouseOver: React.MouseEventHandler<HTMLDivElement> = useCallback(
+		(e) => {
+			const target = e.target as HTMLDivElement;
+			if (target.id === "click-through-container" || target.dataset.enablePassThrough || transitioning) {
+				ipcRenderer.invoke("app/pass-through/enable");
+			} else {
+				ipcRenderer.invoke("app/pass-through/disable");
+			}
+		},
+		[transitioning]
+	);
 
 	const handleWindowResize = useCallback(() => {
 		if (transitioning) {
@@ -102,19 +105,25 @@ const App = () => {
 		}
 	}, []);
 
-	const clickThroughContainerStyle = useMemo<CSSProperties>(() => ({
-		width: "100%",
-		height: "100%",
-		position: "relative",
-		overflow: "hidden"
-	}), []);
+	const clickThroughContainerStyle = useMemo<CSSProperties>(
+		() => ({
+			width: "100%",
+			height: "100%",
+			position: "relative",
+			overflow: "hidden"
+		}),
+		[]
+	);
 
-	const renderCapture = useCallback(() => process.env.CAPTURE ? <style>{"body { zoom: 2; }"}</style> : null, []);
+	const renderCapture = useCallback(() => (process.env.CAPTURE ? <style>{"body { zoom: 2; }"}</style> : null), []);
 
-	const transitionIn = useMemo(() => transitioning ? !transitioning : focused, [transitioning, focused]);
-	const transitionDelay = useMemo(() => ({
-		transitionDelay: `${firstTransition ? 500 : 0}ms`
-	}), [firstTransition]);
+	const transitionIn = useMemo(() => (transitioning ? !transitioning : focused), [transitioning, focused]);
+	const transitionDelay = useMemo(
+		() => ({
+			transitionDelay: `${firstTransition ? 500 : 0}ms`
+		}),
+		[firstTransition]
+	);
 
 	const handleTransitionExited = useCallback(() => {
 		setFirstTransition(false);
@@ -124,11 +133,7 @@ const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<FocusTrap open={transitioning}>
-				<div
-					id={"click-through-container"}
-					style={clickThroughContainerStyle}
-					onMouseOver={handleMouseOver}
-				>
+				<div id={"click-through-container"} style={clickThroughContainerStyle} onMouseOver={handleMouseOver}>
 					{renderCapture()}
 					<Slide
 						direction={"up"}

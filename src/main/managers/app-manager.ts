@@ -138,12 +138,17 @@ class AppManager {
 			this.brightness.apply();
 		});
 
-		screen.on("display-removed", debounce(async () => {
-			const oldMonitors = loadMonitors().filter(({connected}) => connected);
-			const newMonitors = (await this.window.refreshMonitors()).filter(({connected}) => connected);
-			const removedMonitors = oldMonitors.filter((oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id));
-			removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
-		}, REFRESH_DEBOUNCE));
+		screen.on(
+			"display-removed",
+			debounce(async () => {
+				const oldMonitors = loadMonitors().filter(({ connected }) => connected);
+				const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
+				const removedMonitors = oldMonitors.filter(
+					(oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id)
+				);
+				removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
+			}, REFRESH_DEBOUNCE)
+		);
 
 		session.defaultSession.webRequest.onHeadersReceived(this.handleHeaderReceived);
 	};

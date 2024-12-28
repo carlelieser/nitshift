@@ -151,7 +151,7 @@ class Window extends EventEmitter {
 			};
 		});
 
-		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>
+		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>;
 
 		saveMonitors(uniqueMonitors);
 
