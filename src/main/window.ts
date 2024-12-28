@@ -149,7 +149,7 @@ class Window extends EventEmitter {
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
 				connected: connected,
-				position: monitor.position || storedMonitor.position || { x: 0, y: 0 },
+				position: monitor.position || storedMonitor.position || { x: 0, y: 0 }
 			};
 		});
 
