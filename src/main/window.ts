@@ -3,7 +3,7 @@ import { loadLicense, loadMode, loadMonitorNicknames, loadMonitors, saveMonitors
 import lumi from "lumi-control";
 import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
-import { clamp, uniqBy } from "lodash";
+import { clamp, uniqBy, reverse } from "lodash";
 import fs from "fs-extra";
 import path from "path";
 import release from "@common/release.json";
@@ -155,7 +155,7 @@ class Window extends EventEmitter {
 			};
 		});
 
-		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>;
+		const uniqueMonitors = reverse(uniqBy(reverse(monitors), "id")) as Array<UIMonitor>;
 
 		saveMonitors(uniqueMonitors);
 
