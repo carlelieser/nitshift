@@ -133,6 +133,13 @@ class Window extends EventEmitter {
 			const connectedMonitor = availableMonitors.find(({ id }) => id === monitor.id);
 			const connected = connectedMonitor && connectedMonitor.size.width > 0 && connectedMonitor.size.height > 0;
 			const brightness = index > 1 ? 100 : clamp(storedMonitor?.brightness ?? 100, 0, 100);
+			const position = (connectedMonitor?.position ?? monitor.position) || { x: 0, y: 0 };
+			
+			// TODO: This is a temporary workaround for a bug in Lumi where incorrect monitor coordinates are returned. Here we're finding the closest Electron Display matching the given size and position which the target monitor will assume is correct.
+			const screenHandle = screen.getDisplayMatching({
+				...monitor.size,
+				...position
+			});
 
 			monitors[index] = {
 				...monitor,
@@ -149,7 +156,7 @@ class Window extends EventEmitter {
 					: {}),
 				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
 				connected: connected,
-				position: monitor.position || storedMonitor.position || { x: 0, y: 0 }
+				position: screenHandle.bounds || monitor.position || storedMonitor?.position
 			};
 		});
 
