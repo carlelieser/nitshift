@@ -174,7 +174,7 @@ const App = () => {
 													borderRadius: 4
 												}}
 												variant={"elevation"}
-												elevation={0}
+												elevation={1}
 											>
 												<WindowBar />
 												<ExpandedView />
