@@ -38,16 +38,6 @@ class AppManager {
 	private entry = MAIN_WINDOW_VITE_DEV_SERVER_URL ?? path.join(__dirname, "../renderer/index.html");
 	public window: Window = new Window(this.entry);
 
-	private debounceRefresh = debounce(async () => {
-		this.debounceRefresh.cancel();
-		await this.refresh();
-	}, REFRESH_DEBOUNCE);
-
-	private refresh = async () => {
-		await this.window.refreshMonitors();
-		this.window.readjust();
-	};
-
 	private handleDisplayRemoved = debounce(async () => {
 		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
 		const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
@@ -154,6 +144,16 @@ class AppManager {
 		this.window.ref.show();
 	};
 
+	private refresh = async () => {
+		await this.window.refreshMonitors();
+		this.window.readjust();
+	};
+
+	private debounceRefresh = debounce(async () => {
+		this.debounceRefresh.cancel();
+		await this.refresh();
+	}, REFRESH_DEBOUNCE);
+
 	private smartApply = async () => {
 		await this.refresh();
 		this.brightness.apply();
@@ -162,7 +162,7 @@ class AppManager {
 	private handleDisplayMetricsChanged = debounce(async () => {
 		this.shades.destroyAll();
 		await this.smartApply();
-	}, 250);
+	}, 1000);
 
 	private handleDisplayAdded = debounce(async () => {
 		await this.smartApply();
