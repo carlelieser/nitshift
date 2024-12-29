@@ -68,10 +68,10 @@ class Shader extends EventEmitter {
 			delete this.shades[id];
 		}
 	};
-	
+
 	public destroyAll = () => {
 		Object.keys(this.shades).forEach(this.destroy);
-	}
+	};
 
 	private generateColorForBrightness = (brightness: number) =>
 		`rgba(0, 0, 0, ${min([1, max([0, (this.maxBrightness - brightness - this.minBrightness) / 100])])})`;

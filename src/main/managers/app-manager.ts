@@ -38,11 +38,24 @@ class AppManager {
 	private entry = MAIN_WINDOW_VITE_DEV_SERVER_URL ?? path.join(__dirname, "../renderer/index.html");
 	public window: Window = new Window(this.entry);
 
-	private refresh = debounce(async () => {
-		this.refresh.cancel();
+	private debounceRefresh = debounce(async () => {
+		this.debounceRefresh.cancel();
+		await this.refresh();
+	}, REFRESH_DEBOUNCE);
+
+	private refresh = async () => {
 		await this.window.refreshMonitors();
 		this.window.readjust();
-	}, REFRESH_DEBOUNCE);
+	};
+
+	private handleDisplayRemoved = debounce(async () => {
+		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
+		const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
+		const removedMonitors = oldMonitors.filter(
+			(oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id)
+		);
+		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
+	}, 250);
 
 	constructor() {
 		this.auth.on("init", async () => {
@@ -128,27 +141,10 @@ class AppManager {
 		this.tray.create();
 		this.brightness.apply();
 
-		screen.on("display-metrics-changed", async () => {
-			await this.refresh();
-			this.brightness.apply();
-		});
-
-		screen.on("display-added", async () => {
-			await this.refresh();
-			this.brightness.apply();
-		});
-
-		screen.on(
-			"display-removed",
-			debounce(async () => {
-				const oldMonitors = loadMonitors().filter(({ connected }) => connected);
-				const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
-				const removedMonitors = oldMonitors.filter(
-					(oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id)
-				);
-				removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
-			}, REFRESH_DEBOUNCE)
-		);
+		screen.on("display-metrics-changed", this.shades.destroyAll);
+		screen.on("display-metrics-changed", this.handleDisplayMetricsChanged);
+		screen.on("display-added", this.handleDisplayAdded);
+		screen.on("display-removed", this.handleDisplayRemoved);
 
 		session.defaultSession.webRequest.onHeadersReceived(this.handleHeaderReceived);
 	};
@@ -157,6 +153,20 @@ class AppManager {
 		this.window.create();
 		this.window.ref.show();
 	};
+
+	private smartApply = async () => {
+		await this.refresh();
+		this.brightness.apply();
+	};
+
+	private handleDisplayMetricsChanged = debounce(async () => {
+		this.shades.destroyAll();
+		await this.smartApply();
+	}, 250);
+
+	private handleDisplayAdded = debounce(async () => {
+		await this.smartApply();
+	}, 250);
 
 	private handleFreeTrialStarted = async () => {
 		await this.auth.updateUser();
