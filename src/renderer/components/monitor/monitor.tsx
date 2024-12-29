@@ -10,7 +10,7 @@ import MonitorOverflowMenu from "./monitor-overflow-menu";
 import { getFormattedMonitorId } from "@utils";
 import { useAppSelector } from "@hooks";
 
-interface MonitorProps extends UIMonitor {
+interface MonitorProps extends Omit<UIMonitor, "displayId"> {
 	menuDisabled: boolean;
 	dragHandleProps?: DraggableProvided["dragHandleProps"];
 	dragDisabled?: boolean;
