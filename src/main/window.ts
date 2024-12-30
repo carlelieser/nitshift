@@ -3,13 +3,36 @@ import { loadLicense, loadMode, loadMonitorNicknames, loadMonitors, saveMonitors
 import lumi from "lumi-control";
 import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
-import { clamp, reverse, uniqBy } from "lodash";
+import { clamp, merge, pick, uniqBy } from "lodash";
 import fs from "fs-extra";
 import path from "path";
 import release from "@common/release.json";
 import EventEmitter from "events";
 import * as module from "./lumi/wrapper";
 import { loadAppearance, loadNative, loadStartupSettings, saveMode } from "./storage";
+
+const DEFAULT_MONITOR: UIMonitor = {
+	brightness: 100,
+	connected: false,
+	disabled: false,
+	displayId: "",
+	id: "",
+	internal: false,
+	manufacturer: "",
+	mode: "native",
+	name: "",
+	nickname: "",
+	position: {
+		x: 0,
+		y: 0
+	},
+	productCode: "",
+	serialNumber: "",
+	size: {
+		width: 0,
+		height: 0
+	}
+};
 
 class Window extends EventEmitter {
 	public ref: BrowserWindow;
@@ -129,33 +152,32 @@ class Window extends EventEmitter {
 		monitors.push(...storedMonitors, ...availableMonitors);
 
 		monitors.forEach((monitor, index) => {
-			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1];
+			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1] ?? "Monitor";
 			const storedMonitor = storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id);
 			const connectedMonitor = availableMonitors.find(({ id }) => id === monitor.id);
-			const connected = connectedMonitor && connectedMonitor.size.width > 0 && connectedMonitor.size.height > 0;
+			const isConnected = Boolean(
+				connectedMonitor && connectedMonitor?.size.width > 0 && connectedMonitor?.size.height > 0
+			);
 			const brightness = index > 1 ? 100 : clamp(storedMonitor?.brightness ?? 100, 0, 100);
-			const screen = screens.find(({ id }) => id === Number(monitor.displayId));
-
-			monitors[index] = {
-				...monitor,
-				brightness: 100,
-				mode: "native",
-				disabled: false,
-				...(storedMonitor ?? {}),
-				...(license === "free"
+			const idealMonitor = merge({}, monitor, storedMonitor, connectedMonitor);
+			const screen = screens.find(({ id }) => id === Number(connectedMonitor?.displayId));
+			const freeMonitor =
+				license === "free"
 					? {
 							mode: "native",
 							disabled: index > 1,
 							brightness
 					  }
-					: {}),
-				nickname: nickname ?? storedMonitor?.nickname ?? monitor.name ?? "Monitor",
-				connected: connected,
-				position: screen?.bounds || monitor.position || storedMonitor?.position || { x: 0, y: 0 }
-			};
+					: {};
+			const dimensions = merge({}, pick(screen, "size"), { position: pick(screen?.bounds, "x", "y") });
+
+			monitors[index] = merge({}, DEFAULT_MONITOR, idealMonitor, freeMonitor, dimensions, {
+				connected: isConnected,
+				nickname
+			});
 		});
 
-		const uniqueMonitors = reverse(uniqBy(reverse(monitors), "id")) as Array<UIMonitor>;
+		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>;
 
 		saveMonitors(uniqueMonitors);
 
