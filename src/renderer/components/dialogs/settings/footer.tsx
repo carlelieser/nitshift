@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import ReviewButton from "@buttons/review-button";
-import ReportABug from "@buttons/report-a-bug";
-import EmailUs from "@buttons/email-us";
+import ReportBugButton from "@buttons/report-bug-button";
+import EmailUsButton from "@buttons/email-us-button";
 import release from "@common/release.json";
 import { isDev } from "@common/utils";
 import { ipcRenderer } from "electron";
@@ -15,9 +15,9 @@ const Footer = () => {
 	return (
 		<Stack spacing={2} p={2} direction={"column"}>
 			<ButtonGroup fullWidth={true} variant={"outlined"} size={"small"}>
-				<ReportABug />
+				<ReportBugButton />
 				<ReviewButton />
-				<EmailUs />
+				<EmailUsButton />
 			</ButtonGroup>
 			<Stack direction={"row"} width={"100%"} alignItems={"center"} justifyContent={"space-between"}>
 				<Typography variant={"caption"} color={"text.secondary"} textTransform={"uppercase"}>
