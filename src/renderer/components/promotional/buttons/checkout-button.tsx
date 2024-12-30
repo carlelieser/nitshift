@@ -39,7 +39,6 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ price }) => {
 				<ColorButton
 					colour={"blue.500"}
 					fullWidth={true}
-					color={"inherit"}
 					startIcon={loading ? <CircularProgress size={24} color={"inherit"} /> : <ShoppingCartCheckout />}
 					onClick={handleCheckout}
 				>

@@ -36,6 +36,7 @@ const PriceSelect: React.FC<PriceSelectProps> = ({ onChange }) => {
 				<ColorButton
 					colour={"blue.900"}
 					ref={ref}
+					fullWidth={false}
 					disableElevation={true}
 					component={Paper}
 					sx={{
