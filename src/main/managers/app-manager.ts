@@ -41,11 +41,13 @@ class AppManager {
 	public window: Window = new Window(this.entry);
 	private handleDisplayRemoved = debounce(async () => {
 		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
-		const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
+		const newMonitors = await this.window.refreshMonitors();
+		const newlyConnectedMonitors = newMonitors.filter(({ connected }) => connected);
 		const removedMonitors = oldMonitors.filter(
-			(oldMonitor) => !newMonitors.find((newMonitor) => newMonitor.id === oldMonitor.id)
+			(oldMonitor) => !newlyConnectedMonitors.find((monitor) => monitor.id === oldMonitor.id)
 		);
 		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
+		await this.smartApply();
 	}, 250);
 
 	constructor() {
@@ -130,7 +132,6 @@ class AppManager {
 		this.tray.create();
 		this.brightness.apply();
 
-		screen.on("display-metrics-changed", this.shades.destroyAll);
 		screen.on("display-metrics-changed", this.handleDisplayMetricsChanged);
 		screen.on("display-added", this.handleDisplayAdded);
 		screen.on("display-removed", this.handleDisplayRemoved);
