@@ -11,8 +11,8 @@ import {
 import { Add, Remove } from "mui-symbols";
 
 export interface SliderProps {
-	value: number;
-	onChange: (value: number) => void;
+	value?: number;
+	onChange?: (value: number) => void;
 	color?: string;
 	className?: string;
 	disabled?: boolean;
