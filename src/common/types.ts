@@ -61,7 +61,7 @@ export interface BrightnessModeData {
 	removable: boolean;
 }
 
-export type Appearance = "light" | "dark";
+export type Appearance = "auto" | "light" | "dark";
 
 export interface StartupSettings {
 	mode: AppState["mode"];
@@ -72,6 +72,7 @@ export interface StartupSettings {
 export interface AppState {
 	activeMonitor: UIMonitor | null;
 	appearance: Appearance;
+	syncAppearance: boolean;
 	autoUpdateCheck: boolean;
 	brightness: number;
 	brightnessModes: Array<BrightnessModeData>;

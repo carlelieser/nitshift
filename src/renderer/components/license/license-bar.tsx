@@ -10,7 +10,6 @@ const LicenseBar = () => {
 		<Paper
 			elevation={0}
 			variant={"elevation"}
-			square={true}
 			sx={{
 				flexShrink: 0,
 				display: "flex",
@@ -25,7 +24,7 @@ const LicenseBar = () => {
 				justifyContent={"space-between"}
 				width={"100%"}
 				height={50}
-				sx={{ overflow: "hidden", borderRadius: 4, border: "1px solid inherit" }}
+				sx={{ overflow: "hidden", borderRadius: 3 }}
 			>
 				<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
 				<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />

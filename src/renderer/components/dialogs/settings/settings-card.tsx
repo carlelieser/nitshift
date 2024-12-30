@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from "react";
-import { Button, Chip, Stack, Typography } from "@mui/material";
+import { Button, Chip, Paper, Stack, Typography } from "@mui/material";
 import Dialog, { DialogProps } from "@components/dialog";
 import { stubFalse } from "lodash";
 
@@ -57,7 +57,22 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						onClick(e);
 						if (popup) setOpen(true);
 					}}
-					startIcon={icon}
+					startIcon={
+						<Paper
+							elevation={3}
+							sx={{
+								p: 1,
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								borderRadius: "100%",
+								boxShadow: "none"
+							}}
+							variant={"elevation"}
+						>
+							{icon}
+						</Paper>
+					}
 					endIcon={
 						value ? (
 							<Stack pr={2} alignItems={"center"}>
@@ -81,7 +96,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 					color={"inherit"}
 				>
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>
-						<Stack justifyContent={"flex-start"} sx={{ textTransform: "none" }}>
+						<Stack justifyContent={"flex-start"} gap={0} sx={{ textTransform: "none" }}>
 							<Typography fontWeight={500}>{title}</Typography>
 							{subtitle ? (
 								<Typography variant={"body2"} color={"text.secondary"}>

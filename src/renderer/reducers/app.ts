@@ -13,6 +13,7 @@ import {
 	loadNative,
 	loadSchedule,
 	loadStartupSettings,
+	loadSyncAppearance,
 	loadTrialAvailability,
 	loadTrialStartDate,
 	loadUserEmail,
@@ -45,6 +46,7 @@ const findMonitorIndexById = (monitors: UIMonitor[], id: string) => monitors.fin
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
 	appearance: loadAppearance(),
+	syncAppearance: loadSyncAppearance(),
 	autoUpdateCheck: loadAutoUpdateCheck(),
 	brightness: loadGlobalBrightness(),
 	brightnessModes: loadBrightnessModes(),
@@ -123,6 +125,7 @@ export const appSlice = createSlice({
 			state.activeMonitor = state.monitors.find(({ id }) => id === action.payload);
 		},
 		setAppearance: createReducer<AppState["appearance"]>("appearance"),
+		setSyncAppearance: createReducer<AppState["syncAppearance"]>("syncAppearance"),
 		setBrightness: createReducer<AppState["brightness"]>("brightness"),
 		setBrightnessSilent: createReducer<AppState["brightness"]>("brightness"),
 		setLicense: createReducer<AppState["license"]>("license"),
@@ -188,6 +191,7 @@ export const {
 	setActiveBrightnessMode,
 	setActiveMonitor,
 	setAppearance,
+	setSyncAppearance,
 	setAutoUpdateCheck,
 	setBrightness,
 	setBrightnessModes,

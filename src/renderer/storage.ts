@@ -12,6 +12,7 @@ export const STORE = {
 	LAST_UPDATED_ON: "last-updated-on",
 	LICENSE: "license",
 	APPEARANCE: "dark",
+	SYNC_APPEARANCE: "sync-appearance",
 	MODE: "mode",
 	MONITORS: "monitors",
 	MONITOR_NICKNAMES: "monitor-nicknames",
@@ -28,6 +29,8 @@ export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);
 
 export const loadActiveMonitor = (): AppState["activeMonitor"] => ipcRenderer.sendSync("storage/load-active-monitor");
 export const loadAppearance = (): AppState["appearance"] => ipcRenderer.sendSync("storage/load-appearance");
+export const loadSyncAppearance = (): AppState["syncAppearance"] =>
+	ipcRenderer.sendSync("storage/load-sync-appearance");
 export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] =>
 	ipcRenderer.sendSync("storage/load-auto-update-check");
 export const loadBrightnessModes = (): AppState["brightnessModes"] =>
@@ -53,6 +56,8 @@ export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) =>
 	ipcRenderer.sendSync("storage/save-active-monitor", monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) =>
 	ipcRenderer.sendSync("storage/save-appearance", appearance);
+export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
+	ipcRenderer.sendSync("storage/save-sync-appearance", shouldSync);
 export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>
 	ipcRenderer.sendSync("storage/save-auto-update-check", autoUpdateCheck);
 export const saveBrightnessModes = (modes: AppState["brightnessModes"]) =>

@@ -18,7 +18,7 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 		<Dialog title={"Settings"} icon={<SettingsRoundedFilled />} open={open} onClose={onClose}>
 			<Stack spacing={3}>
 				<Stack spacing={2} p={2}>
-					<Upgrade context={"main"} fullWidth={true} />
+					<Upgrade context={"main"} fullWidth={true} sx={{ borderRadius: 9 }} />
 					<Suspense>
 						<Appearance />
 						<BrightnessModes />

@@ -1,12 +1,13 @@
-import ColorButton from "@components/buttons/color-button";
 import React, { useEffect, useState } from "react";
 import { RocketLaunchRoundedFilled } from "mui-symbols";
-import { ButtonProps, IconButton, Tooltip, Typography } from "@mui/material";
+import { IconButton, Tooltip, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import FeaturesDialog from "@components/dialogs/upgrade";
 import { setMode } from "@reducers/app";
+import ThemeButton from "@renderer/components/buttons/theme-button";
+import { ColorButtonProps } from "../../buttons/color-button";
 
-const UpgradeButton: React.FC<Partial<ButtonProps> & { context: "window-bar" | "main" }> = (props) => {
+const UpgradeButton: React.FC<Partial<ColorButtonProps> & { context: "window-bar" | "main" }> = (props) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const mode = useAppSelector((state) => state.app.mode);
@@ -25,22 +26,23 @@ const UpgradeButton: React.FC<Partial<ButtonProps> & { context: "window-bar" | "
 		<>
 			<FeaturesDialog open={open} onClose={closeDialog} />
 			{mode === "compact" && license !== "premium" && props.context === "window-bar" ? (
-				<Tooltip title={<Typography>Go PRO</Typography>}>
+				<Tooltip title={<Typography>Go Pro</Typography>}>
 					<IconButton onClick={openDialog} {...props}>
 						<RocketLaunchRoundedFilled />
 					</IconButton>
 				</Tooltip>
 			) : null}
 			{mode === "expanded" && license !== "premium" && props.context === "main" ? (
-				<ColorButton
+				<ThemeButton
+					variant={"contained"}
+					disableElevation={true}
 					sx={{ px: 2 }}
-					colour={"blue.500"}
 					startIcon={<RocketLaunchRoundedFilled />}
 					onClick={openDialog}
-					{...(props as ButtonProps)}
+					{...(props as ColorButtonProps)}
 				>
-					<Typography variant={"button"}>Go PRO</Typography>
-				</ColorButton>
+					Go Pro
+				</ThemeButton>
 			) : null}
 		</>
 	);
