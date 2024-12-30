@@ -3,15 +3,11 @@
   "productName": "Glimmr",
   "homepage": "https://glimmr.app",
   "target": "node",
-  "version": "0.4.6",
+  "version": "0.4.5",
   "description": "The best multi-monitor brightness tool.",
   "main": "out/main/index.js",
-  "overrides": {
-    "graceful-fs": "^4.2.11"
-  },
-  "precommit": [
-    "format"
-  ],
+  "overrides": { "graceful-fs": "^4.2.11" },
+  "precommit": ["format"],
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron-vite dev",
     "bridge": "node ./pipeline/bridge/storage/generate.js",
@@ -37,7 +33,7 @@
     "release": "npm run release:create && npm run upload",
     "publish": "npm run release:prepare && npm run release",
     "postinstall": "electron-builder install-app-deps",
-    "postpublish": "npm run check-expired-trials"
+    "postpublish": "npm run license-integrity-check"
   },
   "author": "Glimmr",
   "dependencies": {
