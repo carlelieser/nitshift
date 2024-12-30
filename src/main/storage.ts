@@ -14,6 +14,7 @@ export const STORE = {
 	LAST_UPDATED_ON: "last-updated-on",
 	LICENSE: "license",
 	APPEARANCE: "dark",
+	SYNC_APPEARANCE: "sync-appearance",
 	MODE: "mode",
 	MONITORS: "monitors",
 	MONITOR_NICKNAMES: "monitor-nicknames",
@@ -46,6 +47,7 @@ const defaultBrightnessModes = [
 // [storage][start]
 export const loadActiveMonitor = (): AppState["activeMonitor"] => storage().get(STORE.ACTIVE_MONITOR, null);
 export const loadAppearance = (): AppState["appearance"] => storage().get(STORE.APPEARANCE, "dark");
+export const loadSyncAppearance = (): AppState["syncAppearance"] => storage().get(STORE.SYNC_APPEARANCE, true);
 export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] => storage().get(STORE.AUTO_UPDATE_CHECK, true);
 export const loadBrightnessModes = (): AppState["brightnessModes"] =>
 	storage().get(STORE.BRIGHTNESS_MODES, defaultBrightnessModes);
@@ -66,6 +68,8 @@ export const loadUserEmail = (): AppState["userEmail"] => storage().get(STORE.US
 export const loadUserId = (): AppState["userId"] => storage().get(STORE.USER_ID, null);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) => storage().set(STORE.APPEARANCE, appearance);
+export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
+	storage().set(STORE.SYNC_APPEARANCE, shouldSync);
 export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>
 	storage().set(STORE.AUTO_UPDATE_CHECK, autoUpdateCheck);
 export const saveBrightnessModes = (modes: AppState["brightnessModes"]) => storage().set(STORE.BRIGHTNESS_MODES, modes);

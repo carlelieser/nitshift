@@ -1,11 +1,12 @@
 import React from "react";
-import { ButtonProps, Tooltip, Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import { StarRoundedFilled } from "mui-symbols";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setTrialStartDate } from "@reducers/app";
-import ColorButton from "@buttons/color-button";
+import ThemeButton from "@renderer/components/buttons/theme-button";
+import { ColorButtonProps } from "../../buttons/color-button";
 
-const FreeTrialButton: React.FC<Partial<ButtonProps>> = (props) => {
+const FreeTrialButton: React.FC<Partial<ColorButtonProps>> = (props) => {
 	const dispatch = useAppDispatch();
 	const license = useAppSelector((state) => state.app.license);
 	const trialAvailable = useAppSelector((state) => state.app.trialAvailability);
@@ -19,9 +20,15 @@ const FreeTrialButton: React.FC<Partial<ButtonProps>> = (props) => {
 				</Typography>
 			}
 		>
-			<ColorButton colour={"indigo.500"} startIcon={<StarRoundedFilled />} onClick={startFreeTrial} {...props}>
-				<Typography variant={"button"}>Start Free Trial</Typography>
-			</ColorButton>
+			<ThemeButton
+				variant={"contained"}
+				disableElevation={true}
+				startIcon={<StarRoundedFilled />}
+				onClick={startFreeTrial}
+				{...props}
+			>
+				Try for Free
+			</ThemeButton>
 		</Tooltip>
 	) : null;
 };

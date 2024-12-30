@@ -22,6 +22,7 @@ import {
 	setNative,
 	setRefreshed,
 	setSchedule,
+	setSyncAppearance,
 	setTrialAvailability,
 	setTrialStartDate
 } from "@reducers/app";
@@ -39,6 +40,7 @@ import {
 	saveNative,
 	saveSchedule,
 	saveStartupSettings,
+	saveSyncAppearance,
 	saveTrialAvailability,
 	saveTrialStartDate,
 	STORE
@@ -304,6 +306,14 @@ listener.startListening({
 	actionCreator: setAppearance,
 	effect: (action) => {
 		saveAppearance(action.payload);
+	}
+});
+
+listener.startListening({
+	actionCreator: setSyncAppearance,
+	effect: (action) => {
+		saveSyncAppearance(action.payload);
+		ipcRenderer.send("sync-appearance", action.payload);
 	}
 });
 

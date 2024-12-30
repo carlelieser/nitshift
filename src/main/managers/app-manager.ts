@@ -6,11 +6,13 @@ import TrialManager from "./trial-manager";
 import Shader from "../shader";
 import BrightnessManager from "./brightness-manager";
 import Scheduler from "../scheduler";
-import { loadAutoUpdateCheck, loadLicense, loadMonitors, loadUserId } from "@main/storage";
+import { loadAutoUpdateCheck, loadLicense, loadMonitors, loadSyncAppearance, loadUserId } from "@main/storage";
 import {
 	BrowserWindow,
 	HeadersReceivedResponse,
 	ipcMain,
+	IpcMainEvent,
+	nativeTheme,
 	OnHeadersReceivedListenerDetails,
 	screen,
 	session
@@ -37,7 +39,6 @@ class AppManager {
 	public launch = new LaunchManager();
 	private entry = MAIN_WINDOW_VITE_DEV_SERVER_URL ?? path.join(__dirname, "../renderer/index.html");
 	public window: Window = new Window(this.entry);
-
 	private handleDisplayRemoved = debounce(async () => {
 		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
 		const newMonitors = (await this.window.refreshMonitors()).filter(({ connected }) => connected);
@@ -102,12 +103,9 @@ class AppManager {
 		ipcMain.handle("schedule-changed", this.scheduler.check);
 		ipcMain.handle("free-trial-started", this.handleFreeTrialStarted);
 		ipcMain.handle("sync-user", this.auth.updateUser);
-		ipcMain.on("screen/size", (e) => {
-			const { size, scaleFactor } = screen.getPrimaryDisplay();
-			const width = size.width * scaleFactor;
-			const height = size.height * scaleFactor;
-			e.returnValue = { width, height };
-		});
+
+		ipcMain.on("sync-appearance", this.handleAppearanceSync);
+		ipcMain.on("screen/size", this.handleGetScreenSize);
 
 		this.window.on("window-created", (window: BrowserWindow) => {
 			window.on("show", this.handleWindowShown);
@@ -128,6 +126,7 @@ class AppManager {
 
 		if (loadAutoUpdateCheck() || isDev) this.updater.check(true);
 
+		this.initAppearanceSync(loadSyncAppearance());
 		this.tray.create();
 		this.brightness.apply();
 
@@ -142,6 +141,13 @@ class AppManager {
 	public restart = () => {
 		this.window.create();
 		this.window.ref.show();
+	};
+
+	private handleGetScreenSize = (e: IpcMainEvent) => {
+		const { size, scaleFactor } = screen.getPrimaryDisplay();
+		const width = size.width * scaleFactor;
+		const height = size.height * scaleFactor;
+		e.returnValue = { width, height };
 	};
 
 	private refresh = async () => {
@@ -167,6 +173,24 @@ class AppManager {
 	private handleDisplayAdded = debounce(async () => {
 		await this.smartApply();
 	}, 250);
+
+	private syncAppearanceWithNativeTheme = () => {
+		const appearance = nativeTheme.shouldUseDarkColors ? "dark" : "light";
+		this.window.ref.webContents.send("appearance-updated", appearance);
+	};
+
+	private handleAppearanceSync = (_: IpcMainEvent, shouldSync: boolean) => {
+		this.initAppearanceSync(shouldSync);
+	};
+
+	private initAppearanceSync = (shouldSync: boolean) => {
+		if (shouldSync) {
+			this.syncAppearanceWithNativeTheme();
+			nativeTheme.on("updated", this.syncAppearanceWithNativeTheme);
+		} else {
+			nativeTheme.off("updated", this.syncAppearanceWithNativeTheme);
+		}
+	};
 
 	private handleFreeTrialStarted = async () => {
 		await this.auth.updateUser();

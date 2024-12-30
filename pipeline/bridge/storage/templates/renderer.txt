@@ -12,6 +12,7 @@ export const STORE = {
 	LAST_UPDATED_ON: "last-updated-on",
 	LICENSE: "license",
 	APPEARANCE: "dark",
+	SYNC_APPEARANCE: "sync-appearance",
 	MODE: "mode",
 	MONITORS: "monitors",
 	MONITOR_NICKNAMES: "monitor-nicknames",

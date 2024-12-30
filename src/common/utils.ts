@@ -30,7 +30,7 @@ export const createDefaultBrightnessMode = (
 	};
 };
 
-export const appearances: Array<Appearance> = ["light", "dark"];
+export const appearances: Array<Appearance> = ["auto", "light", "dark"];
 
 export const modes: Array<AppState["mode"]> = ["compact", "expanded"];
 

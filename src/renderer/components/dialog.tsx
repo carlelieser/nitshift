@@ -86,10 +86,10 @@ const Dialog: React.FC<DialogProps> = ({
 									borderRadius: 4,
 									position: "absolute",
 									width: "100%",
-									boxShadow: "0 4px 24px 0 rgba(0,0,0,0.1)"
+									boxShadow: "0 4px 4px 0 rgba(0,0,0,0.01), 0 0 4px 0 rgba(0,0,0,0.1)"
 								}}
 								variant={"elevation"}
-								elevation={0}
+								elevation={1}
 							>
 								<Stack direction={"row"} alignItems={"center"} spacing={2}>
 									{icon ? (

@@ -3,7 +3,7 @@ import { loadLicense, loadMode, loadMonitorNicknames, loadMonitors, saveMonitors
 import lumi from "lumi-control";
 import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
-import { clamp, uniqBy, reverse } from "lodash";
+import { clamp, reverse, uniqBy } from "lodash";
 import fs from "fs-extra";
 import path from "path";
 import release from "@common/release.json";

@@ -15,8 +15,9 @@ import { dimensions, isNumberAroundReference } from "@common/utils";
 import FocusTrap from "@mui/material/Unstable_TrapFocus";
 
 import { ipcRenderer } from "electron";
-import { setRelease } from "./reducers/app";
+import { setAppearance, setRelease } from "./reducers/app";
 import { isDev } from "../common/utils";
+import { Appearance } from "../common/types";
 
 const WindowBar = lazy(() => import("@components/window-bar"));
 const ExpandedView = lazy(() => import("./views/expanded"));
@@ -71,6 +72,10 @@ const App = () => {
 	}, [transitioning]);
 
 	useEffect(() => {
+		ipcRenderer.on("appearance-updated", (_, appearance: Appearance) => {
+			dispatch(setAppearance(appearance));
+		});
+
 		ipcRenderer.on("sync-license", () => {
 			batch(() => {
 				dispatch(syncLicenseData());
