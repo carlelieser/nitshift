@@ -12,8 +12,7 @@ import {
 import { common, teal } from "@mui/material/colors";
 import { createDirectory, removeDirectory } from "@common/utils";
 import path from "path";
-import { Info } from "mui-symbols";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { Info, Upgrade } from "mui-symbols";
 import DownloadWorker from "@renderer/download.worker?worker";
 import { DownloadWorkerEvent, TransferStatus } from "@renderer/download.worker";
 import { execFile } from "child_process";
@@ -23,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { setRelease } from "@reducers/app";
 import { Release } from "@common/types";
 import update from "immutability-helper";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const worker = new DownloadWorker();
 
@@ -105,13 +105,15 @@ const UpdateSnackbar: React.FC = () => {
 					icon={<Info sx={{ color: common.white }} />}
 					onClose={handleClose}
 					sx={{ width: "100%", height: "100%", bgcolor: teal[500], color: common.white }}
-					action={
-						<LoadingButton loading={downloading} color={"inherit"} onClick={startDownload}>
-							Update
-						</LoadingButton>
-					}
 				>
-					<AlertTitle>{title}</AlertTitle>
+					<AlertTitle>
+						<Stack direction={"row"} justifyContent={"space-between"}>
+							{title}
+							<Typography variant={"overline"} sx={{ opacity: 0.7 }}>
+								{releaseCopy?.tag_name}
+							</Typography>
+						</Stack>
+					</AlertTitle>
 					{downloading || finished ? (
 						<Stack direction={"row"} width={"100%"} spacing={1} alignItems={"center"}>
 							<LinearProgress
@@ -133,11 +135,18 @@ const UpdateSnackbar: React.FC = () => {
 							</Typography>
 						</Stack>
 					) : (
-						<Stack>
+						<Stack gap={2}>
 							{releaseCopy?.body}
-							<Typography variant={"overline"} sx={{ opacity: 0.7 }}>
-								{releaseCopy?.tag_name}
-							</Typography>
+							<Stack direction={"row"} gap={1}>
+								<LoadingButton
+									startIcon={<Upgrade />}
+									loading={downloading}
+									color={"inherit"}
+									onClick={startDownload}
+								>
+									Update
+								</LoadingButton>
+							</Stack>
 						</Stack>
 					)}
 				</Alert>
