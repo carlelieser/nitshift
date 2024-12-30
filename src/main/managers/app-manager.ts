@@ -39,16 +39,6 @@ class AppManager {
 	public launch = new LaunchManager();
 	private entry = MAIN_WINDOW_VITE_DEV_SERVER_URL ?? path.join(__dirname, "../renderer/index.html");
 	public window: Window = new Window(this.entry);
-	private handleDisplayRemoved = debounce(async () => {
-		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
-		const newMonitors = await this.window.refreshMonitors();
-		const newlyConnectedMonitors = newMonitors.filter(({ connected }) => connected);
-		const removedMonitors = oldMonitors.filter(
-			(oldMonitor) => !newlyConnectedMonitors.find((monitor) => monitor.id === oldMonitor.id)
-		);
-		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
-		await this.smartApply();
-	}, 250);
 
 	constructor() {
 		this.auth.on("init", async () => {
@@ -166,10 +156,20 @@ class AppManager {
 		this.brightness.apply();
 	};
 
+	private handleDisplayRemoved = debounce(async () => {
+		const oldMonitors = loadMonitors().filter(({ connected }) => connected);
+		const newMonitors = await this.window.refreshMonitors();
+		const newlyConnectedMonitors = newMonitors.filter(({ connected }) => connected);
+		const removedMonitors = oldMonitors.filter(
+			(oldMonitor) => !newlyConnectedMonitors.find((monitor) => monitor.id === oldMonitor.id)
+		);
+		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
+		await this.smartApply();
+	}, 250);
 	private handleDisplayMetricsChanged = debounce(async () => {
 		this.shades.destroyAll();
 		await this.smartApply();
-	}, 1000);
+	}, 250);
 
 	private handleDisplayAdded = debounce(async () => {
 		await this.smartApply();
