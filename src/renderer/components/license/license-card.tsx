@@ -69,10 +69,10 @@ const LicenseCard = () => {
 						<License />
 					</Avatar>
 				</Stack>
-				<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} gap={2} flexWrap={"wrap"}>
-					<Upgrade size={"small"} colour={"teal.500"} context={"main"} sx={{ px: 2, borderRadius: 10 }} />
-					<FreeTrialButton size={"small"} colour={"teal.500"} sx={{ px: 2, borderRadius: 10 }} />
-					{license === "premium" ? null : (
+				{license !== "premium" ?
+					<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} gap={2} flexWrap={"wrap"}>
+						<Upgrade size={"small"} colour={"teal.500"} context={"main"} sx={{ px: 2, borderRadius: 10 }} />
+						<FreeTrialButton size={"small"} colour={"teal.500"} sx={{ px: 2, borderRadius: 10 }} />
 						<Tooltip title={<Typography>Activate a lifetime license with your email address</Typography>}>
 							<ColorButton
 								size={"small"}
@@ -84,8 +84,7 @@ const LicenseCard = () => {
 								Activate
 							</ColorButton>
 						</Tooltip>
-					)}
-				</Stack>
+					</Stack> : null}
 			</Stack>
 		</Paper>
 	);
