@@ -12,6 +12,11 @@ const LicenseCard = () => {
 	const license = useAppSelector((state) => state.app.license);
 	const trialStart = useAppSelector((state) => state.app.trialStartDate);
 	const theme = useTheme();
+	const iconBackgroundColor = useMemo(
+		() => (license !== "premium" ? theme.palette.background.paper : theme.palette.primary.main),
+		[license, theme.palette.background.paper, theme.palette.primary.main]
+	);
+	const iconColor = useMemo(() => theme.palette.getContrastText(iconBackgroundColor), [iconBackgroundColor]);
 
 	const [activationDialogOpen, setActivationDialogOpen] = useState<boolean>(false);
 
@@ -57,9 +62,8 @@ const LicenseCard = () => {
 					</Stack>
 					<Avatar
 						sx={{
-							bgcolor:
-								license !== "premium" ? theme.palette.background.paper : theme.palette.primary.main,
-							color: "inherit"
+							bgcolor: iconBackgroundColor,
+							color: iconColor
 						}}
 					>
 						<License />
