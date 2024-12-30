@@ -6,5 +6,5 @@
   "singleQuote": false,
   "useTabs": true,
   "printWidth": 120,
-  "endOfLine": "crlf"
+  "endOfLine": "lf"
 }
