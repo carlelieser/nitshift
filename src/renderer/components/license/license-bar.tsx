@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Stack } from "@mui/material";
+import { ButtonGroup, Paper, Stack } from "@mui/material";
 import FreeTrialButton from "@promotional/buttons/free-trial-button";
 import UpgradeButton from "@promotional/buttons/upgrade-button";
 import { useAppSelector } from "@hooks";
@@ -26,8 +26,10 @@ const LicenseBar = () => {
 				height={50}
 				sx={{ overflow: "hidden", borderRadius: 3 }}
 			>
-				<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
-				<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />
+				<ButtonGroup fullWidth={true} variant={"text"}>
+					<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
+					<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />
+				</ButtonGroup>
 			</Stack>
 		</Paper>
 	);
