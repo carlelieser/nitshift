@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Avatar, Divider, Paper, Stack, Tooltip, Typography, useTheme } from "@mui/material";
+import { Avatar, Chip, Paper, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { Key, License } from "mui-symbols";
 import { dayjs } from "@common/dayjs";
 import { useAppSelector } from "@hooks";
@@ -43,23 +43,20 @@ const LicenseCard = () => {
 				<ActivateLicenseDialog open={activationDialogOpen} onClose={closeActivationDialog} />
 				<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
 					<Stack>
-						<Typography variant={"overline"} sx={{ opacity: 0.7 }}>
-							Current membership
-						</Typography>
+						<Stack direction={"row"} alignItems={"center"} gap={1}>
+							<Typography variant={"overline"} sx={{ opacity: 0.7 }}>
+								Current membership
+							</Typography>
+						</Stack>
 						<Stack direction={"row"} alignItems={"center"} gap={1} mt={-1}>
 							<Typography fontWeight={"medium"} textTransform={"capitalize"}>
 								{license} License
 							</Typography>
-							{license === "trial" ? (
-								<>
-									<Divider variant={"middle"} orientation={"vertical"} flexItem={true} />
-									<Typography fontWeight={"medium"}>
-										{trialDaysLeft} day{trialDaysLeft === 1 ? "" : "s"} left
-									</Typography>
-								</>
-							) : null}
 						</Stack>
 					</Stack>
+					{license === "trial" ? (
+						<Chip size={"small"} label={`${trialDaysLeft} day${trialDaysLeft === 1 ? "" : "s"} left`} />
+					) : null}
 					<Avatar
 						sx={{
 							bgcolor: iconBackgroundColor,
