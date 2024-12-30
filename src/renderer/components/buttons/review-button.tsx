@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { shell } from "electron";
-import { OpenInNew } from "mui-symbols";
+import { EditSquare } from "mui-symbols";
 
 const ReviewButton = () => {
 	const handleClick = () => {
@@ -8,8 +8,8 @@ const ReviewButton = () => {
 	};
 
 	return (
-		<Button startIcon={<OpenInNew />} onClick={handleClick}>
-			Leave a Review
+		<Button startIcon={<EditSquare />} onClick={handleClick}>
+			Review
 		</Button>
 	);
 };
