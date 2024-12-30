@@ -143,8 +143,10 @@ const Dialog: React.FC<DialogProps> = ({
 										return (
 											<LoadingButton
 												key={`dialog-action-${label}`}
+												fullWidth={false}
 												size={"small"}
 												color={color}
+												variant={"text"}
 												loading={loading}
 												endIcon={isPrimary ? <KeyboardArrowRight /> : null}
 												sx={{ opacity: isPrimary ? 1 : 0.5 }}
