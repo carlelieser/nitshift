@@ -2,6 +2,7 @@ import React, { forwardRef, useState } from "react";
 import { Button, Chip, Paper, Stack, Typography } from "@mui/material";
 import Dialog, { DialogProps } from "@components/dialog";
 import { stubFalse } from "lodash";
+import { ChevronRight } from "mui-symbols";
 
 type PopupProps = Pick<DialogProps, "title" | "icon"> & { children: React.ReactNode };
 
@@ -74,7 +75,9 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						</Paper>
 					}
 					endIcon={
-						value ? (
+						popup ? (
+							<ChevronRight />
+						) : value ? (
 							<Stack pr={2} alignItems={"center"}>
 								{disableChip ? (
 									value
