@@ -18,7 +18,7 @@ const Schedule = () => {
 				visible={license !== "free"}
 				icon={<ScheduleIcon />}
 				title={"Schedule"}
-				subtitle={"Set a custom brightness schedule"}
+				subtitle={"Set custom brightness schedules"}
 				onClick={openModal}
 			/>
 		</>

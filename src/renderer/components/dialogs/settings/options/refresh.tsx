@@ -12,7 +12,7 @@ const Refresh = () => {
 		<SettingsCard
 			icon={<RefreshIcon />}
 			title={"Refresh"}
-			subtitle={"Update the list of detected monitors"}
+			subtitle={"Update monitor list"}
 			onClick={refreshMonitors}
 		/>
 	);
