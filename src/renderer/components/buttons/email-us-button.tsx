@@ -12,8 +12,7 @@ const EmailUsButton = () => {
 	};
 
 	return (
-		<Button startIcon={<Send />}
-				color={"success"} onClick={handleOpenEmail}>
+		<Button startIcon={<Send />} color={"success"} onClick={handleOpenEmail}>
 			Email Us
 		</Button>
 	);
