@@ -96,6 +96,7 @@ class AppManager {
 		ipcMain.handle("free-trial-started", this.handleFreeTrialStarted);
 		ipcMain.handle("sync-user", this.auth.updateUser);
 
+		ipcMain.on("app/check-for-updates", this.updater.check.bind(this, true));
 		ipcMain.on("sync-appearance", this.handleAppearanceSync);
 		ipcMain.on("screen/size", this.handleGetScreenSize);
 
