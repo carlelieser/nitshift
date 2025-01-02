@@ -16,18 +16,19 @@ import {
 } from "@mui/material";
 import { Check, Key, Mail, Refresh, Send } from "mui-symbols";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { randomUUID } from "crypto";
 import { clone, times } from "lodash";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import { setLicense, setReceivedPremium, setTrialAvailability } from "@reducers/app";
+import { setReceivedPremium } from "@reducers/app";
 import Dialog, { DialogComponentProps } from "../dialog";
 
 import { clipboard, ipcRenderer } from "electron";
+import { request } from "@common/fetch";
 
 const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 	const theme = useTheme();
 	const dispatch = useAppDispatch();
 	const isCompact = useAppSelector((state) => state.app.mode === "compact");
+	const userId = useAppSelector((state) => state.app.userId);
 
 	const [email, setEmail] = useState<string>("");
 
@@ -43,25 +44,11 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	const code = useRef<string>("");
 
-	const updateCode = () => {
-		const id = randomUUID().split("-").join("");
-		code.current = id.substring(0, 6).toUpperCase();
-	};
-
 	const sendEmailVerification = async () => {
-		updateCode();
-		const succeeded = await ipcRenderer.invoke("mailer/send-email-verification", {
-			email,
-			code: code.current
-		});
-		if (!succeeded) return setError("Error sending email. Please try again.");
+		const response = await request(`/api/verify?email=${email}`, {}, userId);
+		if (!response.ok) return setError("Error sending email. Please try again.");
 		setEmailSent(true);
 	};
-
-	const sendEmailVerificationSuccess = () =>
-		ipcRenderer.invoke("mailer/send-email-verification-success", {
-			email
-		});
 
 	const sendVerificationEmail = async () => {
 		setLoading(true);
@@ -69,15 +56,17 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 		setLoading(false);
 	};
 
-	const verifyCode = () => {
+	const verifyCode = async () => {
 		setLoading(true);
 		const attempt = codeChars.join("");
-		const verified = code.current === attempt;
-		if (!attempt || !verified) {
+		const response = await request(`/api/verify?email=${email}&code=${attempt}`, {}, userId);
+
+		if (!response.ok) {
 			setLoading(false);
 			return setError("Wrong verification code");
 		}
-		setCodeVerified(verified);
+
+		setCodeVerified(response.ok);
 	};
 
 	const handleEmailChange = (e: any) => setEmail(e.target.value);
@@ -106,13 +95,15 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	};
 
 	const verifyLicense = async () => {
-		try {
-			const customer = await ipcRenderer.invoke("stripe/find-customer-by-email", email);
-			const paymentIntent = await ipcRenderer.invoke("stripe/get-latest-payment-intent", customer.id);
-			setLicenseVerified(paymentIntent.status === "succeeded");
-		} catch (err: any) {
-			if (err) setError(err?.message ?? "Error verifying license. Please try again.");
+		const response = await request(`/api/verify/license?email=${email}`, {}, userId);
+		const verified = response.ok;
+
+		if (verified) {
+			setLicenseVerified(true);
+		} else {
+			setError(response.statusText ?? "Error verifying license. Please try again.");
 		}
+
 		setLoading(false);
 	};
 
@@ -157,10 +148,8 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	useEffect(() => {
 		if (licenseVerified) {
-			sendEmailVerificationSuccess();
 			dispatch(setReceivedPremium(true));
-			dispatch(setLicense("premium"));
-			dispatch(setTrialAvailability(false));
+			ipcRenderer.invoke("store-user");
 			onClose();
 		}
 	}, [licenseVerified]);
@@ -188,12 +177,6 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 		if (open) ipcRenderer.invoke("app/auto-hide/disable");
 		else ipcRenderer.invoke("app/auto-hide/enable");
 	}, [open]);
-
-	useEffect(() => {
-		if (codeChars.filter((char) => char).length === 6) {
-			verifyCode();
-		}
-	}, [codeChars]);
 
 	return (
 		<Dialog open={open} icon={<Key />} title={"Activate License"} onClose={onClose} onExited={handleReset}>

@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
+import { Stack, Tooltip, Typography } from "@mui/material";
 import { ShoppingCartCheckout } from "mui-symbols";
 import stripeLogo from "@assets/img/stripe.svg";
 import { ipcRenderer, shell } from "electron";
 import PreCheckoutSnackbar from "@components/promotional/snackbars/pre-checkout";
 import ActivateLicenseDialog from "@dialogs/activate-license";
 import ColorButton from "@buttons/color-button";
+import { useAppSelector } from "@renderer/hooks";
 
 interface CheckoutButtonProps {
-	price: string;
+	price: number;
 }
 
 const CheckoutButton: React.FC<CheckoutButtonProps> = ({ price }) => {
-	const [loading, setLoading] = useState<boolean>(false);
 	const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 	const [activationDialogOpen, setActivationDialogOpen] = useState<boolean>(false);
+	const userId = useAppSelector((state) => state.app.userId);
 
 	const handleCheckout = async () => {
-		setLoading(true);
-		const priceObject = await ipcRenderer.invoke("stripe/create-price", Number(price.split(".").join("")));
-		const link = await ipcRenderer.invoke("stripe/create-payment-link", priceObject.id);
-		await ipcRenderer.invoke("app/auto-hide/disable");
-		await shell.openExternal(link.url);
-		setLoading(false);
+		await shell.openExternal(
+			`${import.meta.env.VITE_HOST}/checkout?price=${price}&customer-id=${userId}&key=${userId}`
+		);
 		setActivationDialogOpen(true);
 		setSnackbarOpen(true);
 	};
@@ -39,7 +37,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ price }) => {
 				<ColorButton
 					colour={"blue.500"}
 					fullWidth={true}
-					startIcon={loading ? <CircularProgress size={24} color={"inherit"} /> : <ShoppingCartCheckout />}
+					startIcon={<ShoppingCartCheckout />}
 					onClick={handleCheckout}
 				>
 					<Stack direction={"row"} alignItems={"center"} spacing={1}>

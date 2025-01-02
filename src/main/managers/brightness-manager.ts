@@ -29,9 +29,9 @@ class BrightnessManager {
 		if (monitors.length) monitors.forEach((monitor) => this.shades.destroy(monitor.id));
 	};
 
-	private applyShades = () => {
+	private applyShades = (source = this.monitors) => {
 		const brightness = loadGlobalBrightness();
-		const monitors = this.monitors.filter(({ mode }) => mode === "shade");
+		const monitors = source.filter(({ mode }) => mode === "shade");
 
 		if (monitors.length) {
 			monitors.forEach((monitor) => {
@@ -41,18 +41,23 @@ class BrightnessManager {
 		}
 	};
 
-	public apply = throttle(() => {
-		this.updateMonitors();
+	public apply = throttle((_, config: Partial<Pick<UIMonitor, "id" | "brightness" | "mode">> = null) => {
+		let brightness = loadGlobalBrightness(),
+			monitors = [];
 
-		const brightness = loadGlobalBrightness();
-		const monitors = this.monitors.filter(({ disabled }) => !disabled);
+		if (config) {
+			monitors = [config];
+		} else {
+			this.updateMonitors();
+			monitors = this.monitors.filter(({ disabled }) => !disabled);
+		}
 
 		const worker = createBrightnessWorker({
 			workerData: { brightness, monitors }
 		});
 
 		this.removeShadesOnNativeMonitors();
-		this.applyShades();
+		this.applyShades(monitors);
 
 		worker.on("message", (event) => {
 			if (event === "finished") worker.terminate();

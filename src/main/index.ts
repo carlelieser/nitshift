@@ -3,12 +3,9 @@ import Store from "electron-store";
 import AppManager from "./managers/app-manager";
 
 import AppMessages from "./messages/app";
-import "./messages/stripe";
 import "./messages/storage";
 import "./messages/keys";
-import "./mailer/mailer";
-
-import "./firebase";
+import "./mailer";
 
 if (require("electron-squirrel-startup")) app.quit();
 

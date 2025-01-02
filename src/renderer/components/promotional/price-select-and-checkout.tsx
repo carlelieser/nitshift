@@ -6,7 +6,7 @@ import PriceSelect from "@components/promotional/price-select";
 import { FeaturesDialogScrollContext } from "@components/dialogs/upgrade";
 
 const PriceSelectAndCheckout = () => {
-	const [price, setPrice] = useState<string>();
+	const [price, setPrice] = useState<number>();
 	const scrollTop = useContext(FeaturesDialogScrollContext);
 
 	const shouldShowAlert = useMemo(() => scrollTop > 0, [scrollTop]);

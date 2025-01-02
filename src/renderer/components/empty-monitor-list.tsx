@@ -1,6 +1,5 @@
-import { Paper, Stack } from "@mui/material";
+import { Paper, Skeleton, Stack } from "@mui/material";
 import { useMemo } from "react";
-import { Skeleton } from "@mui/lab";
 import Slider from "./slider";
 
 const EmptyMonitorList = () => {

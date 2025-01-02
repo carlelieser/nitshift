@@ -11,13 +11,14 @@ const Monitor = lazy(() => import("./monitor"));
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
-	const monitors = useAppSelector((state) => state.app.monitors.filter((monitor) => monitor.connected));
+	const monitors = useAppSelector((state) => state.app.monitors);
+	const connectedMonitors = useMemo(() => monitors.filter((monitor) => monitor.connected), [monitors]);
 	const license = useAppSelector((state) => state.app.license);
 	const brightness = useAppSelector((state) => state.app.brightness);
 
 	const globalMonitorDisabled = useMemo(
-		() => license === "free" || monitors.every(({ disabled }) => disabled),
-		[license, monitors]
+		() => license === "free" || connectedMonitors.every(({ disabled }) => disabled),
+		[license, connectedMonitors]
 	);
 
 	const reorder = (list: Array<UIMonitor>, startIndex: number, endIndex: number) => {
@@ -30,7 +31,7 @@ const MonitorList = () => {
 
 	const handleDragEnd: OnDragEndResponder = (result) => {
 		if (!result.destination) return;
-		dispatch(setMonitors(reorder(monitors, result.source.index, result.destination.index)));
+		dispatch(setMonitors(reorder(connectedMonitors, result.source.index, result.destination.index)));
 	};
 
 	return (
@@ -69,9 +70,9 @@ const MonitorList = () => {
 							<Droppable droppableId={"droppable"}>
 								{(provided, droppableSnapshot) => (
 									<Box {...provided.droppableProps} ref={provided.innerRef}>
-										{monitors.map((monitor, index) => (
+										{connectedMonitors.map((monitor, index) => (
 											<DraggableMonitorWrapper
-												forceDisableDrag={monitors.length === 1}
+												forceDisableDrag={connectedMonitors.length === 1}
 												index={index}
 												isDraggingOver={droppableSnapshot.isDraggingOver}
 												key={monitor.id + "-wrapper"}

@@ -23,6 +23,7 @@ import { debounce } from "lodash";
 import Defender from "../defender";
 import LaunchManager from "./launch-manager";
 import { isDev } from "@common/utils";
+import { installExtension, REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 
 const MAIN_WINDOW_VITE_DEV_SERVER_URL = process.env["ELECTRON_RENDERER_URL"];
 const REFRESH_DEBOUNCE = 3000;
@@ -88,13 +89,14 @@ class AppManager {
 		});
 
 		this.scheduler.on("ready", () => {
-			this.brightness.apply();
+			this.brightness.apply(null);
 			this.window.refreshMonitors();
 		});
 
 		ipcMain.handle("schedule-changed", this.scheduler.check);
 		ipcMain.handle("free-trial-started", this.handleFreeTrialStarted);
-		ipcMain.handle("sync-user", this.auth.updateUser);
+		ipcMain.handle("update-user", this.auth.updateUser);
+		ipcMain.handle("store-user", this.auth.storeUser);
 
 		ipcMain.on("app/check-for-updates", this.updater.check.bind(this, true));
 		ipcMain.on("sync-appearance", this.handleAppearanceSync);
@@ -108,6 +110,7 @@ class AppManager {
 	}
 
 	public init = async () => {
+		installExtension(REACT_DEVELOPER_TOOLS);
 		this.launch.start();
 		this.defender.init();
 		await this.auth.init();
@@ -121,7 +124,7 @@ class AppManager {
 
 		this.initAppearanceSync(loadSyncAppearance());
 		this.tray.create();
-		this.brightness.apply();
+		this.brightness.apply(null);
 
 		screen.on("display-metrics-changed", this.handleDisplayMetricsChanged);
 		screen.on("display-added", this.handleDisplayAdded);
@@ -154,7 +157,7 @@ class AppManager {
 
 	private smartApply = async () => {
 		await this.refresh();
-		this.brightness.apply();
+		this.brightness.apply(null);
 	};
 
 	private handleDisplayRemoved = debounce(async () => {

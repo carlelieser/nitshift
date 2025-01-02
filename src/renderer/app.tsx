@@ -92,8 +92,8 @@ const App = () => {
 
 		ipcRenderer.on("display-arrangement-changed", () => dispatch(refreshAvailableMonitors()));
 		ipcRenderer.on("refresh-monitors", () => dispatch(refreshAvailableMonitors()));
-
 		ipcRenderer.on("focused", () => dispatch(setFocused(true)));
+
 		if (!isDev) ipcRenderer.on("blurred", () => dispatch(setFocused(false)));
 
 		ipcRenderer.on("update-available", (_event, release) => dispatch(setRelease(release)));

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	IconButton,
 	ListItemIcon,
@@ -11,23 +11,28 @@ import {
 	Typography
 } from "@mui/material";
 import { Close, RadioButtonCheckedOutlined, RadioButtonUncheckedOutlined } from "mui-symbols";
-import { ipcRenderer } from "electron";
-
-interface PriceDescriptions {
-	[price: string]: string;
-}
+import { request } from "@common/fetch";
 
 interface PriceMenuProps {
 	open: boolean;
-	price: string;
-	description: string;
+	price: number;
 	anchorEl: HTMLButtonElement;
 	onClose: () => void;
-	onChange: (price: string, description: string) => void;
+	onChange: (price: number) => void;
 }
 
 const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, anchorEl, onClose, onChange }) => {
-	const descriptions = useMemo(() => ipcRenderer.sendSync("key/path", "price.descriptions") as PriceDescriptions, []);
+	const [prices, setPrices] = useState<Array<number>>([]);
+
+	useEffect(() => {
+		onChange(prices[0]);
+	}, [prices]);
+
+	useEffect(() => {
+		request("/api/prices")
+			.then((response) => response.json())
+			.then(setPrices);
+	}, []);
 
 	return (
 		<Menu
@@ -42,18 +47,20 @@ const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, ancho
 			onClose={onClose}
 		>
 			<ListSubheader>
-				<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-					Select a fair price
+				<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} py={1}>
+					<Typography variant={"subtitle2"} sx={{ pr: 3 }}>
+						Select a fair price
+					</Typography>
 					<IconButton size={"small"} onClick={onClose}>
 						<Close />
 					</IconButton>
 				</Stack>
 			</ListSubheader>
-			{Object.keys(descriptions).map((price) => (
+			{prices.map((price) => (
 				<MenuItem
 					key={price}
 					onClick={() => {
-						onChange(price, descriptions[price]);
+						onChange(price);
 						onClose();
 					}}
 				>
@@ -64,20 +71,7 @@ const PriceMenu: React.FC<PriceMenuProps> = ({ open, price: selectedPrice, ancho
 							<RadioButtonUncheckedOutlined />
 						)}
 					</ListItemIcon>
-					<ListItemText
-						primary={<Typography fontWeight={500}>{price}</Typography>}
-						secondary={
-							<Typography
-								sx={{
-									opacity: 0.7,
-									fontSize: 14,
-									whiteSpace: "pre-wrap"
-								}}
-							>
-								{descriptions[price]}
-							</Typography>
-						}
-					/>
+					<ListItemText primary={<Typography fontWeight={500}>{price}</Typography>} />
 				</MenuItem>
 			))}
 		</Menu>

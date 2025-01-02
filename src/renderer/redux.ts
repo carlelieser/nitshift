@@ -83,7 +83,7 @@ listener.startListening({
 			);
 		}
 
-		await ipcRenderer.invoke("sync-user");
+		await ipcRenderer.invoke("update-user");
 	}
 });
 
@@ -100,7 +100,7 @@ listener.startListening({
 			await ipcRenderer.invoke("free-trial-started");
 		}
 
-		await ipcRenderer.invoke("sync-user");
+		await ipcRenderer.invoke("update-user");
 	}
 });
 
@@ -108,7 +108,7 @@ listener.startListening({
 	actionCreator: setTrialAvailability,
 	effect: async (action) => {
 		saveTrialAvailability(action.payload);
-		await ipcRenderer.invoke("sync-user");
+		await ipcRenderer.invoke("update-user");
 	}
 });
 
@@ -187,17 +187,24 @@ listener.startListening({
 
 listener.startListening({
 	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode, setMonitorName),
-	effect: (action, api) => {
-		// @ts-ignore
-		api.dispatch(setActiveMonitor(action.payload.id));
+	effect: async (_, api) => {
+		api.cancelActiveListeners();
 		saveMonitors(api.getState().app.monitors);
 	}
 });
 
 listener.startListening({
+	matcher: isAnyOf(setMonitorBrightness, setMonitorDisabled, setMonitorMode, setMonitorName),
+	effect: (action, api) => {
+		// @ts-ignore
+		api.dispatch(setActiveMonitor(action.payload.id));
+	}
+});
+
+listener.startListening({
 	actionCreator: setMonitorBrightness,
-	effect: () => {
-		ipcRenderer.invoke("monitors/brightness/change");
+	effect: (action) => {
+		ipcRenderer.invoke("monitors/brightness/change", action.payload);
 	}
 });
 

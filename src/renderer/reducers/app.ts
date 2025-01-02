@@ -36,12 +36,15 @@ interface MonitorActionPayload {
 	mode: MonitorMode;
 }
 
-export type SetMonitorBrightnessAction = MonitorAction<Pick<MonitorActionPayload, "brightness">>;
+export type SetMonitorBrightnessAction = MonitorAction<
+	Pick<UIMonitor, "brightness" | "mode" | "disabled" | "position" | "size">
+>;
 export type SetMonitorDisabledAction = MonitorAction<Pick<MonitorActionPayload, "disabled">>;
 export type SetMonitorModeAction = MonitorAction<Pick<MonitorActionPayload, "mode">>;
 export type SetMonitorNameAction = MonitorAction<Pick<MonitorActionPayload, "nickname">>;
 
-const findMonitorIndexById = (monitors: UIMonitor[], id: string) => monitors.findIndex((monitor) => monitor.id === id);
+export const findMonitorIndexById = (monitors: UIMonitor[], id: string) =>
+	monitors.findIndex((monitor) => monitor.id === id);
 
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
@@ -103,8 +106,7 @@ export const appSlice = createSlice({
 			let index = state.schedule.findIndex((schedule) => schedule.id === action.payload.id);
 			state.schedule[index] = action.payload;
 		},
-		refreshAvailableMonitors: (state, action: PayloadAction<boolean>) => {
-			console.log("force refresh monitors: ", action.payload);
+		refreshAvailableMonitors: (state, _: PayloadAction<boolean>) => {
 			state.monitors = loadMonitors();
 		},
 		removeBrightnessMode: (state, action: PayloadAction<string>) => {
@@ -132,10 +134,8 @@ export const appSlice = createSlice({
 		setMode: createReducer<AppState["mode"]>("mode"),
 		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
 			const { id, brightness } = action.payload;
-			state.monitors = update(state.monitors, {
-				$apply: (monitors) =>
-					monitors.map((monitor) => (monitor.id === id ? { ...monitor, brightness } : monitor))
-			});
+			const index = findMonitorIndexById(state.monitors, id);
+			state.monitors[index].brightness = brightness;
 		},
 		setMonitorDisabled: (state, action: PayloadAction<SetMonitorDisabledAction>) => {
 			const { id, disabled } = action.payload;
@@ -172,6 +172,7 @@ export const appSlice = createSlice({
 		setTrialAvailability: createReducer<AppState["trialAvailability"]>("trialAvailability"),
 		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
 		setTransitioning: createReducer<AppState["transitioning"]>("transitioning"),
+		setUserEmail: createReducer<AppState["userEmail"]>("userEmail"),
 		syncLicenseData: (state) => {
 			state.trialStartDate = loadTrialStartDate();
 			state.trialAvailability = loadTrialAvailability();
@@ -213,7 +214,8 @@ export const {
 	syncLicenseData,
 	setFocused,
 	setRelease,
-	setStartupSettings
+	setStartupSettings,
+	setUserEmail
 } = appSlice.actions;
 
 export default appSlice.reducer;

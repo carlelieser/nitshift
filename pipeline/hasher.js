@@ -583,7 +583,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.4.5";
+const tag_name = "v0.4.7";
 const body = "Minor bug fixes and improvements. Fix auto-adjustment issue with Shade mode. Add automatic OS theme sync.";
 const release = {
   tag_name,
