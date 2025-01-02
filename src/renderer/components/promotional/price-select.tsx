@@ -3,17 +3,13 @@ import { Paper, Tooltip, Typography } from "@mui/material";
 import ColorButton from "@buttons/color-button";
 import { ArrowDropDown } from "mui-symbols";
 import PriceMenu from "@components/promotional/price-menu";
-import { ipcRenderer } from "electron";
 
 interface PriceSelectProps {
-	onChange: (price: string) => void;
+	onChange: (price: number) => void;
 }
 
 const PriceSelect: React.FC<PriceSelectProps> = ({ onChange }) => {
-	const [price, setPrice] = useState<string>(ipcRenderer.sendSync("key/path", "price.amounts")[0]);
-	const [description, setDescription] = useState<string>(
-		ipcRenderer.sendSync("key/path", "price.descriptions")[price]
-	);
+	const [price, setPrice] = useState<number>();
 	const [priceMenuOpen, setPriceMenuOpen] = useState<boolean>(false);
 
 	const ref = useRef<HTMLButtonElement>();
@@ -21,9 +17,8 @@ const PriceSelect: React.FC<PriceSelectProps> = ({ onChange }) => {
 	const openPriceMenu = () => setPriceMenuOpen(true);
 	const closePriceMenu = () => setPriceMenuOpen(false);
 
-	const handlePriceChange = (price: string, description: string) => {
+	const handlePriceChange = (price: number) => {
 		setPrice(price);
-		setDescription(description);
 	};
 
 	useEffect(() => {
@@ -55,7 +50,6 @@ const PriceSelect: React.FC<PriceSelectProps> = ({ onChange }) => {
 			<PriceMenu
 				open={priceMenuOpen}
 				price={price}
-				description={description}
 				anchorEl={ref.current}
 				onClose={closePriceMenu}
 				onChange={handlePriceChange}

@@ -3,6 +3,7 @@ import { alpha, Box, Divider, Paper, Stack, Tooltip, Typography, useTheme } from
 import { useAppSelector } from "@hooks";
 import { capitalize } from "lodash";
 import icon from "@assets/img/icon.svg";
+import iconPro from "@assets/img/icon-pro.svg";
 import release from "@common/release.json";
 
 const WindowButtons = lazy(() => import("./buttons/window-buttons"));
@@ -20,6 +21,7 @@ const WindowBar = () => {
 	);
 
 	const color = useMemo(() => theme.palette.getContrastText(bgcolor), [bgcolor]);
+	const windowIcon = useMemo(() => (license === "premium" ? iconPro : icon), [license]);
 
 	return (
 		<Paper
@@ -46,7 +48,7 @@ const WindowBar = () => {
 						<Box
 							width={24}
 							height={24}
-							sx={{ backgroundImage: `url("${icon}")`, backgroundSize: "cover" }}
+							sx={{ backgroundImage: `url("${windowIcon}")`, backgroundSize: "cover" }}
 						/>
 						{mode === "expanded" ? (
 							<Typography variant={"h5"} fontWeight={"bold"}>

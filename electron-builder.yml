@@ -5,9 +5,6 @@ directories:
 files:
   - 'out/**/*'
   - 'node_modules/lumi-control/**/*'
-  - 'node_modules/firebase/**/*'
-  - 'node_modules/stripe/**/*'
-  - 'node_modules/nodemailer/**/*'
   - 'node_modules/electron-store/**/*'
   - 'node_modules/regedit/**/*'
 compression: maximum
@@ -21,7 +18,7 @@ win:
   executableName: Glimmr
   icon: src/renderer/assets/img/icon.ico
 squirrelWindows:
-  iconUrl: https://www.dropbox.com/s/y0e37i0lrz4mexx/icon.ico?dl=1
+  iconUrl: https://glimmr.app/images/icon.ico
   artifactName: ${name}-setup.exe
   loadingGif: src/renderer/assets/img/installer.gif
   useAppIdAsId: true

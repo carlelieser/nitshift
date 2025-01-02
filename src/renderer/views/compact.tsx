@@ -48,6 +48,8 @@ const CompactView = () => {
 							mode={activeMonitor.mode}
 							brightness={activeMonitor.brightness}
 							disabled={activeMonitor.disabled}
+							position={activeMonitor.position}
+							size={activeMonitor.size}
 						/>
 					) : (
 						<MonitorBrightnessSlider
@@ -55,6 +57,8 @@ const CompactView = () => {
 							mode={"native"}
 							brightness={brightness}
 							disabled={false}
+							position={{ x: 0, y: 0 }}
+							size={{ width: 0, height: 0 }}
 						/>
 					)}
 				</Stack>

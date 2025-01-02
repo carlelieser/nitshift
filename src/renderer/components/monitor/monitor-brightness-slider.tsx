@@ -1,28 +1,23 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { setBrightness, setMonitorBrightness } from "@reducers/app";
 import { useAppDispatch, useAppSelector } from "@renderer/hooks";
 import { GLOBAL, UIMonitor } from "@common/types";
-import { createTheme, SlideProps, Theme, ThemeProvider, useTheme } from "@mui/material";
+import { SlideProps } from "@mui/material";
 import Slider from "@components/slider";
-import { merge } from "lodash";
-import Color from "color";
-import { teal } from "@mui/material/colors";
 
-interface MonitorBrightnessSliderProps {
+type MonitorBrightnessSliderProps = {
 	monitorId: string;
-	mode: UIMonitor["mode"];
-	brightness: number;
-	disabled: boolean;
 	color?: SlideProps["color"];
-}
-
-const darkTeal = Color(teal[900]).darken(0.1).hexa();
+} & Pick<UIMonitor, "brightness" | "mode" | "disabled" | "position" | "size">;
 
 const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	monitorId,
 	brightness,
 	color,
-	disabled: monitorDisabled
+	disabled: monitorDisabled,
+	mode,
+	position,
+	size
 }) => {
 	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
@@ -31,59 +26,36 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 		[monitorId, monitorDisabled, license]
 	);
 
-	const baseTheme = useTheme();
-	const theme = useMemo(
-		() =>
-			createTheme({
-				...baseTheme,
-				components: monitorDisabled
-					? baseTheme.components
-					: merge({}, baseTheme.components, {
-							MuiTooltip: {
-								defaultProps: {
-									arrow: true
-								},
-								styleOverrides: {
-									tooltip: {
-										backgroundColor: darkTeal
-									},
-									arrow: {
-										"&:before": {
-											backgroundColor: darkTeal
-										}
-									}
-								}
-							}
-					  } as Theme["components"])
-			}),
-		[baseTheme, monitorDisabled]
+	const dispatchBrightness = useCallback(
+		(newBrightness: number) => {
+			if (monitorId === GLOBAL) {
+				dispatch(setBrightness(newBrightness));
+			} else {
+				dispatch(
+					setMonitorBrightness({
+						id: monitorId,
+						brightness: newBrightness,
+						mode,
+						disabled: monitorDisabled,
+						position,
+						size
+					})
+				);
+			}
+		},
+		[monitorId, dispatch, mode, monitorDisabled, position, size]
 	);
-
-	const dispatchBrightness = (newBrightness: number) => {
-		if (monitorId === GLOBAL) {
-			dispatch(setBrightness(newBrightness));
-		} else {
-			dispatch(
-				setMonitorBrightness({
-					id: monitorId,
-					brightness: newBrightness
-				})
-			);
-		}
-	};
 
 	const handleBrightnessUpdate = (brightness: number) => dispatchBrightness(brightness);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<Slider
-				color={color}
-				value={brightness}
-				percentage={true}
-				disabled={disabled}
-				onChange={handleBrightnessUpdate}
-			/>
-		</ThemeProvider>
+		<Slider
+			color={color}
+			value={brightness}
+			percentage={true}
+			disabled={disabled}
+			onChange={handleBrightnessUpdate}
+		/>
 	);
 };
 

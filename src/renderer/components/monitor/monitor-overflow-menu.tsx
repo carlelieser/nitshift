@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Box, createTheme, Divider, IconButton, Menu, MenuProps, ThemeProvider, useTheme } from "@mui/material";
 import { MoreVert } from "mui-symbols";
 import { useAppSelector } from "../../hooks";
@@ -6,20 +6,17 @@ import MonitorToggle from "./monitor-toggle";
 import MonitorModeToggle from "./monitor-mode-toggle";
 import MonitorRename from "./monitor-rename";
 
-interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl"> {
+interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl" | "open"> {
 	disabled: boolean;
 	monitorId: string;
-	onOpen: () => void;
 }
 
-const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({
-	open,
-	disabled = false,
-	onOpen,
-	onClose,
-	monitorId
-}) => {
+const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ disabled = false, monitorId }) => {
 	const monitor = useAppSelector((state) => state.app.monitors.find((monitor) => monitor.id === monitorId));
+	const [isOpen, setIsOpen] = useState(false);
+
+	const open = useCallback(() => setIsOpen(true), []);
+
 	const ref = useRef<HTMLButtonElement>();
 	const defaultTheme = useTheme();
 	const theme = useMemo(() => {
@@ -32,26 +29,25 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({
 		});
 	}, [defaultTheme]);
 
+	const handleClose = useCallback(() => setIsOpen(false), []);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Box>
 				<Menu
-					autoFocus={open}
+					autoFocus={isOpen}
 					keepMounted={true}
-					open={open}
+					open={isOpen}
 					anchorEl={ref.current}
-					sx={{
-						marginLeft: process.env.CAPTURE ? -23.5 : 0
-					}}
-					onClose={onClose}
-					onClick={() => onClose({}, "backdropClick")}
+					onClose={handleClose}
+					onClick={handleClose}
 				>
 					<MonitorModeToggle variant={"menu-item"} monitorId={monitorId} mode={monitor.mode} />
 					<Divider sx={{ my: 1 }} />
 					<MonitorRename monitorId={monitorId} currentName={monitor.nickname} />
 					<MonitorToggle variant={"menu-item"} monitorId={monitorId} disabled={monitor.disabled} />
 				</Menu>
-				<IconButton color={"inherit"} disabled={disabled} ref={ref} onClick={onOpen}>
+				<IconButton color={"inherit"} disabled={disabled} ref={ref} onClick={open}>
 					<MoreVert />
 				</IconButton>
 			</Box>
