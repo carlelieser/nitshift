@@ -60,7 +60,7 @@ const MonitorSelect = () => {
 			<Menu
 				PaperProps={{
 					style: {
-						minHeight: 150,
+						minHeight: 200,
 						minWidth: 200
 					}
 				}}
