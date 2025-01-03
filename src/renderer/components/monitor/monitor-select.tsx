@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import { Button, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
+import { Button, Chip, ListItemText, ListSubheader, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setActiveMonitor } from "@reducers/app";
-import { ArrowDropDown, HotelClass, MonitorOutlined } from "mui-symbols";
+import { ArrowDropDown, MonitorOutlined } from "mui-symbols";
 import { getFormattedMonitorId } from "@utils";
 import { GLOBAL } from "@common/types";
 
@@ -91,13 +91,10 @@ const MonitorSelect = () => {
 							setAnchorEl(null);
 						}}
 					>
-						{license === "free" && index > 1 ? (
-							<ListItemIcon>
-								<HotelClass color={"warning"} />
-							</ListItemIcon>
-						) : null}
 						<ListItemText sx={{ textTransform: "uppercase" }} secondary={getFormattedMonitorId(id)}>
-							{nickname}
+							<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+								{nickname} {license === "free" && index > 1 && <Chip size={"small"} label={"Pro"} />}
+							</Stack>
 						</ListItemText>
 					</MenuItem>
 				))}

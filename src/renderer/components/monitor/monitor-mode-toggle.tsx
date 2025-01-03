@@ -1,11 +1,20 @@
 import React, { useMemo } from "react";
-import { Badge, Box, IconButton, ListItemIcon, ListItemText, MenuItem, Tooltip, Typography } from "@mui/material";
-import { DonutLarge, DonutSmall, InfoOutlined, StarRoundedFilled } from "mui-symbols";
+import {
+	Badge,
+	Box,
+	Chip,
+	IconButton,
+	ListItemIcon,
+	ListItemText,
+	MenuItem,
+	Stack,
+	Tooltip,
+	Typography
+} from "@mui/material";
+import { DonutLarge, DonutSmall, InfoOutlined } from "mui-symbols";
 import { UIMonitor } from "@common/types";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMonitorMode } from "@reducers/app";
-import ProTooltip from "../promotional/pro-tooltip";
-import { amber } from "@mui/material/colors";
 
 interface MonitorModeToggleProps {
 	variant: "menu-item" | "icon-button";
@@ -45,16 +54,10 @@ const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorI
 					<Box>
 						<MenuItem disabled={license === "free"} onClick={toggle}>
 							<ListItemIcon>{icon}</ListItemIcon>
-							<ListItemText
-								primary={label}
-								secondary={
-									license === "free" ? (
-										<Typography variant={"caption"} textTransform={"uppercase"} fontSize={"small"}>
-											Pro Feature
-										</Typography>
-									) : null
-								}
-							/>
+							<Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} gap={2}>
+								<ListItemText primary={label} />
+								{license === "free" ? <Chip size={"small"} label={"PRO"} /> : null}
+							</Stack>
 							<Tooltip
 								title={
 									<Typography>
@@ -71,21 +74,15 @@ const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorI
 					</Box>
 				</Tooltip>
 			) : (
-				<ProTooltip title={label}>
+				<Tooltip title={<Typography>{label}</Typography>}>
 					<Box>
 						<IconButton disabled={license === "free"} color={"inherit"} onClick={toggle}>
-							<Badge
-								badgeContent={
-									license === "free" ? (
-										<StarRoundedFilled sx={{ fontSize: 12, color: amber[500] }} />
-									) : null
-								}
-							>
+							<Badge badgeContent={"PRO"} color={"warning"}>
 								{icon}
 							</Badge>
 						</IconButton>
 					</Box>
-				</ProTooltip>
+				</Tooltip>
 			),
 		[variant, license, icon, label]
 	);
