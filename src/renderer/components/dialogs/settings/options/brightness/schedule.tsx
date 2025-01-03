@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import SettingsCard from "../../settings-card";
-import { useAppSelector } from "@hooks";
 import ViewScheduleDialog from "@dialogs/view-schedule";
 import { ChevronRight, Schedule as ScheduleIcon } from "mui-symbols";
 
 const Schedule = () => {
-	const license = useAppSelector((state) => state.app.license);
 	const [open, setOpen] = useState(false);
 
 	const openModal = () => setOpen(true);
@@ -15,7 +13,7 @@ const Schedule = () => {
 		<>
 			<ViewScheduleDialog open={open} onClose={closeModal} />
 			<SettingsCard
-				visible={license !== "free"}
+				isPremium={true}
 				icon={<ScheduleIcon />}
 				endIcon={<ChevronRight />}
 				title={"Schedule"}
