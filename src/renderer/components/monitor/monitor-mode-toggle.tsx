@@ -77,7 +77,7 @@ const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorI
 				<Tooltip title={<Typography>{label}</Typography>}>
 					<Box>
 						<IconButton disabled={license === "free"} color={"inherit"} onClick={toggle}>
-							<Badge badgeContent={"PRO"} color={"warning"}>
+							<Badge badgeContent={license === "free" ? "PRO" : null} color={"warning"}>
 								{icon}
 							</Badge>
 						</IconButton>
