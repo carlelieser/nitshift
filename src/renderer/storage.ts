@@ -22,7 +22,9 @@ export const STORE = {
 	TRIAL_START_DATE: "trial-start-date",
 	USER_EMAIL: "user-email",
 	USER_ID: "user-id",
-	STARTUP: "startup"
+	STARTUP: "startup",
+	MIN_SHADE_LEVEL: "min-shade-level",
+	MAX_SHADE_LEVEL: "max-shade-level"
 };
 
 export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);
@@ -52,6 +54,8 @@ export const loadTrialStartDate = (): AppState["trialStartDate"] =>
 	ipcRenderer.sendSync("storage/load-trial-start-date");
 export const loadUserEmail = (): AppState["userEmail"] => ipcRenderer.sendSync("storage/load-user-email");
 export const loadUserId = (): AppState["userId"] => ipcRenderer.sendSync("storage/load-user-id");
+export const loadMinShadeLevel = (): AppState["minShadeLevel"] => ipcRenderer.sendSync("storage/load-min-shade-level");
+export const loadMaxShadeLevel = (): AppState["maxShadeLevel"] => ipcRenderer.sendSync("storage/load-max-shade-level");
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) =>
 	ipcRenderer.sendSync("storage/save-active-monitor", monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) =>
@@ -80,3 +84,7 @@ export const saveTrialStartDate = (date: AppState["trialStartDate"]) =>
 	ipcRenderer.sendSync("storage/save-trial-start-date", date);
 export const saveUserEmail = (email: AppState["userEmail"]) => ipcRenderer.sendSync("storage/save-user-email", email);
 export const saveUserId = (id: AppState["userId"]) => ipcRenderer.sendSync("storage/save-user-id", id);
+export const saveMinShadeLevel = (level: AppState["minShadeLevel"]) =>
+	ipcRenderer.sendSync("storage/save-min-shade-level", level);
+export const saveMaxShadeLevel = (level: AppState["maxShadeLevel"]) =>
+	ipcRenderer.sendSync("storage/save-max-shade-level", level);

@@ -24,7 +24,9 @@ export const STORE = {
 	TRIAL_START_DATE: "trial-start-date",
 	USER_EMAIL: "user-email",
 	USER_ID: "user-id",
-	STARTUP: "startup"
+	STARTUP: "startup",
+	MIN_SHADE_LEVEL: "min-shade-level",
+	MAX_SHADE_LEVEL: "max-shade-level"
 };
 
 export const storage = () =>
@@ -66,6 +68,8 @@ export const loadTrialAvailability = (): AppState["trialAvailability"] =>
 export const loadTrialStartDate = (): AppState["trialStartDate"] => storage().get(STORE.TRIAL_START_DATE, null);
 export const loadUserEmail = (): AppState["userEmail"] => storage().get(STORE.USER_EMAIL, null);
 export const loadUserId = (): AppState["userId"] => storage().get(STORE.USER_ID, null);
+export const loadMinShadeLevel = (): AppState["minShadeLevel"] => storage().get(STORE.MIN_SHADE_LEVEL, 10);
+export const loadMaxShadeLevel = (): AppState["maxShadeLevel"] => storage().get(STORE.MAX_SHADE_LEVEL, 100);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) => storage().set(STORE.APPEARANCE, appearance);
 export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
@@ -89,6 +93,8 @@ export const saveTrialAvailability = (available: AppState["trialAvailability"]) 
 export const saveTrialStartDate = (date: AppState["trialStartDate"]) => storage().set(STORE.TRIAL_START_DATE, date);
 export const saveUserEmail = (email: AppState["userEmail"]) => storage().set(STORE.USER_EMAIL, email);
 export const saveUserId = (id: AppState["userId"]) => storage().set(STORE.USER_ID, id);
+export const saveMinShadeLevel = (level: AppState["minShadeLevel"]) => storage().set(STORE.MIN_SHADE_LEVEL, level);
+export const saveMaxShadeLevel = (level: AppState["maxShadeLevel"]) => storage().set(STORE.MAX_SHADE_LEVEL, level);
 // [storage][end]
 
 if (process.argv.includes("--clear")) {

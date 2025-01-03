@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { LightMode } from "mui-symbols";
-import SettingsCard from "../settings-card";
-import EditBrightnessModesDialog from "../../edit-brightness-modes";
+import { BrightnessMedium, ChevronRight } from "mui-symbols";
+import SettingsCard from "../../settings-card";
+import EditBrightnessModesDialog from "@dialogs/edit-brightness-modes";
 
 const BrightnessModes = () => {
 	const [open, setOpen] = useState<boolean>(false);
@@ -13,9 +13,10 @@ const BrightnessModes = () => {
 		<>
 			<EditBrightnessModesDialog open={open} onClose={closeModal} />
 			<SettingsCard
-				icon={<LightMode />}
-				title={"Brightness Modes"}
-				subtitle={"Customize existing brightness modes or add new ones"}
+				icon={<BrightnessMedium />}
+				endIcon={<ChevronRight />}
+				title={"Profiles"}
+				subtitle={"Manage brightness profiles"}
 				onClick={openModal}
 			/>
 		</>

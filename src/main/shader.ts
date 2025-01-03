@@ -1,8 +1,9 @@
 import { BrowserWindow } from "electron";
 import lumi from "lumi-control";
-import { max, min } from "lodash";
 import EventEmitter from "events";
 import { UIMonitor } from "@common/types";
+import { loadMaxShadeLevel, loadMinShadeLevel } from "./storage";
+import { clamp } from "lodash";
 
 export interface Shades {
 	[monitorId: string]: BrowserWindow;
@@ -10,8 +11,8 @@ export interface Shades {
 
 class Shader extends EventEmitter {
 	private shades: Shades = {};
-	private maxBrightness = 100;
-	private minBrightness = 10;
+	private maxBrightness = loadMaxShadeLevel();
+	private minBrightness = loadMinShadeLevel();
 
 	public create = (id: string, brightness: number) => {
 		const monitors = lumi.monitors();
@@ -73,8 +74,14 @@ class Shader extends EventEmitter {
 		Object.keys(this.shades).forEach(this.destroy);
 	};
 
-	private generateColorForBrightness = (brightness: number) =>
-		`rgba(0, 0, 0, ${min([1, max([0, (this.maxBrightness - brightness - this.minBrightness) / 100])])})`;
+	private generateColorForBrightness = (brightness: number) => {
+		this.maxBrightness = loadMaxShadeLevel();
+		this.minBrightness = loadMinShadeLevel();
+		const clamped = clamp(brightness, this.minBrightness, this.maxBrightness);
+		const interpolated = 100 - clamped;
+		const opacity = interpolated / 100;
+		return `rgba(0, 0, 0, ${opacity})`;
+	};
 }
 
 export default Shader;

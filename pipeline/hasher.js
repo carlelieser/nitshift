@@ -583,7 +583,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.0";
+const tag_name = "v0.5.1";
 const body = "Reduced overall package size by ~20MB. Improved UI animation stability. Made menus taller for better readability. Added a cool little gif during installation.";
 const release = {
   tag_name,

@@ -1,21 +1,28 @@
-import React, { forwardRef, useState } from "react";
-import { Button, Chip, Paper, Stack, Typography } from "@mui/material";
+import React, { forwardRef, useMemo, useState } from "react";
+import { Button, Chip, Collapse, Paper, Stack, Typography } from "@mui/material";
 import Dialog, { DialogProps } from "@components/dialog";
-import { stubFalse } from "lodash";
-import { ChevronRight } from "mui-symbols";
+import { ChevronRight, KeyboardArrowDown, KeyboardArrowUp } from "mui-symbols";
+import { useAppSelector } from "@renderer/hooks";
 
 type PopupProps = Pick<DialogProps, "title" | "icon"> & { children: React.ReactNode };
 
 interface SettingsCardProps {
 	title: React.ReactNode;
 	subtitle?: React.ReactNode;
+	isPremium?: boolean;
 	icon: React.ReactNode;
+	endIcon?: React.ReactNode;
 	onClick?: React.UIEventHandler<HTMLButtonElement>;
+	isCollapsible?: boolean;
+	defaultCollapsed?: boolean;
 	visible?: boolean;
 	value?: React.ReactNode;
 	disableChip?: boolean;
 	popup?: PopupProps;
 	disable?: boolean;
+	children?: React.ReactNode;
+	onClose?: () => void;
+	wrap?: boolean;
 }
 
 const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
@@ -23,24 +30,37 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 		{
 			title,
 			icon,
+			endIcon,
 			subtitle,
+			isPremium,
+			isCollapsible,
+			defaultCollapsed = true,
 			visible = true,
 			value,
-			onClick = stubFalse,
+			children,
+			onClick,
+			onClose,
 			popup = null,
 			disable = false,
-			disableChip = false
+			disableChip = false,
+			wrap = true
 		},
 		ref
 	) => {
-		const [open, setOpen] = useState<boolean>(false);
+		const [popupOpen, setPopupOpen] = useState<boolean>(false);
+		const [collapsed, setCollapsed] = useState<boolean>(defaultCollapsed);
+		const license = useAppSelector((state) => state.app.license);
+		const disabled = useMemo(() => disable || (isPremium && license === "free"), [disable, isPremium, license]);
 
-		const handleClose = () => setOpen(false);
+		const handleClose = () => {
+			setPopupOpen(false);
+			if (onClose) onClose();
+		};
 
 		return visible ? (
 			<>
 				{popup ? (
-					<Dialog title={popup.title} icon={popup.icon} open={open} onClose={handleClose}>
+					<Dialog title={popup.title} icon={popup.icon} open={popupOpen} onClose={handleClose}>
 						<Stack spacing={2} p={2}>
 							{popup.children}
 						</Stack>
@@ -51,12 +71,15 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						borderRadius: 3,
 						px: 3,
 						textAlign: "left",
-						justifyContent: "start"
+						justifyContent: "start",
+						cursor: onClick ? "pointer" : "default"
 					}}
-					disabled={disable}
+					disabled={disabled}
+					disableRipple={disabled || !onClick}
 					onClick={(e) => {
-						onClick(e);
-						if (popup) setOpen(true);
+						if (onClick) onClick(e);
+						if (isCollapsible) setCollapsed((collapsed) => !collapsed);
+						if (popup) setPopupOpen(true);
 					}}
 					startIcon={
 						<Paper
@@ -75,7 +98,15 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						</Paper>
 					}
 					endIcon={
-						popup ? (
+						endIcon ? (
+							endIcon
+						) : isCollapsible ? (
+							collapsed ? (
+								<KeyboardArrowUp />
+							) : (
+								<KeyboardArrowDown />
+							)
+						) : popup ? (
 							<ChevronRight />
 						) : value ? (
 							<Stack pr={2} alignItems={"center"}>
@@ -99,16 +130,24 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 					color={"inherit"}
 				>
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>
-						<Stack justifyContent={"flex-start"} gap={0} sx={{ textTransform: "none" }}>
-							<Typography fontWeight={500}>{title}</Typography>
-							{subtitle ? (
-								<Typography variant={"body2"} color={"text.secondary"}>
-									{subtitle}
-								</Typography>
-							) : null}
+						<Stack justifyContent={"flex-start"} gap={0.5} sx={{ textTransform: "none" }}>
+							<Typography fontWeight={500} noWrap={!wrap}>
+								{title}
+							</Typography>
+							<Stack direction={"row"} alignItems={"center"} gap={1}>
+								{isPremium && license === "free" && <Chip size={"small"} label={"PRO"} />}
+								{typeof subtitle === "string" ? (
+									<Typography variant={"body2"} color={"text.secondary"}>
+										{subtitle}
+									</Typography>
+								) : subtitle ? (
+									subtitle
+								) : null}
+							</Stack>
 						</Stack>
 					</Stack>
 				</Button>
+				<Collapse in={!collapsed}>{children}</Collapse>
 			</>
 		) : null;
 	}

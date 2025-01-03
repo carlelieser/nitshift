@@ -1,18 +1,23 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
 	IconButton,
 	Slider as MUISlider,
 	SliderOwnProps,
+	SliderProps as MUISliderProps,
 	SliderValueLabelProps,
 	Stack,
 	Tooltip,
 	Typography
 } from "@mui/material";
 import { Add, Remove } from "mui-symbols";
+import { diff } from "just-diff";
+import update from "immutability-helper";
 
 export interface SliderProps {
-	value?: number;
-	onChange?: (value: number) => void;
+	value?: MUISliderProps["value"];
+	min?: number;
+	max?: number;
+	onChange?: (value: MUISliderProps["value"]) => void;
 	color?: string;
 	className?: string;
 	disabled?: boolean;
@@ -30,6 +35,8 @@ const CustomValueLabel: React.FC<SliderValueLabelProps> = (props) => {
 
 const Slider: React.FC<SliderProps> = ({
 	value,
+	min = 0,
+	max = 100,
 	disabled = false,
 	disableTooltip = false,
 	color = "primary",
@@ -38,6 +45,19 @@ const Slider: React.FC<SliderProps> = ({
 }) => {
 	const [shouldShowTooltip, setShouldShowTooltip] = useState<boolean>(disableTooltip ? false : null);
 	const timeout = useRef(null);
+	const [lastChangedIndex, setLastChangedIndex] = useState<number>(1);
+	const [prevValue, setPrevValue] = useState<SliderProps["value"]>(0);
+
+	useEffect(() => {
+		if (Array.isArray(value) && prevValue) {
+			const index = diff(prevValue as number[], value)?.[0]?.path?.[0] as number;
+			if (index !== undefined) setLastChangedIndex(index);
+		}
+	}, [value]);
+
+	useEffect(() => {
+		setPrevValue(value);
+	}, [value]);
 
 	const valueLabelDisplay = useMemo(
 		() => (shouldShowTooltip === null ? "auto" : shouldShowTooltip ? "on" : "off"),
@@ -53,15 +73,31 @@ const Slider: React.FC<SliderProps> = ({
 
 	const decrement = () => {
 		showSliderTooltip();
-		onChange(value - 1);
+		if (typeof value === "number") onChange(value - 1);
+		if (Array.isArray(value))
+			onChange(
+				update(value, {
+					[lastChangedIndex]: {
+						$set: value[lastChangedIndex] - 1
+					}
+				})
+			);
 	};
 
 	const increment = () => {
 		showSliderTooltip();
-		onChange(value + 1);
+		if (typeof value === "number") onChange(value + 1);
+		if (Array.isArray(value))
+			onChange(
+				update(value, {
+					[lastChangedIndex]: {
+						$set: value[lastChangedIndex] + 1
+					}
+				})
+			);
 	};
 
-	const handleChange: SliderOwnProps["onChange"] = (_event, value) => onChange(value as number);
+	const handleChange: SliderOwnProps["onChange"] = (_event, value) => onChange(value);
 
 	return (
 		<Stack flex={1} direction={"row"} alignItems={"center"} spacing={2} p={1} width={"100%"}>
@@ -70,8 +106,8 @@ const Slider: React.FC<SliderProps> = ({
 			</IconButton>
 			<MUISlider
 				className={"brightness-slider"}
-				min={0}
-				max={100}
+				min={min}
+				max={max}
 				sx={{
 					color
 				}}

@@ -13,6 +13,7 @@ import {
 	setAppearance,
 	setBrightness,
 	setLicense,
+	setMaxShadeLevel,
 	setMode,
 	setMonitorBrightness,
 	setMonitorDisabled,
@@ -34,6 +35,8 @@ import {
 	saveBrightnessModes,
 	saveGlobalBrightness,
 	saveLicense,
+	saveMaxShadeLevel,
+	saveMinShadeLevel,
 	saveMode,
 	saveMonitorNicknames,
 	saveMonitors,
@@ -52,7 +55,7 @@ import { batch } from "react-redux";
 import { AppState } from "@common/types";
 
 import { ipcRenderer } from "electron";
-import { setAutoUpdateCheck, setBrightnessSilent, setStartupSettings } from "./reducers/app";
+import { setAutoUpdateCheck, setBrightnessSilent, setMinShadeLevel, setStartupSettings } from "./reducers/app";
 
 const listener: ListenerMiddlewareInstance<{ app: AppState }> = createListenerMiddleware();
 
@@ -226,6 +229,24 @@ listener.startListening({
 	actionCreator: setMonitors,
 	effect: (action) => {
 		saveMonitors(action.payload);
+	}
+});
+
+listener.startListening({
+	actionCreator: setMinShadeLevel,
+	effect: (action, api) => {
+		api.cancelActiveListeners();
+		if (action.payload.save) saveMinShadeLevel(action.payload.level);
+		if (action.payload.apply) ipcRenderer.invoke("monitors/brightness/change");
+	}
+});
+
+listener.startListening({
+	actionCreator: setMaxShadeLevel,
+	effect: (action, api) => {
+		api.cancelActiveListeners();
+		if (action.payload.save) saveMaxShadeLevel(action.payload.level);
+		if (action.payload.apply) ipcRenderer.invoke("monitors/brightness/change");
 	}
 });
 
