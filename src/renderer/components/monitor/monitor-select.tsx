@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Button, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setActiveMonitor } from "@reducers/app";
@@ -9,7 +9,8 @@ import { GLOBAL } from "@common/types";
 const MonitorSelect = () => {
 	const dispatch = useAppDispatch();
 	const license = useAppSelector((state) => state.app.license);
-	const monitors = useAppSelector((state) => state.app.monitors.filter((monitor) => monitor.connected));
+	const monitors = useAppSelector((state) => state.app.monitors);
+	const connectedMonitors = useMemo(() => monitors.filter((monitor) => monitor.connected), [monitors]);
 	const globalBrightness = useAppSelector((state) => state.app.brightness);
 	const activeMonitor = useAppSelector((state) => state.app.activeMonitor);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -80,7 +81,7 @@ const MonitorSelect = () => {
 						Global
 					</MenuItem>
 				)}
-				{monitors.map(({ id, nickname }, index) => (
+				{connectedMonitors.map(({ id, nickname }, index) => (
 					<MenuItem
 						disabled={license === "free" ? index > 1 : null}
 						key={`monitor-item-${id}`}
