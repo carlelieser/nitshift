@@ -72,7 +72,7 @@ const ShadeSettings = () => {
 
 	return (
 		<SettingsCard
-			title={"Shade Level Range"}
+			title={"Shade Strength"}
 			subtitle={
 				<Stack direction={"row"} gap={1}>
 					<Chip size={"small"} icon={<BacklightLow />} label={minShadeLevel} />
