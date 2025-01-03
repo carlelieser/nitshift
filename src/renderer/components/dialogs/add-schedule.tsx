@@ -7,7 +7,7 @@ import { Button, Collapse, Stack, Typography } from "@mui/material";
 import Stepper from "../stepper/stepper";
 import StepView from "../stepper/step-view";
 import MonitorMultiSelectList from "../monitor/monitor-multi-select-list";
-import Slider from "../slider";
+import Slider, { SliderProps } from "../slider";
 import Color from "color";
 import { CalendarAddOn, Monitor, Timer, WbSunny } from "mui-symbols";
 import { ScheduleItem, UIMonitor } from "@common/types";
@@ -73,7 +73,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 
 	const handleMonitorSelectChange = (monitors: Array<UIMonitor>) => setSelectedMonitors(monitors);
 
-	const handleBrightnessChange = (brightness: number) => setBrightness(brightness);
+	const handleBrightnessChange: SliderProps["onChange"] = (brightness) => setBrightness(brightness as number);
 
 	const handleReset = () => {
 		setActiveStep(0);
@@ -180,11 +180,10 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 
 	useEffect(() => {
 		if (!open) return;
-		selectedMonitors.forEach((monitor) => {
+		selectedMonitors.forEach(({id, brightness, mode, disabled, position, size}) => {
 			dispatch(
 				setMonitorBrightness({
-					id: monitor.id,
-					brightness
+					id, brightness, mode, disabled, position, size
 				})
 			);
 		});
@@ -201,8 +200,8 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 				setTime(dayjs());
 			}
 		} else {
-			monitorSnapshot.current?.forEach(({ id, brightness }) => {
-				dispatch(setMonitorBrightness({ id, brightness }));
+			monitorSnapshot.current?.forEach(({ id, brightness, mode, disabled, position, size }) => {
+				dispatch(setMonitorBrightness({ id, brightness, mode,disabled, position, size }));
 			});
 		}
 	}, [open]);
