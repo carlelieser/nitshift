@@ -62,7 +62,7 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 
 	return (
 		<Dialog
-			title={"Brightness Modes"}
+			title={"Brightness Profiles"}
 			icon={<LightMode />}
 			actions={[
 				{
