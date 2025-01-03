@@ -180,10 +180,15 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 
 	useEffect(() => {
 		if (!open) return;
-		selectedMonitors.forEach(({id, brightness, mode, disabled, position, size}) => {
+		selectedMonitors.forEach(({ id, brightness, mode, disabled, position, size }) => {
 			dispatch(
 				setMonitorBrightness({
-					id, brightness, mode, disabled, position, size
+					id,
+					brightness,
+					mode,
+					disabled,
+					position,
+					size
 				})
 			);
 		});
@@ -201,7 +206,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 			}
 		} else {
 			monitorSnapshot.current?.forEach(({ id, brightness, mode, disabled, position, size }) => {
-				dispatch(setMonitorBrightness({ id, brightness, mode,disabled, position, size }));
+				dispatch(setMonitorBrightness({ id, brightness, mode, disabled, position, size }));
 			});
 		}
 	}, [open]);
