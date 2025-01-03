@@ -16,7 +16,7 @@ interface MonitorModeToggleProps {
 const MonitorModeToggle: React.FC<MonitorModeToggleProps> = ({ variant, monitorId, mode }) => {
 	const dispatch = useAppDispatch();
 	const license = useAppSelector((state) => state.app.license);
-	const label = useMemo(() => (mode === "native" ? "Enable shade mode" : "Disable shade mode"), [mode]);
+	const label = useMemo(() => (mode === "native" ? "Enable shade" : "Disable shade"), [mode]);
 	const icon = useMemo(() => (mode === "native" ? <DonutSmall /> : <DonutLarge />), [mode]);
 
 	const toggle = () => {
