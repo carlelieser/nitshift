@@ -5,9 +5,8 @@ import { SettingsRoundedFilled } from "mui-symbols";
 import Upgrade from "@promotional/buttons/upgrade-button";
 import LicenseCard from "@components/license/license-card";
 
-const BrightnessModes = lazy(() => import("./options/brightness-modes"));
-const Schedule = lazy(() => import("./options/schedule"));
 const Refresh = lazy(() => import("./options/refresh"));
+const BrightnessSettings = lazy(() => import("./options/brightness/brightness-settings"));
 const Appearance = lazy(() => import("./options/appearance"));
 const Startup = lazy(() => import("./options/startup/startup"));
 const AutoUpdateCheck = lazy(() => import("./options/auto-update-check"));
@@ -21,8 +20,7 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 					<Upgrade context={"main"} fullWidth={true} sx={{ borderRadius: 9 }} />
 					<Suspense>
 						<Appearance />
-						<BrightnessModes />
-						<Schedule />
+						<BrightnessSettings />
 						<Refresh />
 						<AutoUpdateCheck />
 						<Startup />

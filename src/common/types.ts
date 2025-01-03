@@ -91,6 +91,8 @@ export interface AppState {
 	focused: boolean;
 	release: Release;
 	startup: StartupSettings;
+	minShadeLevel: number;
+	maxShadeLevel: number;
 
 	[key: string]: any;
 }

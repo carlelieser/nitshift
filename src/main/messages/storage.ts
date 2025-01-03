@@ -62,6 +62,12 @@ ipcMain.on("storage/load-user-email", (e) => {
 ipcMain.on("storage/load-user-id", (e) => {
 	e.returnValue = storage.loadUserId();
 });
+ipcMain.on("storage/load-min-shade-level", (e) => {
+	e.returnValue = storage.loadMinShadeLevel();
+});
+ipcMain.on("storage/load-max-shade-level", (e) => {
+	e.returnValue = storage.loadMaxShadeLevel();
+});
 ipcMain.on("storage/save-active-monitor", (e, monitor) => {
 	e.returnValue = storage.saveActiveMonitor(monitor);
 });
@@ -115,4 +121,10 @@ ipcMain.on("storage/save-user-email", (e, email) => {
 });
 ipcMain.on("storage/save-user-id", (e, id) => {
 	e.returnValue = storage.saveUserId(id);
+});
+ipcMain.on("storage/save-min-shade-level", (e, level) => {
+	e.returnValue = storage.saveMinShadeLevel(level);
+});
+ipcMain.on("storage/save-max-shade-level", (e, level) => {
+	e.returnValue = storage.saveMaxShadeLevel(level);
 });

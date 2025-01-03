@@ -7,6 +7,8 @@ import {
 	loadBrightnessModes,
 	loadGlobalBrightness,
 	loadLicense,
+	loadMaxShadeLevel,
+	loadMinShadeLevel,
 	loadMode,
 	loadMonitorNicknames,
 	loadMonitors,
@@ -68,7 +70,9 @@ const initialState: AppState = {
 	userId: loadUserId(),
 	startup: loadStartupSettings(),
 	focused: false,
-	release: null
+	release: null,
+	minShadeLevel: loadMinShadeLevel(),
+	maxShadeLevel: loadMaxShadeLevel()
 };
 
 const createReducer =
@@ -173,6 +177,12 @@ export const appSlice = createSlice({
 		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
 		setTransitioning: createReducer<AppState["transitioning"]>("transitioning"),
 		setUserEmail: createReducer<AppState["userEmail"]>("userEmail"),
+		setMinShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
+			state.minShadeLevel = action.payload.level;
+		},
+		setMaxShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
+			state.maxShadeLevel = action.payload.level;
+		},
 		syncLicenseData: (state) => {
 			state.trialStartDate = loadTrialStartDate();
 			state.trialAvailability = loadTrialAvailability();
@@ -215,7 +225,9 @@ export const {
 	setFocused,
 	setRelease,
 	setStartupSettings,
-	setUserEmail
+	setUserEmail,
+	setMinShadeLevel,
+	setMaxShadeLevel
 } = appSlice.actions;
 
 export default appSlice.reducer;

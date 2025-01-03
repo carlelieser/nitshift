@@ -23,6 +23,8 @@ export const STORE = {
 	USER_EMAIL: "user-email",
 	USER_ID: "user-id",
 	STARTUP: "startup",
+	MIN_SHADE_LEVEL: "min-shade-level",
+	MAX_SHADE_LEVEL: "max-shade-level",
 };
 
 export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);

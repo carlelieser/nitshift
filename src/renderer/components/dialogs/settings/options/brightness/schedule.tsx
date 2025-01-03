@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SettingsCard from "../settings-card";
+import SettingsCard from "../../settings-card";
 import { useAppSelector } from "@hooks";
-import ViewScheduleDialog from "../../view-schedule";
-import { Schedule as ScheduleIcon } from "mui-symbols";
+import ViewScheduleDialog from "@dialogs/view-schedule";
+import { ChevronRight, Schedule as ScheduleIcon } from "mui-symbols";
 
 const Schedule = () => {
 	const license = useAppSelector((state) => state.app.license);
@@ -17,8 +17,9 @@ const Schedule = () => {
 			<SettingsCard
 				visible={license !== "free"}
 				icon={<ScheduleIcon />}
+				endIcon={<ChevronRight />}
 				title={"Schedule"}
-				subtitle={"Set custom brightness schedules"}
+				subtitle={"Manage scheduled brightness changes"}
 				onClick={openModal}
 			/>
 		</>
