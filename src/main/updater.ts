@@ -3,38 +3,14 @@ import { loadLastUpdatedOn, saveLastUpdatedOn } from "@main/storage";
 import { dayjs } from "@common/dayjs";
 import release from "@common/release.json";
 import EventEmitter from "events";
-import { Octokit } from "octokit";
-import { GetResponseTypeFromEndpointMethod } from "@octokit/types";
-import { git } from "./keys";
-
-const API_CONFIG = {
-	auth: git
-};
-
-type ExtractChildType<T> = T extends Array<infer R> ? R : never;
+import { request } from "@common/fetch";
 
 class Updater extends EventEmitter {
-	private api = new Octokit(API_CONFIG);
-	private release: ExtractChildType<
-		GetResponseTypeFromEndpointMethod<typeof this.api.rest.repos.listReleases>["data"]
-	> = null;
+	private release: any = null;
 
 	public getLatestRelease = async () => {
-		try {
-			const response = await this.api.rest.repos.listReleases({
-				owner: "carlelieser",
-				repo: "glimmr"
-			});
-
-			if (isDev) return response.data.shift();
-			return response.data.find((release) => !release.draft && !release.prerelease);
-		} catch (err) {
-			console.log({
-				message: "Failed to get latest release.",
-				err
-			});
-			return null;
-		}
+		const response = await request("/releases/latest");
+		return response.json();
 	};
 
 	public updateRelease = async () => {
