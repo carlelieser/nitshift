@@ -150,7 +150,7 @@ const App = () => {
 						style={transitionDelay}
 						onExited={handleTransitionExited}
 					>
-						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>
+						<Box p={2} position={"relative"} width={"100%"} height={"100%"} sx={{ overflow: "hidden" }}>
 							<Suspense>
 								<MonitorsRefreshed />
 								<ReceivedPremium />
@@ -160,12 +160,14 @@ const App = () => {
 									<Box
 										sx={{
 											mt: "auto",
-											height: mode === "compact" ? "auto" : "100%"
+											height: mode === "compact" ? "auto" : "100%",
+											overflow: "hidden"
 										}}
 									>
 										<Box
 											sx={{
 												height: "100%",
+												overflow: "hidden",
 												position: "relative"
 											}}
 										>
