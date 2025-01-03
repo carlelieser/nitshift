@@ -130,12 +130,14 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 					color={"inherit"}
 				>
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>
-						<Stack justifyContent={"flex-start"} gap={0.5} sx={{ textTransform: "none" }}>
-							<Typography fontWeight={500} noWrap={!wrap}>
-								{title}
-							</Typography>
+						<Stack justifyContent={"flex-start"} flex={1} gap={0.5} sx={{ textTransform: "none" }}>
 							<Stack direction={"row"} alignItems={"center"} gap={1}>
 								{isPremium && license === "free" && <Chip size={"small"} label={"PRO"} />}
+								<Typography fontWeight={500} noWrap={!wrap}>
+									{title}
+								</Typography>
+							</Stack>
+							<Stack direction={"row"} alignItems={"center"} gap={1}>
 								{typeof subtitle === "string" ? (
 									<Typography variant={"body2"} color={"text.secondary"}>
 										{subtitle}
@@ -147,7 +149,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						</Stack>
 					</Stack>
 				</Button>
-				<Collapse in={!collapsed}>{children}</Collapse>
+				<Collapse in={!collapsed && !disabled}>{children}</Collapse>
 			</>
 		) : null;
 	}
