@@ -584,7 +584,7 @@ class PQueue extends EventEmitter {
   }
 }
 const tag_name = "v0.5.1";
-const body = "Reduced overall package size by ~20MB. Improved UI animation stability. Made menus taller for better readability. Added a cool little gif during installation.";
+const body = "Added setting for adjusting shade strength. Reorganized brightness-related options in settings page. Minor UI updates.";
 const release = {
   tag_name,
   body
