@@ -17,7 +17,7 @@ const BrightnessModeButton = () => {
 
 	return (
 		<Box width={36}>
-			<Tooltip title={<Typography>Brightness Mode · {activeMode?.label ?? "Global"}</Typography>}>
+			<Tooltip title={<Typography>Profile · {activeMode?.label ?? "Global"}</Typography>}>
 				<Grow key={activeMode.id + "brightness-mode-button"} in={true}>
 					<IconButton size={"small"} ref={ref} onClick={openMenu}>
 						<Icon name={activeMode?.icon} />
