@@ -6,7 +6,8 @@ const PreCheckoutSnackbar: React.FC<Pick<SnackbarProps, "open" | "onClose">> = (
 		<Portal>
 			<Snackbar open={open} onClose={onClose} autoHideDuration={null}>
 				<Alert severity={"info"} onClose={onClose as any} sx={{ width: "100%" }} elevation={12}>
-					Once you've completed your purchase, you can activate your license by verifying your email and entering your license key.
+					Once you've completed your purchase, you can activate your license by verifying your email and
+					entering your license key.
 				</Alert>
 			</Snackbar>
 		</Portal>
