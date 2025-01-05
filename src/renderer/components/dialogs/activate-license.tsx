@@ -14,7 +14,7 @@ import {
 	Typography,
 	useTheme
 } from "@mui/material";
-import { Check, Key, Mail, Refresh, Send } from "mui-symbols";
+import { Check, Key, LockOpen, Mail, Refresh, Send } from "mui-symbols";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { clone, times } from "lodash";
 import { useAppDispatch, useAppSelector } from "@hooks";
@@ -39,6 +39,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	const [codeCharIndex, setCodeCharIndex] = useState<number>(0);
 	const [codeVerified, setCodeVerified] = useState<boolean>(false);
 	const [licenseVerified, setLicenseVerified] = useState<boolean>(false);
+	const [licenseKey, setLicenseKey] = useState<string>("");
 
 	const [ctrlPressed, setCtrlPressed] = useState<boolean>(false);
 
@@ -60,9 +61,9 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 		setLoading(true);
 		const attempt = codeChars.join("");
 		const response = await request(`/api/verify?email=${email}&code=${attempt}`, {}, userId);
+		setLoading(false);
 
 		if (!response.ok) {
-			setLoading(false);
 			return setError("Wrong verification code");
 		}
 
@@ -73,6 +74,12 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	const handleEmailKeyUp: KeyboardEventHandler<HTMLDivElement> = (e) => {
 		if (e.keyCode === 13) sendVerificationEmail();
+	};
+
+	const handleLicenseChange = (e: any) => setLicenseKey(e.target.value);
+
+	const handleLicenseKeyUp: KeyboardEventHandler<HTMLDivElement> = (e) => {
+		if (e.keyCode === 13) verifyLicense();
 	};
 
 	const clearError = () => setError("");
@@ -95,13 +102,14 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	};
 
 	const verifyLicense = async () => {
-		const response = await request(`/api/verify/license?email=${email}`, {}, userId);
+		const response = await request(`/api/v2/verify/license?email=${email}&code=${licenseKey}`, {}, userId);
 		const verified = response.ok;
 
 		if (verified) {
 			setLicenseVerified(true);
 		} else {
-			setError(response.statusText ?? "Error verifying license. Please try again.");
+			const data = await response.json();
+			setError(data?.message ?? response.statusText ?? "Error verifying license. Please try again.");
 		}
 
 		setLoading(false);
@@ -109,8 +117,8 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	const handleKeyDown = useCallback(
 		(e: KeyboardEvent) => {
-			if (emailSent) {
-				if (e.key === "v") return setCodeChars(clipboard.readText().split(""));
+			if (emailSent && !codeVerified) {
+				if (e.key === "v" && ctrlPressed) return setCodeChars(clipboard.readText().split(""));
 				if (e.key.length === 1 && e.key.match(/\w/g)) {
 					setCodeChars((prevPinChars) => {
 						prevPinChars[codeCharIndex] = e.key.toUpperCase();
@@ -130,7 +138,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 				if (e.key === "Control") setCtrlPressed(true);
 			}
 		},
-		[emailSent, codeChars, codeCharIndex, ctrlPressed]
+		[emailSent, codeChars, codeCharIndex, ctrlPressed, codeVerified]
 	);
 
 	const handleReset = () => {
@@ -155,12 +163,12 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	}, [licenseVerified]);
 
 	useEffect(() => {
-		if (codeVerified) verifyLicense();
-	}, [codeVerified]);
-
-	useEffect(() => {
 		if (codeChars.every((char) => char !== "")) verifyCode();
 	}, [codeChars]);
+
+	useEffect(() => {
+		if (licenseKey.length === 36) verifyLicense();
+	}, [licenseKey])
 
 	useEffect(() => {
 		clearError();
@@ -181,7 +189,40 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 	return (
 		<Dialog open={open} icon={<Key />} title={"Activate License"} onClose={onClose} onExited={handleReset}>
 			<Stack height={"100%"} alignItems={"center"} justifyContent={"center"}>
-				<Collapse in={emailSent}>
+				<Collapse in={emailSent && codeVerified}>
+					<Stack
+						spacing={2}
+						direction={isCompact ? "row" : "column"}
+						alignItems={isCompact ? "center" : "auto"}
+					>
+						<TextField
+							label={"License"}
+							type={"text"}
+							placeholder={"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}
+							sx={{
+								minWidth: 300
+							}}
+							InputProps={{
+								startAdornment: (
+									<InputAdornment position={"start"}>
+										<Key />
+									</InputAdornment>
+								),
+							}}
+							onKeyUp={handleLicenseKeyUp}
+							value={licenseKey}
+							onChange={handleLicenseChange}
+						/>
+						<Stack justifyContent={"center"}>
+							{isCompact ? null : (
+								<LoadingButton loading={loading} startIcon={<LockOpen />} onClick={verifyLicense}>
+									Activate License
+								</LoadingButton>
+							)}
+						</Stack>
+					</Stack>
+				</Collapse>
+				<Collapse in={emailSent && !codeVerified}>
 					<Stack alignItems={"center"} justifyContent={"center"} spacing={2}>
 						<Stack
 							spacing={2}
