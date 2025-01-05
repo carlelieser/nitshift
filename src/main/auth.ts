@@ -26,15 +26,19 @@ class Auth extends EventEmitter {
 		const license = loadLicense();
 		const trialStartDate = loadTrialStartDate();
 		const trialAvailability = loadTrialAvailability();
-		return request("/api/users", {
-			method: "POST",
-			body: JSON.stringify({
-				id,
-				license,
-				trialStartDate,
-				trialAvailability
-			})
-		});
+		return request(
+			"/api/users",
+			{
+				method: "POST",
+				body: JSON.stringify({
+					id,
+					license,
+					trialStartDate,
+					trialAvailability
+				})
+			},
+			id
+		);
 	};
 
 	public getUser = async () => {
