@@ -168,7 +168,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 
 	useEffect(() => {
 		if (licenseKey.length === 36) verifyLicense();
-	}, [licenseKey])
+	}, [licenseKey]);
 
 	useEffect(() => {
 		clearError();
@@ -207,7 +207,7 @@ const ActivateLicenseDialog: React.FC<DialogComponentProps> = ({ open, onClose }
 									<InputAdornment position={"start"}>
 										<Key />
 									</InputAdornment>
-								),
+								)
 							}}
 							onKeyUp={handleLicenseKeyUp}
 							value={licenseKey}
