@@ -583,8 +583,8 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.1";
-const body = "Added setting for adjusting shade strength. Reorganized brightness-related options in settings page. Minor UI updates.";
+const tag_name = "v0.5.2";
+const body = "Update license verification dialog.";
 const release = {
   tag_name,
   body
