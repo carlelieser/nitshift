@@ -40,6 +40,9 @@ class Window extends EventEmitter {
 	public autoHide = true;
 	private readonly entry: any;
 
+	private widthOffset = 0;
+	private heightOffset = 0;
+
 	constructor(entry: any) {
 		super();
 		this.entry = entry;
@@ -56,8 +59,20 @@ class Window extends EventEmitter {
 		});
 	}
 
+	public resize = (width: number, height: number, animate: boolean = true) => {
+		this.ref.setResizable(true);
+		this.ref.setMaximumSize(width, height);
+		this.ref.setSize(width, height, animate);
+		this.ref.setResizable(false);
+	}
+
 	public readjust = () => {
 		if (this.ref) {
+			const width = this.getRealWidth();
+			const height = this.getRealHeight();
+
+			this.resize(width, height);
+
 			const { x, y } = this.getCoordinates();
 			this.ref.setPosition(x, y);
 		}
@@ -67,12 +82,9 @@ class Window extends EventEmitter {
 		if (this.ref) {
 			this.mode = loadMode();
 
-			const width = this.getWidth();
-			const height = this.getHeight();
-			this.ref.setResizable(true);
-			this.ref.setMaximumSize(width, height);
-			this.ref.setSize(width, height, true);
-			this.ref.setResizable(false);
+			const width = this.getModeWidth();
+			const height = this.getModeHeight();
+			this.resize(width, height);
 			this.readjust();
 		}
 	};
@@ -119,6 +131,8 @@ class Window extends EventEmitter {
 
 		if (this.entry.startsWith("http")) await this.ref.loadURL(this.entry);
 		else await this.ref.loadFile(this.entry);
+
+		this.emit("loaded");
 
 		if (isDev) {
 			setTimeout(() => {
@@ -199,20 +213,38 @@ class Window extends EventEmitter {
 		return fs.outputFile(output, data.toPNG());
 	};
 
-	private getWidth = () => {
+	public setWidthOffset = (widthOffset: number) => {
+		this.widthOffset = widthOffset;
+		this.readjust();
+	}
+
+	public setHeightOffset = (heightOffset: number) => {
+		this.heightOffset = heightOffset;
+		this.readjust();
+	}
+
+	private getModeWidth = () => {
 		return dimensions[this.mode][loadNative() ? "native" : "default"].width * (process.env.CAPTURE ? 2 : 1);
 	};
 
-	private getHeight = () => {
+	private getModeHeight = () => {
 		return dimensions[this.mode][loadNative() ? "native" : "default"].height * (process.env.CAPTURE ? 2 : 1);
 	};
+
+	private getRealWidth = () => {
+		return this.getModeWidth() + this.widthOffset;
+	}
+
+	private getRealHeight = () => {
+		return this.getModeHeight() + this.heightOffset;
+	}
 
 	private getCoordinates = () => {
 		const monitor = screen.getPrimaryDisplay();
 		const right = monitor.workArea.x + monitor.workArea.width;
 		const bottom = monitor.workArea.y + monitor.workArea.height;
-		const width = this.getWidth();
-		const height = this.getHeight();
+		const width = this.getRealWidth();
+		const height = this.getRealHeight();
 
 		return {
 			x: right - width - dimensions.padding,
