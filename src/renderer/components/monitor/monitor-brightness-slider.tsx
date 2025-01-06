@@ -11,14 +11,14 @@ type MonitorBrightnessSliderProps = {
 } & Pick<UIMonitor, "brightness" | "mode" | "disabled" | "position" | "size">;
 
 const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
-																			 monitorId,
-																			 brightness,
-																			 color,
-																			 disabled: monitorDisabled,
-																			 mode,
-																			 position,
-																			 size
-																		 }) => {
+	monitorId,
+	brightness,
+	color,
+	disabled: monitorDisabled,
+	mode,
+	position,
+	size
+}) => {
 	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
 	const disabled = useMemo(
