@@ -1,49 +1,99 @@
 import { loadLicense, loadMonitors, loadSchedule, saveMonitors } from "@main/storage";
-import { CronJob } from "cron";
+import { CronJob, CronTime } from "cron";
 import { clone, difference } from "lodash";
 import { dayjs, DEFAULT_TIMEZONE, getDateFromTime } from "@common/dayjs";
 import EventEmitter from "events";
+import { ScheduleItem } from "../common/types";
+import * as SunCalc from "suncalc";
+import update from "immutability-helper";
+import { getUserPosition } from "@common/fetch";
 
 class Scheduler extends EventEmitter {
-	private schedule: Array<CronJob> = [];
+	private schedule: Record<string, CronJob> = {};
 
-	public check = () => {
-		this.schedule.forEach((job) => job.stop);
+	public check = async () => {
+		Object.values(this.schedule).forEach((job) => job.stop);
 
 		const prevSchedules = this.getHistory();
 		const latestSchedule = prevSchedules[prevSchedules.length - 1];
 
-		if (latestSchedule) this.apply(latestSchedule.id);
+		if (latestSchedule) await this.apply(latestSchedule.id);
 
-		loadSchedule().forEach(({ id, time }) => {
-			const date = getDateFromTime(time);
-			const cron = `0 ${date.minute()} ${date.hour()} * * *`;
+		for await (let schedule of loadSchedule()) {
+			schedule = await this.getSchedule(schedule.id);
+			const cronTime = this.getCronTime(schedule);
 			const job = new CronJob(
-				cron,
-				() => {
-					this.apply(id);
+				cronTime,
+				async () => {
+					await this.apply(schedule.id);
 				},
 				null,
 				true,
 				DEFAULT_TIMEZONE
 			);
 			job.start();
-			this.schedule.push(job);
+			this.schedule[schedule.id] = job;
+		}
+	};
+
+	private getCronTime = (schedule: ScheduleItem): string => {
+		const date = getDateFromTime(schedule.time);
+		return `0 ${date.minute()} ${date.hour()} * * *`;
+	};
+
+	private getSchedule = async (id: string) => {
+		let schedule = loadSchedule().find((schedule) => schedule.id === id);
+
+		if (!schedule) return;
+
+		if (schedule.type === "sunrise" || schedule.type === "sunset") {
+			schedule = await this.updateSunSchedule(schedule);
+		}
+
+		return schedule;
+	};
+
+	private updateSunSchedule = async (schedule: ScheduleItem) => {
+		const position = await getUserPosition();
+
+		if (!position) return schedule;
+
+		const times = SunCalc.getTimes(dayjs().toDate(), position.latitude, position.longitude);
+		const sunTime = dayjs(times[schedule.type]);
+		const time = sunTime.format("HH:mm A");
+		return update(schedule, {
+			time: { $set: time }
 		});
 	};
 
-	private apply = (id: string) => {
+	private apply = async (id: string) => {
 		if (loadLicense() === "free") return;
-		const schedule = loadSchedule().find((schedule) => schedule.id === id);
-		if (!schedule) return;
+
+		const schedule = await this.getSchedule(id);
 		const referenceMonitors = loadMonitors();
 		const prevMonitors = loadMonitors();
+
 		prevMonitors.forEach((monitor) => {
 			if (schedule.monitors.find((ref) => ref.id === monitor.id)) monitor.brightness = schedule.brightness;
 		});
+
 		const updatedMonitors = clone(prevMonitors);
+
 		saveMonitors(updatedMonitors);
+
 		if (difference(referenceMonitors, updatedMonitors).length) this.emit("ready");
+
+		const job = this.schedule[id];
+
+		if (this.shouldUpdateJobTime(job, schedule)) {
+			job.setTime(new CronTime(this.getCronTime(schedule)));
+		}
+	};
+
+	private shouldUpdateJobTime = (job: CronJob, schedule: ScheduleItem) => {
+		const nextDate = dayjs(job.nextDate().toJSDate());
+		const date = getDateFromTime(schedule.time);
+		return nextDate.hour() !== date.hour() || nextDate.minute() !== date.minute();
 	};
 
 	private getHistory = () => {

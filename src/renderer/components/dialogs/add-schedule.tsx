@@ -3,19 +3,30 @@ import Dialog, { DialogComponentProps } from "../dialog";
 import { LocalizationProvider, TimeClock, TimeView } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { Button, Collapse, Stack, Typography } from "@mui/material";
+import { Button, Collapse, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import Stepper from "../stepper/stepper";
 import StepView from "../stepper/step-view";
 import MonitorMultiSelectList from "../monitor/monitor-multi-select-list";
 import Slider, { SliderProps } from "../slider";
 import Color from "color";
-import { CalendarAddOn, Monitor, Timer, WbSunny } from "mui-symbols";
+import {
+	CalendarAddOn,
+	HourglassBottom,
+	HourglassTop,
+	MonitorOutlined,
+	Person,
+	Timer,
+	WbSunny,
+	WbTwilight
+} from "mui-symbols";
 import { ScheduleItem, UIMonitor } from "@common/types";
 import { redux } from "@redux";
 import { useAppDispatch } from "@hooks";
 import { addSchedule, editSchedule, setMonitorBrightness } from "@reducers/app";
 import { clone } from "lodash";
 import { dayjs, Dayjs, getDateFromTime } from "@common/dayjs";
+import { ipcRenderer } from "electron";
+import * as SunCalc from "suncalc";
 
 interface ScheduleItemDialogProps extends DialogComponentProps {
 	edit: null | ScheduleItem;
@@ -46,11 +57,17 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 	const [brightness, setBrightness] = useState<number>(edit?.brightness ?? 100);
 	const [time, setTime] = useState<Dayjs | null>(edit?.time ? getDateFromTime(edit.time) : dayjs());
 	const [timeView, setTimeView] = useState<TimeView>("hours");
+	const [type, setType] = useState<"manual" | "sunrise" | "sunset">(edit?.type ?? "manual");
+
+	const [userPosition, setUserPosition] = useState<GeolocationCoordinates | null>(null);
+
+	const [sunrise, setSunrise] = useState<Dayjs | null>(null);
+	const [sunset, setSunset] = useState<Dayjs | null>(null);
 
 	const dispatch = useAppDispatch();
 	const container = createRef<HTMLDivElement>();
 	const brightnessColor = useMemo(
-		() => Color(getColorAtProgress([68, 34, 120, 1], [255, 249, 50, 1], brightness / 100)).hexa(),
+		() => Color(getColorAtProgress([68, 34, 120, 1], [255, 255, 255, 1], brightness / 100)).hexa(),
 		[brightness]
 	);
 	const brightnessTextColor = useMemo(() => (Color(brightnessColor).isLight() ? "#000" : "#FFF"), [brightnessColor]);
@@ -81,12 +98,17 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 		setBrightness(100);
 		setTime(dayjs());
 		setTimeView("hours");
+		setType("manual");
+	};
+
+	const handleTypeChange = (_event: React.MouseEvent<HTMLElement>, newType: "manual" | "sunrise" | "sunset") => {
+		setType(newType);
 	};
 
 	const steps = [
 		{
-			title: "Monitor(s)",
-			icon: Monitor,
+			title: "Displays",
+			icon: MonitorOutlined,
 			component: (
 				<StepView variant={"elevation"}>
 					<MonitorMultiSelectList value={selectedMonitors} onChange={handleMonitorSelectChange} />
@@ -94,21 +116,46 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 			)
 		},
 		{
-			title: "Time",
+			title: `${
+				type === "manual"
+					? `${time.format("hh:mm")} ${time.format("A")}`
+					: type === "sunrise"
+					? sunrise?.format("hh:mm A")
+					: sunset?.format("hh:mm A")
+			}`,
 			icon: Timer,
 			component: (
 				<StepView>
 					<Stack alignItems={"center"}>
-						<Stack direction={"row"} alignItems={"flex-end"} spacing={1}>
-							<Typography variant={"h3"} fontWeight={"bold"}>
-								{time.format("hh:mm")}
-							</Typography>
-							<Typography variant={"h6"} color={"text.secondary"} pb={0.5}>
-								{time.format("A")}
-							</Typography>
-						</Stack>
+						<ToggleButtonGroup
+							size={"small"}
+							value={type}
+							exclusive={true}
+							onChange={handleTypeChange}
+							color={"primary"}
+						>
+							<ToggleButton value={"sunrise"}>
+								<Stack direction={"row"} gap={1}>
+									<WbSunny />
+									Sunrise
+								</Stack>
+							</ToggleButton>
+							<ToggleButton value={"sunset"}>
+								<Stack direction={"row"} gap={1}>
+									<WbTwilight />
+									Sunset
+								</Stack>
+							</ToggleButton>
+							<ToggleButton value={"manual"}>
+								<Stack direction={"row"} gap={1}>
+									<Person />
+									Manual
+								</Stack>
+							</ToggleButton>
+						</ToggleButtonGroup>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<TimeClock
+								disabled={type !== "manual"}
 								views={["hours", "minutes"]}
 								value={time}
 								view={timeView}
@@ -117,7 +164,12 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 								onViewChange={handleViewChange}
 							/>
 						</LocalizationProvider>
-						<Button color={"inherit"} onClick={toggleTimeView} sx={{ textTransform: "capitalize" }}>
+						<Button
+							disabled={type !== "manual"}
+							startIcon={timeView === "hours" ? <HourglassTop /> : <HourglassBottom />}
+							onClick={toggleTimeView}
+							sx={{ textTransform: "capitalize" }}
+						>
 							View {timeView === "hours" ? "minutes" : "hours"}
 						</Button>
 					</Stack>
@@ -176,7 +228,27 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 		}
 	];
 
-	const canAdd = useMemo(() => selectedMonitors.length !== 0, [selectedMonitors]);
+	const canAdd = useMemo(() => selectedMonitors.length !== 0, [selectedMonitors.length]);
+
+	const getUserPosition = (): Promise<GeolocationCoordinates> => {
+		return new Promise((resolve) => {
+			navigator.geolocation.getCurrentPosition((position) => {
+				resolve(position.coords);
+			});
+		});
+	};
+
+	const updateUserPosition = async () => {
+		const position = await getUserPosition();
+		setUserPosition(position);
+	};
+
+	useEffect(() => {
+		if (!userPosition) return;
+		const time = SunCalc.getTimes(dayjs().toDate(), userPosition.latitude, userPosition.longitude);
+		setSunrise(dayjs(time.sunrise));
+		setSunset(dayjs(time.sunset));
+	}, [userPosition]);
 
 	useEffect(() => {
 		if (!open) return;
@@ -196,6 +268,8 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 
 	useEffect(() => {
 		if (open) {
+			updateUserPosition();
+			ipcRenderer.send("app/window/offset/height", 124);
 			monitorSnapshot.current = clone(redux.getState().app.monitors);
 			if (edit) {
 				setSelectedMonitors(clone(edit.monitors));
@@ -205,6 +279,7 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 				setTime(dayjs());
 			}
 		} else {
+			ipcRenderer.send("app/window/offset/height", 0);
 			monitorSnapshot.current?.forEach(({ id, brightness, mode, disabled, position, size }) => {
 				dispatch(setMonitorBrightness({ id, brightness, mode, disabled, position, size }));
 			});
@@ -224,7 +299,8 @@ const AddScheduleDialog: React.FC<ScheduleItemDialogProps> = ({ open, edit, onCl
 						const content = {
 							monitors: selectedMonitors,
 							time: time.format("hh:mm A"),
-							brightness
+							brightness,
+							type
 						};
 
 						if (edit) {
