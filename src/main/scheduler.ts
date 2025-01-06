@@ -1,6 +1,6 @@
 import { loadLicense, loadMonitors, loadSchedule, saveMonitors } from "@main/storage";
 import { CronJob, CronTime } from "cron";
-import { clone, difference } from "lodash";
+import { clone, difference, orderBy } from "lodash";
 import { dayjs, DEFAULT_TIMEZONE, getDateFromTime } from "@common/dayjs";
 import EventEmitter from "events";
 import { ScheduleItem } from "../common/types";
@@ -14,10 +14,8 @@ class Scheduler extends EventEmitter {
 	public check = async () => {
 		Object.values(this.schedule).forEach((job) => job.stop);
 
-		const prevSchedules = this.getHistory();
+		const prevSchedules = await this.getHistory();
 		const latestSchedule = prevSchedules[prevSchedules.length - 1];
-
-		if (latestSchedule) await this.apply(latestSchedule.id);
 
 		for await (let schedule of loadSchedule()) {
 			schedule = await this.getSchedule(schedule.id);
@@ -34,6 +32,8 @@ class Scheduler extends EventEmitter {
 			job.start();
 			this.schedule[schedule.id] = job;
 		}
+
+		if (latestSchedule) await this.apply(latestSchedule.id);
 	};
 
 	private getCronTime = (schedule: ScheduleItem): string => {
@@ -55,9 +55,7 @@ class Scheduler extends EventEmitter {
 
 	private updateSunSchedule = async (schedule: ScheduleItem) => {
 		const position = await getUserPosition();
-
 		if (!position) return schedule;
-
 		const times = SunCalc.getTimes(dayjs().toDate(), position.latitude, position.longitude);
 		const sunTime = dayjs(times[schedule.type]);
 		const time = sunTime.format("HH:mm A");
@@ -85,7 +83,7 @@ class Scheduler extends EventEmitter {
 
 		const job = this.schedule[id];
 
-		if (this.shouldUpdateJobTime(job, schedule)) {
+		if (job && this.shouldUpdateJobTime(job, schedule)) {
 			job.setTime(new CronTime(this.getCronTime(schedule)));
 		}
 	};
@@ -96,13 +94,21 @@ class Scheduler extends EventEmitter {
 		return nextDate.hour() !== date.hour() || nextDate.minute() !== date.minute();
 	};
 
-	private getHistory = () => {
-		return loadSchedule().filter(({ time }) => {
-			const currentTime = dayjs();
-			const targetDate = getDateFromTime(time);
-			const targetTime = dayjs().hour(targetDate.hour()).minute(targetDate.minute());
-			return currentTime.isAfter(targetTime);
-		});
+	private getCorrectedSchedule = async () => {
+		const schedules = loadSchedule();
+		const corrected = [];
+
+		for await (let schedule of schedules) {
+			corrected.push(await this.getSchedule(schedule.id));
+		}
+
+		return corrected;
+	};
+
+	private getHistory = async () => {
+		const schedule = await this.getCorrectedSchedule();
+		const sorted = orderBy(schedule, "time", "asc");
+		return sorted.filter((schedule) => dayjs().isAfter(getDateFromTime(schedule.time)));
 	};
 }
 
