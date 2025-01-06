@@ -251,6 +251,12 @@ class Window extends EventEmitter {
 			y: bottom - height - dimensions.padding
 		};
 	};
+
+	public minimize = () => {
+		this.setWidthOffset(0);
+		this.setHeightOffset(0);
+		if (this.ref) this.ref.minimize();
+	};
 }
 
 export default Window;
