@@ -583,8 +583,8 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.2";
-const body = "Update license verification dialog.";
+const tag_name = "v0.5.4";
+const body = "Added sunrise/sunset scheduling! Also, made the add/edit schedule dialog a bit taller.";
 const release = {
   tag_name,
   body
