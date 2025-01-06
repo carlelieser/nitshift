@@ -25,8 +25,20 @@ class AppMessages {
 			e.returnValue = app.getPath(name);
 		});
 
-		ipcMain.on("app/window/size", (e) => {
-			e.returnValue = window.ref.getSize();
+		ipcMain.handle("app/window/size", () => {
+			return window.ref.getSize();
+		});
+
+		ipcMain.on("app/window/offset/height", (_, height) => {
+			window.setHeightOffset(height);
+		});
+
+		ipcMain.on("app/window/offset/width", (_, width) => {
+			window.setWidthOffset(width);
+		});
+
+		ipcMain.on("app/window/readjust", () => {
+			window.readjust();
 		});
 
 		ipcMain.handle("app/window/show", () => window.ref.show());
