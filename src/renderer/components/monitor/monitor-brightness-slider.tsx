@@ -3,7 +3,7 @@ import { setBrightness, setMonitorBrightness } from "@reducers/app";
 import { useAppDispatch, useAppSelector } from "@renderer/hooks";
 import { GLOBAL, UIMonitor } from "@common/types";
 import { SlideProps } from "@mui/material";
-import Slider from "@components/slider";
+import Slider, { SliderProps } from "@components/slider";
 
 type MonitorBrightnessSliderProps = {
 	monitorId: string;
@@ -11,14 +11,14 @@ type MonitorBrightnessSliderProps = {
 } & Pick<UIMonitor, "brightness" | "mode" | "disabled" | "position" | "size">;
 
 const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
-	monitorId,
-	brightness,
-	color,
-	disabled: monitorDisabled,
-	mode,
-	position,
-	size
-}) => {
+																			 monitorId,
+																			 brightness,
+																			 color,
+																			 disabled: monitorDisabled,
+																			 mode,
+																			 position,
+																			 size
+																		 }) => {
 	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
 	const disabled = useMemo(
@@ -46,7 +46,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 		[monitorId, dispatch, mode, monitorDisabled, position, size]
 	);
 
-	const handleBrightnessUpdate = (brightness: number) => dispatchBrightness(brightness);
+	const handleBrightnessUpdate: SliderProps["onChange"] = (brightness) => dispatchBrightness(brightness as number);
 
 	return (
 		<Slider
