@@ -64,7 +64,7 @@ class Window extends EventEmitter {
 		this.ref.setMaximumSize(width, height);
 		this.ref.setSize(width, height, animate);
 		this.ref.setResizable(false);
-	}
+	};
 
 	public readjust = () => {
 		if (this.ref) {
@@ -216,12 +216,12 @@ class Window extends EventEmitter {
 	public setWidthOffset = (widthOffset: number) => {
 		this.widthOffset = widthOffset;
 		this.readjust();
-	}
+	};
 
 	public setHeightOffset = (heightOffset: number) => {
 		this.heightOffset = heightOffset;
 		this.readjust();
-	}
+	};
 
 	private getModeWidth = () => {
 		return dimensions[this.mode][loadNative() ? "native" : "default"].width * (process.env.CAPTURE ? 2 : 1);
@@ -233,11 +233,11 @@ class Window extends EventEmitter {
 
 	private getRealWidth = () => {
 		return this.getModeWidth() + this.widthOffset;
-	}
+	};
 
 	private getRealHeight = () => {
 		return this.getModeHeight() + this.heightOffset;
-	}
+	};
 
 	private getCoordinates = () => {
 		const monitor = screen.getPrimaryDisplay();
