@@ -43,7 +43,7 @@ class AppMessages {
 
 		ipcMain.handle("app/window/show", () => window.ref.show());
 		ipcMain.handle("app/window/blur", () => window.ref.blur());
-		ipcMain.handle("app/window/minimize", () => window.ref.minimize());
+		ipcMain.handle("app/window/minimize", () => window.minimize());
 
 		ipcMain.handle("app/quit", () => app.exit());
 	};
