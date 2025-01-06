@@ -8,7 +8,9 @@ import { GLOBAL } from "@common/types";
 
 const CompactView = () => {
 	const mode = useAppSelector((state) => state.app.mode);
-	const activeMonitor = useAppSelector((state) => state.app.monitors.find((monitor) => monitor.id === state.app.activeMonitor?.id));
+	const activeMonitor = useAppSelector((state) =>
+		state.app.monitors.find((monitor) => monitor.id === state.app.activeMonitor?.id)
+	);
 	const brightness = useAppSelector((state) => state.app.brightness);
 
 	return mode === "compact" ? (
