@@ -49,10 +49,10 @@ const App = () => {
 		[transitioning]
 	);
 
-	const handleWindowResize = useCallback(() => {
+	const handleWindowResize = useCallback(async () => {
 		if (transitioning) {
 			const nextMode = mode === "compact" ? "expanded" : "compact";
-			const [width, height] = ipcRenderer.sendSync("app/window/size");
+			const [width, height] = await ipcRenderer.invoke("app/window/size");
 			if (
 				isNumberAroundReference(width, dimensions[nextMode].native?.width, 5) &&
 				isNumberAroundReference(height, dimensions[nextMode].native?.height, 5)
@@ -108,6 +108,8 @@ const App = () => {
 				}
 			});
 		}
+
+		ipcRenderer.send("app/renderer/ready");
 	}, []);
 
 	const clickThroughContainerStyle = useMemo<CSSProperties>(
