@@ -64,7 +64,11 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 				<Stack direction={"row"} justifyContent={"space-between"} px={2}>
 					<Stack direction={"row"} alignItems={"center"} spacing={2}>
 						<Timer />
-						<Chip label={getDateFromTime(props.time).format("hh:mm A")} />
+						{props.type === "manual" ? (
+							<Chip label={getDateFromTime(props.time).format("hh:mm A")} />
+						) : (
+							<Chip sx={{ textTransform: "capitalize" }} label={props.type} />
+						)}
 					</Stack>
 					<Divider orientation={"vertical"} flexItem={true} />
 					<Stack direction={"row"} alignItems={"center"} spacing={2}>

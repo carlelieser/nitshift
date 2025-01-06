@@ -43,6 +43,7 @@ export interface UIMonitor extends Monitor {
 }
 
 export interface ScheduleItemContent {
+	type: "manual" | "sunrise" | "sunset";
 	monitors: Array<UIMonitor>;
 	time: string;
 	brightness: number;
