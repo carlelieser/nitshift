@@ -11,10 +11,14 @@ const AutoResize = () => {
 	const toggle = () => dispatch(setAutoResize(!autoResize));
 
 	return (
-		<SettingsCard title={"Auto resize"} subtitle={"Expand to fit all available displays"} icon={<AspectRatio />}
-					  value={<Switch checked={autoResize} />}
-					  disableChip={true}
-					  onClick={toggle} />
+		<SettingsCard
+			title={"Auto resize"}
+			subtitle={"Expand to fit all available displays"}
+			icon={<AspectRatio />}
+			value={<Switch checked={autoResize} />}
+			disableChip={true}
+			onClick={toggle}
+		/>
 	);
 };
 
