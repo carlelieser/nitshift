@@ -28,7 +28,12 @@ export interface SliderProps {
 
 const CustomValueLabel: React.FC<SliderValueLabelProps> = (props) => {
 	return (
-		<Tooltip placement={"top"} enterDelay={0} {...(omit(props, "valueLabelDisplay", "valueLabelFormat"))} title={<Typography>{props.value}</Typography>}>
+		<Tooltip
+			placement={"top"}
+			enterDelay={0}
+			{...omit(props, "valueLabelDisplay", "valueLabelFormat")}
+			title={<Typography>{props.value}</Typography>}
+		>
 			{props.children}
 		</Tooltip>
 	);

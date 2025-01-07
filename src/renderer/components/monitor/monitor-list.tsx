@@ -78,9 +78,7 @@ const MonitorList = () => {
 			variant={"elevation"}
 			elevation={0}
 		>
-			<Stack spacing={2} p={2} pb={license === "free" ? 8 : 0}
-				   ref={ref}
-			>
+			<Stack spacing={2} p={2} pb={license === "free" ? 8 : 0} ref={ref}>
 				<Stack spacing={2}>
 					<Suspense>
 						<Monitor
@@ -102,25 +100,22 @@ const MonitorList = () => {
 						<DragDropContext onDragEnd={handleDragEnd}>
 							<Droppable droppableId={"droppable"}>
 								{(provided, droppableSnapshot) => (
-									<Box ref={provided.innerRef} {...provided.droppableProps} >
+									<Box ref={provided.innerRef} {...provided.droppableProps}>
 										<TransitionGroup>
-														 {connectedMonitors.map((monitor, index) => (
-															 <Collapse
-																 key={monitor.id + "-wrapper"}
-															 >
-																 <DraggableMonitorWrapper
-																	 forceDisableDrag={connectedMonitors.length === 1}
-																	 index={index}
-																	 isDraggingOver={droppableSnapshot.isDraggingOver}
-																	 monitor={monitor}
-																	 provided={provided}
-																 />
-															 </Collapse>
-														 ))}
-															 {provided.placeholder}
+											{connectedMonitors.map((monitor, index) => (
+												<Collapse key={monitor.id + "-wrapper"}>
+													<DraggableMonitorWrapper
+														forceDisableDrag={connectedMonitors.length === 1}
+														index={index}
+														isDraggingOver={droppableSnapshot.isDraggingOver}
+														monitor={monitor}
+														provided={provided}
+													/>
+												</Collapse>
+											))}
+											{provided.placeholder}
 										</TransitionGroup>
 									</Box>
-
 								)}
 							</Droppable>
 						</DragDropContext>

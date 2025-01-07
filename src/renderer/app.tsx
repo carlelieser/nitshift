@@ -116,7 +116,7 @@ const App = () => {
 		() => ({
 			width: "100%",
 			height: "100%",
-			position: "relative",
+			position: "relative"
 		}),
 		[]
 	);
@@ -161,7 +161,7 @@ const App = () => {
 									<Box
 										sx={{
 											mt: "auto",
-											height: mode === "compact" ? "auto" : "100%",
+											height: mode === "compact" ? "auto" : "100%"
 										}}
 									>
 										<Box
