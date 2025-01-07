@@ -58,7 +58,7 @@ const MonitorList = () => {
 		if (autoResize && mode === "expanded") {
 			if (monitors.length && height) {
 				const base = license === "free" ? 64 : 0;
-				const initialOffset = height - dimensions.expanded.default.height - 100 + (base);
+				const initialOffset = height - dimensions.expanded.default.height - 100 + base;
 				const finalOffset = initialOffset < dimensions.expanded.default.height ? base : initialOffset;
 				ipcRenderer.send("app/window/offset/height", finalOffset);
 			}
