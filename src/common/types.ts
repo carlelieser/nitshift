@@ -1,4 +1,5 @@
 import { Monitor } from "lumi-control";
+import { GetTimesResult } from "suncalc";
 
 export type BrightnessMode = "native" | "shade";
 
@@ -43,7 +44,7 @@ export interface UIMonitor extends Monitor {
 }
 
 export interface ScheduleItemContent {
-	type: "manual" | "sunrise" | "sunset";
+	type: "manual" | keyof GetTimesResult;
 	monitors: Array<UIMonitor>;
 	time: string;
 	brightness: number;
