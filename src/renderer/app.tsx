@@ -133,9 +133,9 @@ const App = () => {
 					<Slide
 						direction={"up"}
 						in={transitionIn}
-						appear={false}
+						appear={true}
 						mountOnEnter={true}
-						unmountOnExit={true}
+						unmountOnExit={false}
 						onExited={handleTransitionExited}
 					>
 						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>

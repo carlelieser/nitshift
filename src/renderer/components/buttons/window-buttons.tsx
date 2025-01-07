@@ -23,7 +23,7 @@ const WindowButtons = () => {
 			setTimeout(() => {
 				dispatch(setMode(mode === "compact" ? "expanded" : "compact"));
 				dispatch(setTransitioning(false));
-			}, 150);
+			}, 250);
 		});
 	};
 
