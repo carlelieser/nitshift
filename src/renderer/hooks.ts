@@ -99,8 +99,8 @@ export const useAppTheme = () => {
 					defaultProps: {
 						PopperProps: {
 							hidden: transitioning ? true : undefined
-						},
-					},
+						}
+					}
 				},
 				MuiMenu: {
 					defaultProps: {
