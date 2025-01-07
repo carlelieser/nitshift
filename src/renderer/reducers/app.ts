@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	loadActiveMonitor,
 	loadAppearance,
+	loadAutoResize,
 	loadAutoUpdateCheck,
 	loadBrightnessModes,
 	loadGlobalBrightness,
@@ -51,6 +52,7 @@ export const findMonitorIndexById = (monitors: UIMonitor[], id: string) =>
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
 	appearance: loadAppearance(),
+	autoResize: loadAutoResize(),
 	syncAppearance: loadSyncAppearance(),
 	autoUpdateCheck: loadAutoUpdateCheck(),
 	brightness: loadGlobalBrightness(),
@@ -100,6 +102,7 @@ export const appSlice = createSlice({
 			});
 		},
 		setAutoUpdateCheck: createReducer<AppState["autoUpdateCheck"]>("autoUpdateCheck"),
+		setAutoResize: createReducer<AppState["autoResize"]>("autoResize"),
 		setBrightnessModes: (state, action: PayloadAction<Array<BrightnessModeData>>) => {
 			state.brightnessModes = action.payload;
 		},
@@ -202,6 +205,7 @@ export const {
 	setActiveBrightnessMode,
 	setActiveMonitor,
 	setAppearance,
+	setAutoResize,
 	setSyncAppearance,
 	setAutoUpdateCheck,
 	setBrightness,

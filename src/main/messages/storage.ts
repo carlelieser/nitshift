@@ -14,6 +14,9 @@ ipcMain.on("storage/load-active-monitor", (e) => {
 ipcMain.on("storage/load-appearance", (e) => {
 	e.returnValue = storage.loadAppearance();
 });
+ipcMain.on("storage/load-auto-resize", (e) => {
+	e.returnValue = storage.loadAutoResize();
+});
 ipcMain.on("storage/load-sync-appearance", (e) => {
 	e.returnValue = storage.loadSyncAppearance();
 });
@@ -73,6 +76,9 @@ ipcMain.on("storage/save-active-monitor", (e, monitor) => {
 });
 ipcMain.on("storage/save-appearance", (e, appearance) => {
 	e.returnValue = storage.saveAppearance(appearance);
+});
+ipcMain.on("storage/save-auto-resize", (e, autoResize) => {
+	e.returnValue = storage.saveAutoResize(autoResize);
 });
 ipcMain.on("storage/save-sync-appearance", (e, shouldSync) => {
 	e.returnValue = storage.saveSyncAppearance(shouldSync);

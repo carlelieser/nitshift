@@ -74,6 +74,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 						justifyContent: "start",
 						cursor: onClick ? "pointer" : "default"
 					}}
+					component={value ? "div" : "button"}
 					disabled={disabled}
 					disableRipple={disabled || !onClick}
 					onClick={(e) => {

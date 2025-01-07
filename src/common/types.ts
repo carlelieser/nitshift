@@ -74,6 +74,7 @@ export interface StartupSettings {
 export interface AppState {
 	activeMonitor: UIMonitor | null;
 	appearance: Appearance;
+	autoResize: boolean;
 	syncAppearance: boolean;
 	autoUpdateCheck: boolean;
 	brightness: number;
