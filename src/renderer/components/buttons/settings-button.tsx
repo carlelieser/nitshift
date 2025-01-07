@@ -31,7 +31,7 @@ const SettingsButton = () => {
 				});
 			}, 250);
 		}
-	}
+	};
 
 	const closeSettings = () => {
 		if (prevMode === "compact") {
