@@ -59,6 +59,7 @@ const initialState: AppState = {
 	brightnessModes: loadBrightnessModes(),
 	license: loadLicense(),
 	mode: loadMode(),
+	prevMode: loadMode(),
 	monitors: loadMonitors(),
 	monitorNicknames: loadMonitorNicknames(),
 	native: loadNative(),
@@ -74,7 +75,8 @@ const initialState: AppState = {
 	focused: false,
 	release: null,
 	minShadeLevel: loadMinShadeLevel(),
-	maxShadeLevel: loadMaxShadeLevel()
+	maxShadeLevel: loadMaxShadeLevel(),
+	settingsOpen: false
 };
 
 const createReducer =
@@ -139,6 +141,7 @@ export const appSlice = createSlice({
 		setBrightnessSilent: createReducer<AppState["brightness"]>("brightness"),
 		setLicense: createReducer<AppState["license"]>("license"),
 		setMode: createReducer<AppState["mode"]>("mode"),
+		setPrevMode: createReducer<AppState["prevMode"]>("prevMode"),
 		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
 			const { id, brightness } = action.payload;
 			const index = findMonitorIndexById(state.monitors, id);
@@ -175,6 +178,7 @@ export const appSlice = createSlice({
 		setRefreshed: createReducer<AppState["refreshed"]>("refreshed"),
 		setRelease: createReducer<AppState["release"]>("release"),
 		setSchedule: createReducer<AppState["schedule"]>("schedule"),
+		setSettingsOpen: createReducer<AppState["settingsOpen"]>("settingsOpen"),
 		setStartupSettings: createReducer<AppState["startup"]>("startup"),
 		setTrialAvailability: createReducer<AppState["trialAvailability"]>("trialAvailability"),
 		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
@@ -213,6 +217,7 @@ export const {
 	setBrightnessSilent,
 	setLicense,
 	setMode,
+	setPrevMode,
 	setMonitorBrightness,
 	setMonitorDisabled,
 	setMonitorMode,
@@ -222,6 +227,7 @@ export const {
 	setReceivedPremium,
 	setRefreshed,
 	setSchedule,
+	setSettingsOpen,
 	setTrialAvailability,
 	setTrialStartDate,
 	setTransitioning,
