@@ -58,7 +58,9 @@ const MonitorList = () => {
 	useEffect(() => {
 		if (autoResize && mode === "expanded") {
 			if (monitors.length) {
-				ipcRenderer.send("app/window/offset/height", height - dimensions["expanded"].default.height + 100);
+				const initialOffset = height - dimensions.expanded.default.height - 100;
+				const finalOffset = initialOffset < dimensions.expanded.default.height ? 0 : initialOffset;
+				ipcRenderer.send("app/window/offset/height", finalOffset);
 			}
 		} else {
 			ipcRenderer.send("app/window/offset/height", 0);
@@ -102,18 +104,18 @@ const MonitorList = () => {
 								{(provided, droppableSnapshot) => (
 									<Box ref={provided.innerRef} {...provided.droppableProps}>
 										<TransitionGroup>
-											{connectedMonitors.map((monitor, index) => (
-												<Collapse key={monitor.id + "-wrapper"}>
-													<DraggableMonitorWrapper
-														forceDisableDrag={connectedMonitors.length === 1}
-														index={index}
-														isDraggingOver={droppableSnapshot.isDraggingOver}
-														monitor={monitor}
-														provided={provided}
-													/>
-												</Collapse>
-											))}
-											{provided.placeholder}
+														 {connectedMonitors.map((monitor, index) => (
+															 <Collapse key={monitor.id + "-wrapper"}>
+																 <DraggableMonitorWrapper
+																	 forceDisableDrag={connectedMonitors.length === 1}
+																	 index={index}
+																	 isDraggingOver={droppableSnapshot.isDraggingOver}
+																	 monitor={monitor}
+																	 provided={provided}
+																 />
+															 </Collapse>
+														 ))}
+															 {provided.placeholder}
 										</TransitionGroup>
 									</Box>
 								)}
