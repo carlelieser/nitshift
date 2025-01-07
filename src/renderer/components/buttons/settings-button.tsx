@@ -30,7 +30,7 @@ const SettingsButton = () => {
 						dispatch(setMode("expanded"));
 						dispatch(setTransitioning(false));
 					});
-				}, 150);
+				}, 250);
 			}
 		});
 	}, [mode, dispatch]);
@@ -44,7 +44,7 @@ const SettingsButton = () => {
 					dispatch(setMode(prevMode));
 					dispatch(setTransitioning(false));
 				});
-			}, 150);
+			}, 250);
 		} else {
 			dispatch(setSettingsOpen(false));
 		}

@@ -176,15 +176,15 @@ class AppManager {
 		);
 		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
 		await this.smartApply();
-	}, 150);
+	}, 250);
 	private handleDisplayMetricsChanged = debounce(async () => {
 		this.shades.destroyAll();
 		await this.smartApply();
-	}, 150);
+	}, 250);
 
 	private handleDisplayAdded = debounce(async () => {
 		await this.smartApply();
-	}, 150);
+	}, 250);
 
 	private syncAppearanceWithNativeTheme = () => {
 		const appearance = nativeTheme.shouldUseDarkColors ? "dark" : "light";
