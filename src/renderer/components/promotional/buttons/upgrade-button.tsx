@@ -36,7 +36,7 @@ const UpgradeButton: React.FC<Partial<ColorButtonProps> & { context: "window-bar
 			}, 250);
 		}
 	};
-	
+
 	const closeDialog = () => {
 		if (prevMode === "compact") {
 			dispatch(setTransitioning(true));
