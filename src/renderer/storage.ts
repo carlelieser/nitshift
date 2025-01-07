@@ -24,13 +24,15 @@ export const STORE = {
 	USER_ID: "user-id",
 	STARTUP: "startup",
 	MIN_SHADE_LEVEL: "min-shade-level",
-	MAX_SHADE_LEVEL: "max-shade-level"
+	MAX_SHADE_LEVEL: "max-shade-level",
+	AUTO_RESIZE: "auto-resize"
 };
 
 export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);
 
 export const loadActiveMonitor = (): AppState["activeMonitor"] => ipcRenderer.sendSync("storage/load-active-monitor");
 export const loadAppearance = (): AppState["appearance"] => ipcRenderer.sendSync("storage/load-appearance");
+export const loadAutoResize = (): AppState["autoResize"] => ipcRenderer.sendSync("storage/load-auto-resize");
 export const loadSyncAppearance = (): AppState["syncAppearance"] =>
 	ipcRenderer.sendSync("storage/load-sync-appearance");
 export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] =>
@@ -60,6 +62,8 @@ export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) =>
 	ipcRenderer.sendSync("storage/save-active-monitor", monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) =>
 	ipcRenderer.sendSync("storage/save-appearance", appearance);
+export const saveAutoResize = (autoResize: AppState["autoResize"]) =>
+	ipcRenderer.sendSync("storage/save-auto-resize", autoResize);
 export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
 	ipcRenderer.sendSync("storage/save-sync-appearance", shouldSync);
 export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>

@@ -117,7 +117,6 @@ const App = () => {
 			width: "100%",
 			height: "100%",
 			position: "relative",
-			overflow: "hidden"
 		}),
 		[]
 	);
@@ -152,7 +151,7 @@ const App = () => {
 						style={transitionDelay}
 						onExited={handleTransitionExited}
 					>
-						<Box p={2} position={"relative"} width={"100%"} height={"100%"} sx={{ overflow: "hidden" }}>
+						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>
 							<Suspense>
 								<MonitorsRefreshed />
 								<ReceivedPremium />
@@ -163,13 +162,11 @@ const App = () => {
 										sx={{
 											mt: "auto",
 											height: mode === "compact" ? "auto" : "100%",
-											overflow: "hidden"
 										}}
 									>
 										<Box
 											sx={{
 												height: "100%",
-												overflow: "hidden",
 												position: "relative"
 											}}
 										>
@@ -178,9 +175,9 @@ const App = () => {
 													height: "100%",
 													display: "flex",
 													flexDirection: "column",
-													overflow: "hidden",
 													zIndex: 10,
-													borderRadius: 4
+													borderRadius: 4,
+													overflow: "hidden"
 												}}
 												variant={"elevation"}
 												elevation={1}

@@ -4,6 +4,7 @@ import React, { lazy, Suspense } from "react";
 import { SettingsRoundedFilled } from "mui-symbols";
 import Upgrade from "@promotional/buttons/upgrade-button";
 import LicenseCard from "@components/license/license-card";
+import AutoResize from "./options/AutoResize";
 
 const Refresh = lazy(() => import("./options/refresh"));
 const BrightnessSettings = lazy(() => import("./options/brightness/brightness-settings"));
@@ -19,8 +20,9 @@ const ViewSettings: React.FC<DialogComponentProps> = ({ open, onClose }) => {
 				<Stack spacing={2} p={2}>
 					<Upgrade context={"main"} fullWidth={true} sx={{ borderRadius: 9 }} />
 					<Suspense>
-						<Appearance />
 						<BrightnessSettings />
+						<Appearance />
+						<AutoResize />
 						<Refresh />
 						<AutoUpdateCheck />
 						<Startup />

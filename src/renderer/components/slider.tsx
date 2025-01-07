@@ -12,6 +12,7 @@ import {
 import { Add, Remove } from "mui-symbols";
 import { diff } from "just-diff";
 import update from "immutability-helper";
+import { omit } from "lodash";
 
 export interface SliderProps {
 	value?: MUISliderProps["value"];
@@ -27,7 +28,7 @@ export interface SliderProps {
 
 const CustomValueLabel: React.FC<SliderValueLabelProps> = (props) => {
 	return (
-		<Tooltip placement={"top"} enterDelay={0} {...props} title={<Typography>{props.value}</Typography>}>
+		<Tooltip placement={"top"} enterDelay={0} {...(omit(props, "valueLabelDisplay", "valueLabelFormat"))} title={<Typography>{props.value}</Typography>}>
 			{props.children}
 		</Tooltip>
 	);
