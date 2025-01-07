@@ -3,7 +3,7 @@
   "productName": "Glimmr",
   "homepage": "https://glimmr.app",
   "target": "node",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "The best multi-monitor brightness tool.",
   "main": "out/main/index.js",
   "overrides": { "graceful-fs": "^4.2.11" },

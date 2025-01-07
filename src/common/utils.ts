@@ -57,3 +57,21 @@ export const dimensions = {
 	},
 	padding: 4
 };
+
+export const scheduleTypes = {
+	manual: "Manual",
+	dawn: "Dawn",
+	dusk: "Dusk",
+	goldenHour: "Golden Hour",
+	goldenHourEnd: "Golden Hour End",
+	nadir: "Nadir",
+	nauticalDawn: "Nautical Dawn",
+	nauticalDusk: "Nautical Dusk",
+	night: "Night",
+	nightEnd: "Night End",
+	solarNoon: "Solar Noon",
+	sunrise: "Sunrise",
+	sunriseEnd: "Sunrise End",
+	sunset: "Sunset",
+	sunsetStart: "Sunset Start"
+};
