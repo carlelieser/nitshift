@@ -76,7 +76,8 @@ const initialState: AppState = {
 	release: null,
 	minShadeLevel: loadMinShadeLevel(),
 	maxShadeLevel: loadMaxShadeLevel(),
-	settingsOpen: false
+	settingsDialogOpen: false,
+	upgradeDialogOpen: false
 };
 
 const createReducer =
@@ -178,11 +179,12 @@ export const appSlice = createSlice({
 		setRefreshed: createReducer<AppState["refreshed"]>("refreshed"),
 		setRelease: createReducer<AppState["release"]>("release"),
 		setSchedule: createReducer<AppState["schedule"]>("schedule"),
-		setSettingsOpen: createReducer<AppState["settingsOpen"]>("settingsOpen"),
+		setSettingsDialogOpen: createReducer<AppState["settingsDialogOpen"]>("settingsDialogOpen"),
 		setStartupSettings: createReducer<AppState["startup"]>("startup"),
 		setTrialAvailability: createReducer<AppState["trialAvailability"]>("trialAvailability"),
 		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
 		setTransitioning: createReducer<AppState["transitioning"]>("transitioning"),
+		setUpgradeDialogOpen: createReducer<AppState["upgradeDialogOpen"]>("upgradeDialogOpen"),
 		setUserEmail: createReducer<AppState["userEmail"]>("userEmail"),
 		setMinShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
 			state.minShadeLevel = action.payload.level;
@@ -227,7 +229,8 @@ export const {
 	setReceivedPremium,
 	setRefreshed,
 	setSchedule,
-	setSettingsOpen,
+	setUpgradeDialogOpen,
+	setSettingsDialogOpen,
 	setTrialAvailability,
 	setTrialStartDate,
 	setTransitioning,

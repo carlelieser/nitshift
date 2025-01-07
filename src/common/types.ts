@@ -87,7 +87,7 @@ export interface AppState {
 	receivedPremium: boolean;
 	refreshed: boolean;
 	schedule: Array<ScheduleItem>;
-	settingsOpen: boolean;
+	settingsDialogOpen: boolean;
 	trialAvailability: boolean;
 	trialStartDate: number | null;
 	transitioning: boolean;
