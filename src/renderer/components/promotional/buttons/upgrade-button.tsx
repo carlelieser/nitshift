@@ -13,10 +13,10 @@ const UpgradeButton: React.FC<Partial<ColorButtonProps> & { context: "window-bar
 	const dispatch = useAppDispatch();
 	const mode = useAppSelector((state) => state.app.mode);
 	const license = useAppSelector((state) => state.app.license);
-	const upgradeDialogOpen = useAppSelector((state) => state.app.upgradeDialogOpen)
+	const upgradeDialogOpen = useAppSelector((state) => state.app.upgradeDialogOpen);
 	const prevMode = useAppSelector((state) => state.app.prevMode);
 
-	const openDialog = () =>  {
+	const openDialog = () => {
 		if (mode === "expanded") {
 			batch(() => {
 				dispatch(setPrevMode(mode));
@@ -35,7 +35,7 @@ const UpgradeButton: React.FC<Partial<ColorButtonProps> & { context: "window-bar
 				});
 			}, 250);
 		}
-	}
+	};
 	const closeDialog = () => {
 		if (prevMode === "compact") {
 			dispatch(setTransitioning(true));
@@ -49,8 +49,7 @@ const UpgradeButton: React.FC<Partial<ColorButtonProps> & { context: "window-bar
 		} else {
 			dispatch(setUpgradeDialogOpen(false));
 		}
-	}
-
+	};
 
 	return (
 		<>
