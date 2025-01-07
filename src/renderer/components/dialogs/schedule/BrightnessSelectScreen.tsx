@@ -70,7 +70,12 @@ const BrightnessSelectScreen = () => {
 						%
 					</Typography>
 				</Stack>
-				<Slider color={"inherit"} value={context.brightness} disableTooltip={true} onChange={handleBrightnessChange} />
+				<Slider
+					color={"inherit"}
+					value={context.brightness}
+					disableTooltip={true}
+					onChange={handleBrightnessChange}
+				/>
 			</Stack>
 		</Box>
 	);
