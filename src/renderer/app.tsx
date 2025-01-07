@@ -135,7 +135,7 @@ const App = () => {
 						in={transitionIn}
 						appear={true}
 						mountOnEnter={true}
-						unmountOnExit={false}
+						unmountOnExit={true}
 						onExited={handleTransitionExited}
 					>
 						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>

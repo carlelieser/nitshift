@@ -57,14 +57,15 @@ const MonitorList = () => {
 	useEffect(() => {
 		if (autoResize && mode === "expanded") {
 			if (monitors.length && height) {
-				const initialOffset = height - dimensions.expanded.default.height - 100;
-				const finalOffset = initialOffset < dimensions.expanded.default.height ? 0 : initialOffset;
+				const base = license === "free" ? 64 : 0;
+				const initialOffset = height - dimensions.expanded.default.height - 100 + (base);
+				const finalOffset = initialOffset < dimensions.expanded.default.height ? base : initialOffset;
 				ipcRenderer.send("app/window/offset/height", finalOffset);
 			}
 		} else {
 			ipcRenderer.send("app/window/offset/height", 0);
 		}
-	}, [autoResize, monitors, mode, height]);
+	}, [autoResize, monitors, mode, height, license]);
 
 	return (
 		<Paper
