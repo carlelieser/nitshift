@@ -81,11 +81,13 @@ export interface AppState {
 	brightnessModes: Array<BrightnessModeData>;
 	license: "free" | "trial" | "premium";
 	mode: "expanded" | "compact";
+	prevMode: "expanded" | "compact";
 	monitors: Array<UIMonitor>;
 	monitorNicknames: Array<[string, string]>;
 	receivedPremium: boolean;
 	refreshed: boolean;
 	schedule: Array<ScheduleItem>;
+	settingsOpen: boolean;
 	trialAvailability: boolean;
 	trialStartDate: number | null;
 	transitioning: boolean;

@@ -583,7 +583,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.5";
+const tag_name = "v0.6.7";
 const body = "Minor bug fixes.";
 const release = {
   tag_name,

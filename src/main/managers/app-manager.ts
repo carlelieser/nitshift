@@ -62,8 +62,15 @@ class AppManager {
 		});
 
 		this.tray.on("click", () => {
-			if (this.window.ref) this.window.ref.show();
-			else this.window.create();
+			if (this.window.ref) {
+				if (this.window.ref.isVisible()) {
+					this.window.ref.blur();
+				} else {
+					this.window.ref.show();
+				}
+			} else {
+				this.window.create();
+			}
 		});
 
 		this.tray.on("check-for-updates", () => {
@@ -169,15 +176,15 @@ class AppManager {
 		);
 		removedMonitors.forEach((monitor) => this.shades.destroy(monitor.id));
 		await this.smartApply();
-	}, 250);
+	}, 150);
 	private handleDisplayMetricsChanged = debounce(async () => {
 		this.shades.destroyAll();
 		await this.smartApply();
-	}, 250);
+	}, 150);
 
 	private handleDisplayAdded = debounce(async () => {
 		await this.smartApply();
-	}, 250);
+	}, 150);
 
 	private syncAppearanceWithNativeTheme = () => {
 		const appearance = nativeTheme.shouldUseDarkColors ? "dark" : "light";

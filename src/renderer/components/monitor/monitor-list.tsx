@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Collapse, Paper, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMonitors } from "@reducers/app";
@@ -9,8 +9,7 @@ import DraggableMonitorWrapper from "@components/monitor/draggable-monitor-wrapp
 import { ipcRenderer } from "electron";
 import { dimensions } from "@common/utils";
 import { TransitionGroup } from "react-transition-group";
-
-const Monitor = lazy(() => import("./monitor"));
+import Monitor from "./monitor";
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
@@ -82,46 +81,44 @@ const MonitorList = () => {
 		>
 			<Stack spacing={2} p={2} pb={license === "free" ? 8 : 0} ref={ref}>
 				<Stack spacing={2}>
-					<Suspense>
-						<Monitor
-							brightness={brightness}
-							connected={true}
-							disabled={globalMonitorDisabled}
-							id={GLOBAL}
-							internal={false}
-							manufacturer={null}
-							menuDisabled={true}
-							mode={"native"}
-							name={GLOBAL}
-							nickname={""}
-							position={{ x: 0, y: 0 }}
-							productCode={null}
-							serialNumber={null}
-							size={{ width: 0, height: 0 }}
-						/>
-						<DragDropContext onDragEnd={handleDragEnd}>
-							<Droppable droppableId={"droppable"}>
-								{(provided, droppableSnapshot) => (
-									<Box ref={provided.innerRef} {...provided.droppableProps}>
-										<TransitionGroup>
-											{connectedMonitors.map((monitor, index) => (
-												<Collapse key={monitor.id + "-wrapper"}>
-													<DraggableMonitorWrapper
-														forceDisableDrag={connectedMonitors.length === 1}
-														index={index}
-														isDraggingOver={droppableSnapshot.isDraggingOver}
-														monitor={monitor}
-														provided={provided}
-													/>
-												</Collapse>
-											))}
-											{provided.placeholder}
-										</TransitionGroup>
-									</Box>
-								)}
-							</Droppable>
-						</DragDropContext>
-					</Suspense>
+					<Monitor
+						brightness={brightness}
+						connected={true}
+						disabled={globalMonitorDisabled}
+						id={GLOBAL}
+						internal={false}
+						manufacturer={null}
+						menuDisabled={true}
+						mode={"native"}
+						name={GLOBAL}
+						nickname={""}
+						position={{ x: 0, y: 0 }}
+						productCode={null}
+						serialNumber={null}
+						size={{ width: 0, height: 0 }}
+					/>
+					<DragDropContext onDragEnd={handleDragEnd}>
+						<Droppable droppableId={"droppable"}>
+							{(provided, droppableSnapshot) => (
+								<Box ref={provided.innerRef} {...provided.droppableProps}>
+									<TransitionGroup>
+										{connectedMonitors.map((monitor, index) => (
+											<Collapse key={monitor.id + "-wrapper"}>
+												<DraggableMonitorWrapper
+													forceDisableDrag={connectedMonitors.length === 1}
+													index={index}
+													isDraggingOver={droppableSnapshot.isDraggingOver}
+													monitor={monitor}
+													provided={provided}
+												/>
+											</Collapse>
+										))}
+										{provided.placeholder}
+									</TransitionGroup>
+								</Box>
+							)}
+						</Droppable>
+					</DragDropContext>
 				</Stack>
 			</Stack>
 		</Paper>

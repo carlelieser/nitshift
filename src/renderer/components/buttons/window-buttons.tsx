@@ -1,13 +1,12 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { Close, UnfoldLess, UnfoldMore } from "mui-symbols";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMode, setTransitioning } from "@reducers/app";
 import { ipcRenderer } from "electron";
-
-const BrightnessModeButton = lazy(() => import("../brightness-mode/brightness-mode-button"));
-const SettingsButton = lazy(() => import("./settings-button"));
-const Upgrade = lazy(() => import("@promotional/buttons/upgrade-button"));
+import BrightnessModeButton from "../brightness-mode/brightness-mode-button";
+import SettingsButton from "./settings-button";
+import UpgradeButton from "../promotional/buttons/upgrade-button";
 
 const WindowButtons = () => {
 	const dispatch = useAppDispatch();
@@ -19,30 +18,30 @@ const WindowButtons = () => {
 	};
 
 	const toggleMode = () => {
-		dispatch(setTransitioning(true));
-		setTimeout(() => {
-			dispatch(setMode(mode === "compact" ? "expanded" : "compact"));
-			dispatch(setTransitioning(false));
-		}, 250);
+		requestAnimationFrame(() => {
+			dispatch(setTransitioning(true));
+			setTimeout(() => {
+				dispatch(setMode(mode === "compact" ? "expanded" : "compact"));
+				dispatch(setTransitioning(false));
+			}, 150);
+		});
 	};
 
 	return (
 		<Stack direction={"row"} alignItems={"center"} spacing={1}>
-			<Suspense>
-				<Upgrade context={"window-bar"} size={"small"} />
-				<BrightnessModeButton />
-				<SettingsButton />
-				<Tooltip title={<Typography>{mode === "compact" ? "Expanded View" : "Compact View"}</Typography>}>
-					<IconButton size={"small"} onClick={toggleMode}>
-						{mode === "expanded" ? <UnfoldLess /> : <UnfoldMore />}
-					</IconButton>
-				</Tooltip>
-				<Tooltip title={<Typography>Close</Typography>}>
-					<IconButton size={"small"} onClick={handleMinimize}>
-						<Close />
-					</IconButton>
-				</Tooltip>
-			</Suspense>
+			<UpgradeButton context={"window-bar"} size={"small"} />
+			<BrightnessModeButton />
+			<SettingsButton />
+			<Tooltip title={<Typography>{mode === "compact" ? "Expanded View" : "Compact View"}</Typography>}>
+				<IconButton size={"small"} onClick={toggleMode}>
+					{mode === "expanded" ? <UnfoldLess /> : <UnfoldMore />}
+				</IconButton>
+			</Tooltip>
+			<Tooltip title={<Typography>Close</Typography>}>
+				<IconButton size={"small"} onClick={handleMinimize}>
+					<Close />
+				</IconButton>
+			</Tooltip>
 		</Stack>
 	);
 };
