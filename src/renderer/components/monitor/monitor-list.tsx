@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useMemo, useRef } from "react";
+import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Box, Collapse, Paper, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMonitors } from "@reducers/app";
@@ -21,7 +21,7 @@ const MonitorList = () => {
 	const autoResize = useAppSelector((state) => state.app.autoResize);
 	const ref = useRef(null);
 	const mode = useAppSelector((state) => state.app.mode);
-	const [height, setHeight] = React.useState(0);
+	const [height, setHeight] = useState(0);
 
 	const globalMonitorDisabled = useMemo(
 		() => license === "free" || connectedMonitors.every(({ disabled }) => disabled),
@@ -57,7 +57,7 @@ const MonitorList = () => {
 
 	useEffect(() => {
 		if (autoResize && mode === "expanded") {
-			if (monitors.length) {
+			if (monitors.length && height) {
 				const initialOffset = height - dimensions.expanded.default.height - 100;
 				const finalOffset = initialOffset < dimensions.expanded.default.height ? 0 : initialOffset;
 				ipcRenderer.send("app/window/offset/height", finalOffset);
@@ -104,18 +104,18 @@ const MonitorList = () => {
 								{(provided, droppableSnapshot) => (
 									<Box ref={provided.innerRef} {...provided.droppableProps}>
 										<TransitionGroup>
-														 {connectedMonitors.map((monitor, index) => (
-															 <Collapse key={monitor.id + "-wrapper"}>
-																 <DraggableMonitorWrapper
-																	 forceDisableDrag={connectedMonitors.length === 1}
-																	 index={index}
-																	 isDraggingOver={droppableSnapshot.isDraggingOver}
-																	 monitor={monitor}
-																	 provided={provided}
-																 />
-															 </Collapse>
-														 ))}
-															 {provided.placeholder}
+											{connectedMonitors.map((monitor, index) => (
+												<Collapse key={monitor.id + "-wrapper"}>
+													<DraggableMonitorWrapper
+														forceDisableDrag={connectedMonitors.length === 1}
+														index={index}
+														isDraggingOver={droppableSnapshot.isDraggingOver}
+														monitor={monitor}
+														provided={provided}
+													/>
+												</Collapse>
+											))}
+											{provided.placeholder}
 										</TransitionGroup>
 									</Box>
 								)}
