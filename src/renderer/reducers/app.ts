@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	loadActiveMonitor,
 	loadAppearance,
+	loadAutoResize,
 	loadAutoUpdateCheck,
 	loadBrightnessModes,
 	loadGlobalBrightness,
@@ -51,12 +52,14 @@ export const findMonitorIndexById = (monitors: UIMonitor[], id: string) =>
 const initialState: AppState = {
 	activeMonitor: loadActiveMonitor(),
 	appearance: loadAppearance(),
+	autoResize: loadAutoResize(),
 	syncAppearance: loadSyncAppearance(),
 	autoUpdateCheck: loadAutoUpdateCheck(),
 	brightness: loadGlobalBrightness(),
 	brightnessModes: loadBrightnessModes(),
 	license: loadLicense(),
 	mode: loadMode(),
+	prevMode: loadMode(),
 	monitors: loadMonitors(),
 	monitorNicknames: loadMonitorNicknames(),
 	native: loadNative(),
@@ -72,7 +75,9 @@ const initialState: AppState = {
 	focused: false,
 	release: null,
 	minShadeLevel: loadMinShadeLevel(),
-	maxShadeLevel: loadMaxShadeLevel()
+	maxShadeLevel: loadMaxShadeLevel(),
+	settingsDialogOpen: false,
+	upgradeDialogOpen: false
 };
 
 const createReducer =
@@ -100,6 +105,7 @@ export const appSlice = createSlice({
 			});
 		},
 		setAutoUpdateCheck: createReducer<AppState["autoUpdateCheck"]>("autoUpdateCheck"),
+		setAutoResize: createReducer<AppState["autoResize"]>("autoResize"),
 		setBrightnessModes: (state, action: PayloadAction<Array<BrightnessModeData>>) => {
 			state.brightnessModes = action.payload;
 		},
@@ -136,6 +142,7 @@ export const appSlice = createSlice({
 		setBrightnessSilent: createReducer<AppState["brightness"]>("brightness"),
 		setLicense: createReducer<AppState["license"]>("license"),
 		setMode: createReducer<AppState["mode"]>("mode"),
+		setPrevMode: createReducer<AppState["prevMode"]>("prevMode"),
 		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
 			const { id, brightness } = action.payload;
 			const index = findMonitorIndexById(state.monitors, id);
@@ -172,10 +179,12 @@ export const appSlice = createSlice({
 		setRefreshed: createReducer<AppState["refreshed"]>("refreshed"),
 		setRelease: createReducer<AppState["release"]>("release"),
 		setSchedule: createReducer<AppState["schedule"]>("schedule"),
+		setSettingsDialogOpen: createReducer<AppState["settingsDialogOpen"]>("settingsDialogOpen"),
 		setStartupSettings: createReducer<AppState["startup"]>("startup"),
 		setTrialAvailability: createReducer<AppState["trialAvailability"]>("trialAvailability"),
 		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
 		setTransitioning: createReducer<AppState["transitioning"]>("transitioning"),
+		setUpgradeDialogOpen: createReducer<AppState["upgradeDialogOpen"]>("upgradeDialogOpen"),
 		setUserEmail: createReducer<AppState["userEmail"]>("userEmail"),
 		setMinShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
 			state.minShadeLevel = action.payload.level;
@@ -202,6 +211,7 @@ export const {
 	setActiveBrightnessMode,
 	setActiveMonitor,
 	setAppearance,
+	setAutoResize,
 	setSyncAppearance,
 	setAutoUpdateCheck,
 	setBrightness,
@@ -209,6 +219,7 @@ export const {
 	setBrightnessSilent,
 	setLicense,
 	setMode,
+	setPrevMode,
 	setMonitorBrightness,
 	setMonitorDisabled,
 	setMonitorMode,
@@ -218,6 +229,8 @@ export const {
 	setReceivedPremium,
 	setRefreshed,
 	setSchedule,
+	setUpgradeDialogOpen,
+	setSettingsDialogOpen,
 	setTrialAvailability,
 	setTrialStartDate,
 	setTransitioning,

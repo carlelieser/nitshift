@@ -46,7 +46,7 @@ class Scheduler extends EventEmitter {
 
 		if (!schedule) return;
 
-		if (schedule.type === "sunrise" || schedule.type === "sunset") {
+		if (schedule.type !== "manual") {
 			schedule = await this.updateSunSchedule(schedule);
 		}
 

@@ -583,8 +583,8 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.4";
-const body = "Added sunrise/sunset scheduling! Also, made the add/edit schedule dialog a bit taller.";
+const tag_name = "v0.5.6";
+const body = "Minor bug fixes.";
 const release = {
   tag_name,
   body

@@ -4,9 +4,10 @@ import { removeSchedule } from "@reducers/app";
 import { Delete, Edit, MonitorOutlined, Timer, WbSunny } from "mui-symbols";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { randomUUID } from "crypto";
-import AddScheduleDialog from "./dialogs/add-schedule";
+import AddScheduleDialog from "@dialogs/schedule/AddSchedule";
 import { getDateFromTime } from "@common/dayjs";
 import { ScheduleItem } from "@common/types";
+import { scheduleTypes } from "@common/utils";
 
 const Schedule: React.FC<ScheduleItem> = (props) => {
 	const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
@@ -67,7 +68,7 @@ const Schedule: React.FC<ScheduleItem> = (props) => {
 						{props.type === "manual" ? (
 							<Chip label={getDateFromTime(props.time).format("hh:mm A")} />
 						) : (
-							<Chip sx={{ textTransform: "capitalize" }} label={props.type} />
+							<Chip sx={{ textTransform: "capitalize" }} label={scheduleTypes[props.type]} />
 						)}
 					</Stack>
 					<Divider orientation={"vertical"} flexItem={true} />

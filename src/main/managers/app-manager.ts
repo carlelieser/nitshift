@@ -62,8 +62,15 @@ class AppManager {
 		});
 
 		this.tray.on("click", () => {
-			if (this.window.ref) this.window.ref.show();
-			else this.window.create();
+			if (this.window.ref) {
+				if (this.window.ref.isVisible()) {
+					this.window.ref.blur();
+				} else {
+					this.window.ref.show();
+				}
+			} else {
+				this.window.create();
+			}
 		});
 
 		this.tray.on("check-for-updates", () => {
