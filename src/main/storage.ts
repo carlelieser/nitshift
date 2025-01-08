@@ -26,7 +26,8 @@ export const STORE = {
 	USER_ID: "user-id",
 	STARTUP: "startup",
 	MIN_SHADE_LEVEL: "min-shade-level",
-	MAX_SHADE_LEVEL: "max-shade-level"
+	MAX_SHADE_LEVEL: "max-shade-level",
+	AUTO_RESIZE: "auto-resize"
 };
 
 export const storage = () =>
@@ -49,6 +50,7 @@ const defaultBrightnessModes = [
 // [storage][start]
 export const loadActiveMonitor = (): AppState["activeMonitor"] => storage().get(STORE.ACTIVE_MONITOR, null);
 export const loadAppearance = (): AppState["appearance"] => storage().get(STORE.APPEARANCE, "dark");
+export const loadAutoResize = (): AppState["autoResize"] => storage().get(STORE.AUTO_RESIZE, true);
 export const loadSyncAppearance = (): AppState["syncAppearance"] => storage().get(STORE.SYNC_APPEARANCE, true);
 export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] => storage().get(STORE.AUTO_UPDATE_CHECK, true);
 export const loadBrightnessModes = (): AppState["brightnessModes"] =>
@@ -72,6 +74,7 @@ export const loadMinShadeLevel = (): AppState["minShadeLevel"] => storage().get(
 export const loadMaxShadeLevel = (): AppState["maxShadeLevel"] => storage().get(STORE.MAX_SHADE_LEVEL, 100);
 export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) => storage().set(STORE.ACTIVE_MONITOR, monitor);
 export const saveAppearance = (appearance: AppState["appearance"]) => storage().set(STORE.APPEARANCE, appearance);
+export const saveAutoResize = (autoResize: AppState["autoResize"]) => storage().set(STORE.AUTO_RESIZE, autoResize);
 export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
 	storage().set(STORE.SYNC_APPEARANCE, shouldSync);
 export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>

@@ -25,6 +25,7 @@ export const STORE = {
 	STARTUP: "startup",
 	MIN_SHADE_LEVEL: "min-shade-level",
 	MAX_SHADE_LEVEL: "max-shade-level",
+	AUTO_RESIZE: "auto-resize",
 };
 
 export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);

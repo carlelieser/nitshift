@@ -1,9 +1,8 @@
-import React, { lazy, Suspense, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Box, Grow, IconButton, Tooltip, Typography } from "@mui/material";
 import { useAppSelector } from "@hooks";
 import Icon from "../icon/icon";
-
-const BrightnessModeMenu = lazy(() => import("./brightness-mode-menu"));
+import BrightnessModeMenu from "./brightness-mode-menu";
 
 const BrightnessModeButton = () => {
 	const modes = useAppSelector((state) => state.app.brightnessModes);
@@ -24,9 +23,7 @@ const BrightnessModeButton = () => {
 					</IconButton>
 				</Grow>
 			</Tooltip>
-			<Suspense>
-				<BrightnessModeMenu open={open} anchorEl={ref.current} onClose={closeMenu} />
-			</Suspense>
+			<BrightnessModeMenu open={open} anchorEl={ref.current} onClose={closeMenu} />
 		</Box>
 	);
 };

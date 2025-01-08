@@ -1,10 +1,8 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import { Box, Paper } from "@mui/material";
 import { useAppSelector } from "@hooks";
-import EmptyMonitorList from "../components/empty-monitor-list";
-
-const MonitorList = lazy(() => import("@components/monitor/monitor-list"));
-const LicenseBar = lazy(() => import("@components/license/license-bar"));
+import MonitorList from "@components/monitor/monitor-list";
+import LicenseBar from "@components/license/license-bar";
 
 const ExpandedView = () => {
 	const mode = useAppSelector((state) => state.app.mode);
@@ -21,10 +19,8 @@ const ExpandedView = () => {
 			elevation={0}
 			variant={"elevation"}
 		>
-			<Suspense fallback={<EmptyMonitorList />}>
-				<MonitorList />
-				<LicenseBar />
-			</Suspense>
+			<MonitorList />
+			<LicenseBar />
 		</Box>
 	) : null;
 };

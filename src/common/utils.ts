@@ -38,11 +38,11 @@ export const dimensions = {
 	expanded: {
 		native: {
 			width: 400,
-			height: 450
+			height: 430
 		},
 		default: {
 			width: 400,
-			height: 450
+			height: 430
 		}
 	},
 	compact: {
@@ -56,4 +56,22 @@ export const dimensions = {
 		}
 	},
 	padding: 4
+};
+
+export const scheduleTypes = {
+	manual: "Manual",
+	sunrise: "Sunrise",
+	sunriseEnd: "Sunrise End",
+	goldenHourEnd: "Golden Hour End",
+	solarNoon: "Solar Noon",
+	goldenHour: "Golden Hour",
+	sunsetStart: "Sunset Start",
+	sunset: "Sunset",
+	dusk: "Dusk",
+	nauticalDusk: "Nautical Dusk",
+	night: "Night",
+	nadir: "Nadir",
+	nightEnd: "Night End",
+	nauticalDawn: "Nautical Dawn",
+	dawn: "Dawn"
 };

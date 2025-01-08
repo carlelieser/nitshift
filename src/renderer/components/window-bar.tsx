@@ -1,13 +1,12 @@
-import React, { lazy, Suspense, useMemo } from "react";
+import React, { useMemo } from "react";
 import { alpha, Box, Divider, Paper, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { useAppSelector } from "@hooks";
 import { capitalize } from "lodash";
 import icon from "@assets/img/icon.svg";
 import iconPro from "@assets/img/icon-pro.svg";
 import release from "@common/release.json";
-
-const WindowButtons = lazy(() => import("./buttons/window-buttons"));
-const MonitorSelect = lazy(() => import("./monitor/monitor-select"));
+import WindowButtons from "./buttons/window-buttons";
+import MonitorSelect from "./monitor/monitor-select";
 
 const WindowBar = () => {
 	const theme = useTheme();
@@ -57,14 +56,12 @@ const WindowBar = () => {
 						) : null}
 					</Stack>
 				</Tooltip>
-				<Suspense>
-					<Stack direction={"row"} alignItems={"center"} width={"100%"} spacing={2}>
-						<Divider orientation={"vertical"} flexItem />
-						{mode === "compact" ? <MonitorSelect /> : null}
-						<Divider orientation={"vertical"} flexItem />
-					</Stack>
-					<WindowButtons />
-				</Suspense>
+				<Stack direction={"row"} alignItems={"center"} width={"100%"} spacing={2}>
+					<Divider orientation={"vertical"} flexItem />
+					{mode === "compact" ? <MonitorSelect /> : null}
+					<Divider orientation={"vertical"} flexItem />
+				</Stack>
+				<WindowButtons />
 			</Stack>
 		</Paper>
 	);

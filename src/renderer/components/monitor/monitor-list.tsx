@@ -1,13 +1,15 @@
-import React, { lazy, Suspense, useMemo } from "react";
-import { Box, Paper, Stack } from "@mui/material";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Box, Collapse, Paper, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { setMonitors } from "@reducers/app";
 import { DragDropContext, Droppable, OnDragEndResponder } from "react-beautiful-dnd";
 
 import { GLOBAL, UIMonitor } from "@common/types";
 import DraggableMonitorWrapper from "@components/monitor/draggable-monitor-wrapper";
-
-const Monitor = lazy(() => import("./monitor"));
+import { ipcRenderer } from "electron";
+import { dimensions } from "@common/utils";
+import { TransitionGroup } from "react-transition-group";
+import Monitor from "./monitor";
 
 const MonitorList = () => {
 	const dispatch = useAppDispatch();
@@ -15,6 +17,10 @@ const MonitorList = () => {
 	const connectedMonitors = useMemo(() => monitors.filter((monitor) => monitor.connected), [monitors]);
 	const license = useAppSelector((state) => state.app.license);
 	const brightness = useAppSelector((state) => state.app.brightness);
+	const autoResize = useAppSelector((state) => state.app.autoResize);
+	const ref = useRef(null);
+	const mode = useAppSelector((state) => state.app.mode);
+	const [height, setHeight] = useState(0);
 
 	const globalMonitorDisabled = useMemo(
 		() => license === "free" || connectedMonitors.every(({ disabled }) => disabled),
@@ -34,6 +40,33 @@ const MonitorList = () => {
 		dispatch(setMonitors(reorder(connectedMonitors, result.source.index, result.destination.index)));
 	};
 
+	useEffect(() => {
+		if (!ref.current) return;
+
+		const resizeObserver = new ResizeObserver((entries) => {
+			if (Number.isInteger(entries[0].contentRect.height)) setHeight(entries[0].contentRect.height);
+		});
+
+		resizeObserver.observe(ref.current);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (autoResize && mode === "expanded") {
+			if (monitors.length && height) {
+				const base = license === "free" ? 64 : 0;
+				const initialOffset = height - dimensions.expanded.default.height - 100 + base;
+				const finalOffset = initialOffset < dimensions.expanded.default.height ? base : initialOffset;
+				ipcRenderer.send("app/window/offset/height", finalOffset);
+			}
+		} else {
+			ipcRenderer.send("app/window/offset/height", 0);
+		}
+	}, [autoResize, monitors, mode, height, license]);
+
 	return (
 		<Paper
 			sx={{
@@ -47,45 +80,46 @@ const MonitorList = () => {
 			variant={"elevation"}
 			elevation={0}
 		>
-			<Stack spacing={2} p={2} pb={8}>
+			<Stack spacing={2} p={2} pb={license === "free" ? 8 : 0} ref={ref}>
 				<Stack spacing={2}>
-					<Suspense>
-						<Monitor
-							brightness={brightness}
-							connected={true}
-							disabled={globalMonitorDisabled}
-							id={GLOBAL}
-							internal={false}
-							manufacturer={null}
-							menuDisabled={true}
-							mode={"native"}
-							name={GLOBAL}
-							nickname={""}
-							position={{ x: 0, y: 0 }}
-							productCode={null}
-							serialNumber={null}
-							size={{ width: 0, height: 0 }}
-						/>
-						<DragDropContext onDragEnd={handleDragEnd}>
-							<Droppable droppableId={"droppable"}>
-								{(provided, droppableSnapshot) => (
-									<Box {...provided.droppableProps} ref={provided.innerRef}>
+					<Monitor
+						brightness={brightness}
+						connected={true}
+						disabled={globalMonitorDisabled}
+						id={GLOBAL}
+						internal={false}
+						manufacturer={null}
+						menuDisabled={true}
+						mode={"native"}
+						name={GLOBAL}
+						nickname={""}
+						position={{ x: 0, y: 0 }}
+						productCode={null}
+						serialNumber={null}
+						size={{ width: 0, height: 0 }}
+					/>
+					<DragDropContext onDragEnd={handleDragEnd}>
+						<Droppable droppableId={"droppable"}>
+							{(provided, droppableSnapshot) => (
+								<Box ref={provided.innerRef} {...provided.droppableProps}>
+									<TransitionGroup>
 										{connectedMonitors.map((monitor, index) => (
-											<DraggableMonitorWrapper
-												forceDisableDrag={connectedMonitors.length === 1}
-												index={index}
-												isDraggingOver={droppableSnapshot.isDraggingOver}
-												key={monitor.id + "-wrapper"}
-												monitor={monitor}
-												provided={provided}
-											/>
+											<Collapse key={monitor.id + "-wrapper"}>
+												<DraggableMonitorWrapper
+													forceDisableDrag={connectedMonitors.length === 1}
+													index={index}
+													isDraggingOver={droppableSnapshot.isDraggingOver}
+													monitor={monitor}
+													provided={provided}
+												/>
+											</Collapse>
 										))}
 										{provided.placeholder}
-									</Box>
-								)}
-							</Droppable>
-						</DragDropContext>
-					</Suspense>
+									</TransitionGroup>
+								</Box>
+							)}
+						</Droppable>
+					</DragDropContext>
 				</Stack>
 			</Stack>
 		</Paper>

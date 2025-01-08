@@ -5,7 +5,7 @@ import { useAppSelector } from "@hooks";
 import { Add, Schedule as ScheduleIcon } from "mui-symbols";
 import { TransitionGroup } from "react-transition-group";
 import Schedule from "../schedule";
-import AddScheduleDialog from "./add-schedule";
+import AddScheduleDialog from "@dialogs/schedule/AddSchedule";
 
 import clock from "@assets/img/clock.jpeg";
 

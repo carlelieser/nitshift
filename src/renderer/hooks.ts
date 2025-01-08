@@ -97,12 +97,8 @@ export const useAppTheme = () => {
 				},
 				MuiTooltip: {
 					defaultProps: {
-						disableFocusListener: transitioning,
-						disableHoverListener: transitioning,
-						disableInteractive: true,
 						PopperProps: {
-							disablePortal: transitioning,
-							hidden: transitioning || !focused
+							hidden: transitioning ? true : undefined
 						}
 					}
 				},

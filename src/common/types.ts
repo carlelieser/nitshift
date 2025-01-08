@@ -1,4 +1,5 @@
 import { Monitor } from "lumi-control";
+import { GetTimesResult } from "suncalc";
 
 export type BrightnessMode = "native" | "shade";
 
@@ -43,7 +44,7 @@ export interface UIMonitor extends Monitor {
 }
 
 export interface ScheduleItemContent {
-	type: "manual" | "sunrise" | "sunset";
+	type: "manual" | keyof GetTimesResult;
 	monitors: Array<UIMonitor>;
 	time: string;
 	brightness: number;
@@ -73,17 +74,20 @@ export interface StartupSettings {
 export interface AppState {
 	activeMonitor: UIMonitor | null;
 	appearance: Appearance;
+	autoResize: boolean;
 	syncAppearance: boolean;
 	autoUpdateCheck: boolean;
 	brightness: number;
 	brightnessModes: Array<BrightnessModeData>;
 	license: "free" | "trial" | "premium";
 	mode: "expanded" | "compact";
+	prevMode: "expanded" | "compact";
 	monitors: Array<UIMonitor>;
 	monitorNicknames: Array<[string, string]>;
 	receivedPremium: boolean;
 	refreshed: boolean;
 	schedule: Array<ScheduleItem>;
+	settingsDialogOpen: boolean;
 	trialAvailability: boolean;
 	trialStartDate: number | null;
 	transitioning: boolean;
