@@ -1,11 +1,13 @@
 import React from "react";
-import { ButtonGroup, Paper, Stack } from "@mui/material";
+import { Divider, Paper, Stack, useTheme } from "@mui/material";
 import FreeTrialButton from "@promotional/buttons/free-trial-button";
 import UpgradeButton from "@promotional/buttons/upgrade-button";
 import { useAppSelector } from "@hooks";
 
 const LicenseBar = () => {
 	const license = useAppSelector((state) => state.app.license);
+	const theme = useTheme();
+	const appearance = useAppSelector((state) => state.app.appearance);
 	return license === "premium" ? null : (
 		<Paper
 			elevation={0}
@@ -21,15 +23,22 @@ const LicenseBar = () => {
 		>
 			<Stack
 				direction={"row"}
-				justifyContent={"space-between"}
 				width={"100%"}
 				height={50}
-				sx={{ overflow: "hidden", borderRadius: 3 }}
+				sx={{
+					overflow: "hidden",
+					borderRadius: 3,
+					bgcolor: appearance === "light" ? theme.palette.grey[900] : theme.palette.grey[100]
+				}}
 			>
-				<ButtonGroup fullWidth={true} variant={"text"}>
-					<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
-					<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />
-				</ButtonGroup>
+				<FreeTrialButton fullWidth={true} sx={{ borderRadius: 0 }} />
+				<Divider
+					orientation={"vertical"}
+					variant={"middle"}
+					flexItem
+					color={appearance === "light" ? theme.palette.grey[800] : theme.palette.grey[400]}
+				/>
+				<UpgradeButton context={"main"} fullWidth={true} sx={{ borderRadius: 0 }} />
 			</Stack>
 		</Paper>
 	);
