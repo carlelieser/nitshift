@@ -1,3 +1,5 @@
+import { isDev } from "./utils";
+
 export const getUserPosition = async (): Promise<{ latitude: number; longitude: number }> => {
 	try {
 		const response = await fetch(
@@ -24,7 +26,8 @@ export const request = (url: string, init: RequestInit = {}, userId = "") => {
 		...init,
 		headers: {
 			...init.headers,
-			...(userId ? { "X-Glimmr-Secret-Key": userId } : {})
+			...(userId ? { "X-Glimmr-Secret-Key": userId } : {}),
+			origin: isDev ? "http://localhost:5173" : "https://glimmr.app"
 		}
 	});
 };
