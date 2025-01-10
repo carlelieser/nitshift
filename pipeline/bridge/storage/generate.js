@@ -69,7 +69,16 @@ const convertMethodToIpcRenderer = (method) => {
 const convertMethodToIpcMain = (method) => {
 	return convert(method, ({ parsed, event }) => {
 		const args = getIpcParams(["e", ...parsed.params]);
-		const methodCall = `storage.${parsed.originalName}(${parsed.paramString})`;
+		let methodCall = `storage.${parsed.originalName}(${parsed.paramString})`;
+
+		if (parsed.originalName === "loadLicense") {
+			methodCall = `loadGenuineLicense()`;
+		}
+
+		if (parsed.originalName === "saveLicense") {
+			methodCall = `storage.${parsed.originalName}(loadGenuineLicense())`;
+		}
+
 		return `ipcMain.on("${event}", (${args}) => { e.returnValue = ${methodCall}; })`;
 	});
 };

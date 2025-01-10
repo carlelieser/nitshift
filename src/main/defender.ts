@@ -4,7 +4,7 @@ import ProjectHasher from "./project-hasher";
 import { main_id, version_id } from "./keys";
 import { isDev } from "@common/utils";
 import { safe } from "./safe";
-import { isPackaged } from "./utils";
+import { getUserAccess, isPackaged } from "./utils";
 
 const SHA_256_LENGTH = 64;
 
@@ -22,7 +22,8 @@ class Defender {
 	};
 
 	public defend = () => {
-		if (this.id !== this.version && !isDev) {
+		const userAccess = getUserAccess();
+		if ((this.id !== this.version || userAccess === false) && !isDev) {
 			app.quit();
 			process.exit();
 		}

@@ -1,6 +1,7 @@
 // THIS FILE IS AUTO-GENERATED. DO NOT EDIT.
 
 import * as storage from "@main/storage";
+import { loadGenuineLicense } from "@main/utils";
 import { ipcMain } from "electron";
 
 ipcMain.on("storage/remove", (e, key) => {
@@ -33,7 +34,7 @@ ipcMain.on("storage/load-last-updated-on", (e) => {
 	e.returnValue = storage.loadLastUpdatedOn();
 });
 ipcMain.on("storage/load-license", (e) => {
-	e.returnValue = storage.loadLicense();
+	e.returnValue = loadGenuineLicense();
 });
 ipcMain.on("storage/load-mode", (e) => {
 	e.returnValue = storage.loadMode();
@@ -96,7 +97,7 @@ ipcMain.on("storage/save-last-updated-on", (e, date) => {
 	e.returnValue = storage.saveLastUpdatedOn(date);
 });
 ipcMain.on("storage/save-license", (e, license) => {
-	e.returnValue = storage.saveLicense(license);
+	e.returnValue = storage.saveLicense(loadGenuineLicense());
 });
 ipcMain.on("storage/save-mode", (e, mode) => {
 	e.returnValue = storage.saveMode(mode);
