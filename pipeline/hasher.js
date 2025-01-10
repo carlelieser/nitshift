@@ -188,6 +188,7 @@ function pTimeout(promise, options) {
     customTimers = { setTimeout, clearTimeout }
   } = options;
   let timer;
+  let abortHandler;
   const wrappedPromise = new Promise((resolve, reject) => {
     if (typeof milliseconds !== "number" || Math.sign(milliseconds) !== 1) {
       throw new TypeError(`Expected \`milliseconds\` to be a positive number, got \`${milliseconds}\``);
@@ -197,13 +198,10 @@ function pTimeout(promise, options) {
       if (signal.aborted) {
         reject(getAbortedReason(signal));
       }
-      const abortHandler = () => {
+      abortHandler = () => {
         reject(getAbortedReason(signal));
       };
       signal.addEventListener("abort", abortHandler, { once: true });
-      promise.finally(() => {
-        signal.removeEventListener("abort", abortHandler);
-      });
     }
     if (milliseconds === Number.POSITIVE_INFINITY) {
       promise.then(resolve, reject);
@@ -241,6 +239,9 @@ function pTimeout(promise, options) {
   });
   const cancelablePromise = wrappedPromise.finally(() => {
     cancelablePromise.clear();
+    if (abortHandler && options.signal) {
+      options.signal.removeEventListener("abort", abortHandler);
+    }
   });
   cancelablePromise.clear = () => {
     customTimers.clearTimeout.call(void 0, timer);
@@ -583,7 +584,7 @@ class PQueue extends EventEmitter {
     return this.#isPaused;
   }
 }
-const tag_name = "v0.5.8";
+const tag_name = "v0.5.7";
 const body = "Added more options for scheduling! Also fixed some bugs and made other minor improvements to the UI.";
 const release = {
   tag_name,

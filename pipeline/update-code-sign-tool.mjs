@@ -6,6 +6,7 @@ import * as fs from "node:fs";
 import { fileURLToPath } from "url";
 import { Extract } from "unzip-stream";
 import ora from "ora";
+import os from "os";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,12 +14,12 @@ const __dirname = path.dirname(__filename);
 const spinner = ora();
 const target = path.join(__dirname, "..", "code-sign-tool");
 const octokit = new Octokit({
-	auth: keys.git,
+	auth: keys.git
 });
 
 spinner.start();
 
-spinner.info(`Cleaning directory: ${target}`)
+spinner.info(`Cleaning directory: ${target}`);
 
 await fs.promises.rm(target, { force: true, recursive: true });
 
@@ -26,15 +27,15 @@ spinner.info("Getting latest release asset from GitHub...");
 
 const release = await octokit.rest.repos.getLatestRelease({
 	owner: "SSLcom",
-	repo: "CodeSignTool",
+	repo: "CodeSignTool"
 });
 
-const asset = release.data.assets.find(asset => asset.name.includes("windows"));
+const asset = release.data.assets.find(asset => (os.platform() === "win32" ? asset.name.includes("windows") : !asset.name.includes("windows")));
 
 spinner.succeed(`Found: ${asset.browser_download_url}`);
 
 const response = await fetch(asset.browser_download_url);
 
-spinner.start("Downloading and extracting zip...")
+spinner.start("Downloading and extracting zip...");
 
 response.body.pipe(Extract({ path: target })).on("finish", () => spinner.succeed(`CodeSignTool updated to ${release.data.tag_name}!`));
