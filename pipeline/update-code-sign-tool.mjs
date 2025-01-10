@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import path from "node:path";
 import * as fs from "node:fs";
 import { fileURLToPath } from "url";
-import { Extract } from "unzip";
+import { Extract } from "unzip-stream";
 import ora from "ora";
 
 const __filename = fileURLToPath(import.meta.url);
