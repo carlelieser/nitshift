@@ -10,6 +10,7 @@ const fg = require("fast-glob");
 const os = require("os");
 const isWindows = os.platform() === "win32";
 const scriptExtension = isWindows ? ".bat" : ".sh";
+const shell = isWindows ? "powershell" : "/bin/bash";
 const root = path.resolve(__dirname, "..");
 const installer = path.join(root, "dist", "squirrel-windows", "glimmr-setup.exe");
 const tool = path.dirname(fg.globSync(`code-sign-tool/**/CodeSignTool${scriptExtension}`, { cwd: root }).shift());
@@ -19,7 +20,7 @@ console.log(logSymbols.info, `Running command: ${command}`);
 
 const spinner = ora().start("Signing installer");
 
-const child = exec(command, { shell: "powershell.exe", cwd: tool }, (error, stdout, stderr) => {
+const child = exec(command, { shell , cwd: tool }, (error, stdout, stderr) => {
 	spinner.stop();
 	if (error || !stdout.includes("Code signed successfully") || stderr) {
 		console.log(logSymbols.error, "Signing failed:");
