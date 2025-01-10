@@ -28,4 +28,4 @@ squirrelWindows:
 #  shortcutName: ${productName}
 #  uninstallDisplayName: ${productName}
 #  createDesktopShortcut: false
-npmRebuild: true
+npmRebuild: false
