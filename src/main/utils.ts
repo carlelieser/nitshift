@@ -19,4 +19,4 @@ export const loadGenuineLicense = () => {
 	if (userAccess === "all") return loadLicense();
 	if (userAccess) return premium_license;
 	return free_license;
-}
+};
