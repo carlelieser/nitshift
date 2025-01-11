@@ -10,13 +10,13 @@ export const exeRoot = path.dirname(app.getPath("exe"));
 
 export const getUserAccess = () => {
 	const id = machineIdSync();
-	if (access.includes("*")) return "all";
+	if (access.includes("default")) return "default";
 	return access.includes(id);
 };
 
 export const loadGenuineLicense = () => {
 	const userAccess = getUserAccess();
-	if (userAccess === "all") return loadLicense();
+	if (userAccess === "default") return loadLicense();
 	if (userAccess) return premium_license;
 	return free_license;
 };
