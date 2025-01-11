@@ -13,7 +13,7 @@ const scriptExtension = isWindows ? ".bat" : ".sh";
 const shell = isWindows ? "powershell" : "/bin/bash";
 const root = path.resolve(__dirname, "..");
 const installer = path.join(root, "dist", "squirrel-windows", "glimmr-setup.exe");
-const tool = path.dirname(fg.globSync(`code-sign-tool/**/CodeSignTool${scriptExtension}`, { cwd: root }).shift());
+const tool = path.dirname(fg.globSync(`code-sign-tool/CodeSignTool${scriptExtension}`, { cwd: root }).shift());
 const command = `./CodeSignTool${scriptExtension} sign -username=${process.env.SSL_USER} -password=${process.env.SSL_PASS} -totp_secret=${process.env.SSL_TOTP_SECRET} -input_file_path="${installer}"`;
 
 console.log(logSymbols.info, `Running command: ${command}`);

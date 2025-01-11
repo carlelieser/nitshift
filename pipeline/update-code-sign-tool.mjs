@@ -2,13 +2,14 @@ import { Octokit } from "octokit";
 import * as keys from "../src/main/keys.ts";
 import fetch from "node-fetch";
 import path from "node:path";
-import * as fs from "node:fs";
+import fs from "fs-extra";
 import { fileURLToPath } from "url";
 import { Extract } from "unzip-stream";
 import ora from "ora";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const isWindows = process.platform === "win32";
 
 const spinner = ora();
 const target = path.join(__dirname, "..", "code-sign-tool");
@@ -20,7 +21,7 @@ spinner.start();
 
 spinner.info(`Cleaning directory: ${target}`);
 
-await fs.promises.rm(target, { force: true, recursive: true });
+await fs.emptyDir(target);
 
 spinner.info("Getting latest release asset from GitHub...");
 
@@ -29,7 +30,7 @@ const release = await octokit.rest.repos.getLatestRelease({
 	repo: "CodeSignTool"
 });
 
-const asset = release.data.assets.find(asset => !asset.name.includes("windows"));
+const asset = release.data.assets.find(asset => asset.name === `CodeSignTool-${release.data.tag_name}${isWindows ? "-windows" : ""}.zip`);
 
 spinner.succeed(`Found: ${asset.browser_download_url}`);
 
