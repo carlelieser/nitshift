@@ -6,7 +6,6 @@ import * as fs from "node:fs";
 import { fileURLToPath } from "url";
 import { Extract } from "unzip-stream";
 import ora from "ora";
-import os from "os";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,7 +29,7 @@ const release = await octokit.rest.repos.getLatestRelease({
 	repo: "CodeSignTool"
 });
 
-const asset = release.data.assets.find(asset => (os.platform() === "win32" ? asset.name.includes("windows") : !asset.name.includes("windows")));
+const asset = release.data.assets.find(asset => !asset.name.includes("windows"));
 
 spinner.succeed(`Found: ${asset.browser_download_url}`);
 
