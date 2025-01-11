@@ -19,8 +19,20 @@ jobs:
         with:
           node-version: 22
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.github_token }}
+      - name: npm install
+        run: npm install
 
+      - name: npm run update:cst
+        run: npm run update:cst
+
+      - name: npm run format
+        run: npm run format
+
+      - name: npm run make
+        run: npm run make
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: glimmr-setup.exe
+          path: dist/squirrel-windows/glimmr-setup.exe
