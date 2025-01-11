@@ -5,4 +5,4 @@ export const main_id = "project-hash";
 export const premium_license = "premium";
 export const free_license = "free";
 
-export const access = ["*"];
+export const access = ["default"];
