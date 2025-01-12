@@ -34,7 +34,7 @@
     "release:auto": "npm run release:create -- -- --auto",
     "publish:auto": "npm run release:prepare && npm run release:auto",
     "release": "npm run release:create",
-    "users:prepare": "tsx pipeline/prepare-for-users.mjs",
+    "access": "tsx pipeline/grant-access.mjs",
     "publish": "npm run release:prepare && npm run release",
     "postpublish": "npm run license-integrity-check"
   },
