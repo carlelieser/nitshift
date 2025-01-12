@@ -12,6 +12,6 @@ const keyContent = await fs.readFile(keyPath, "utf8");
 const keyContentLines = keyContent.split("\n");
 const baseContentLines = keyContentLines.slice(0, keyContentLines.findIndex((line) => line.includes("export const access")));
 const baseContent = baseContentLines.join("\n");
-const newKeyContent = `${baseContent}\nexport const access = [${access.split(" ").map(id => `"${id}"`).join(", ")}];\n`;
+const newKeyContent = `${baseContent}\nexport const access = [${access.split(/[^a-zA-Z0-9]/g).map(id => `"${id}"`).join(", ")}];\n`;
 
 await fs.outputFile(keyPath, newKeyContent);
