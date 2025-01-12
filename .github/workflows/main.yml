@@ -17,11 +17,6 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
-        with:
-          node-version: 22
-
       - name: Build
         env:
           ACCESS: ${{ inputs.access }}
