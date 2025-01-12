@@ -1,6 +1,13 @@
 name: build
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      access:
+        description: "Default access level"
+        required: false
+        default: "*"
+        type: string
 
 jobs:
   release:
@@ -20,8 +27,11 @@ jobs:
           node-version: 22
 
       - name: Build
+        env:
+          ACCESS: ${{ inputs.access }}
         run: |
           npm install
+          npm run access -- $env:ACCESS
           npm run update:cst
           npm run format
           npm run make
