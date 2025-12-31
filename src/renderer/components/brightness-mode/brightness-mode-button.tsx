@@ -1,18 +1,12 @@
-import React, { useMemo, useRef, useState } from "react";
+import React from "react";
 import { Box, Grow, IconButton, Tooltip, Typography } from "@mui/material";
-import { useAppSelector } from "@hooks";
+import { selectActiveBrightnessMode, useAppSelector, useMenuState } from "@hooks";
 import Icon from "../icon/icon";
 import BrightnessModeMenu from "./brightness-mode-menu";
 
 const BrightnessModeButton = () => {
-	const modes = useAppSelector((state) => state.app.brightnessModes);
-	const activeMode = useMemo(() => modes.find((mode) => mode.active), [modes]);
-
-	const [open, setOpen] = useState<boolean>(false);
-	const ref = useRef();
-
-	const openMenu = () => setOpen(true);
-	const closeMenu = () => setOpen(false);
+	const activeMode = useAppSelector(selectActiveBrightnessMode);
+	const { open, ref, openMenu, closeMenu } = useMenuState<HTMLButtonElement>();
 
 	return (
 		<Box width={36}>

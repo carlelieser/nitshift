@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { setBrightness, setMonitorBrightness } from "@reducers/app";
-import { useAppDispatch, useAppSelector } from "@renderer/hooks";
+import { useAppDispatch } from "@renderer/hooks";
 import { GLOBAL, UIMonitor } from "@common/types";
 import { SlideProps } from "@mui/material";
 import Slider, { SliderProps } from "@components/slider";
@@ -19,12 +19,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 	position,
 	size
 }) => {
-	const license = useAppSelector((state) => state.app.license);
 	const dispatch = useAppDispatch();
-	const disabled = useMemo(
-		() => monitorDisabled || (license === "free" && monitorId === GLOBAL),
-		[monitorId, monitorDisabled, license]
-	);
 
 	const dispatchBrightness = useCallback(
 		(newBrightness: number) => {
@@ -53,7 +48,7 @@ const MonitorBrightnessSlider: React.FC<MonitorBrightnessSliderProps> = ({
 			color={color}
 			value={brightness}
 			percentage={true}
-			disabled={disabled}
+			disabled={monitorDisabled}
 			onChange={handleBrightnessUpdate}
 		/>
 	);

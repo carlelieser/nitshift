@@ -1,13 +1,13 @@
 import React from "react";
 import { ListItemIcon, ListItemText, Menu, MenuItem, MenuProps } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { selectActiveBrightnessMode, useAppDispatch, useAppSelector } from "../../hooks";
 import { setActiveBrightnessMode } from "../../reducers/app";
 import Icon from "../icon/icon";
 
 const BrightnessModeMenu: React.FC<MenuProps> = (props) => {
 	const dispatch = useAppDispatch();
 	const modes = useAppSelector((state) => state.app.brightnessModes);
-	const activeMode = useAppSelector((state) => state.app.brightnessModes?.find((mode) => mode.active));
+	const activeMode = useAppSelector(selectActiveBrightnessMode);
 
 	return (
 		<Menu

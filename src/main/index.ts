@@ -3,15 +3,14 @@ import Store from "electron-store";
 import AppManager from "./managers/app-manager";
 
 import AppMessages from "./messages/app";
-import "./messages/storage";
-import "./messages/keys";
-import "./mailer";
 
 if (require("electron-squirrel-startup")) app.quit();
 
 require("v8-compile-cache");
 
 Store.initRenderer();
+
+process.env.GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const manager = new AppManager();
 

@@ -2,13 +2,47 @@ import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "./redux";
 import { AppState } from "../common/types";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { createTheme, Grow } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import shadows from "@mui/material/styles/shadows";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
+
+// Selectors
+export const selectActiveBrightnessMode = (state: AppState) =>
+	state.app.brightnessModes.find((mode) => mode.active);
+
+export const selectConnectedMonitors = (state: AppState) =>
+	state.app.monitors.filter((monitor) => monitor.connected);
+
+// Hook for simple open/close menu state with optional ref
+export const useMenuState = <T extends HTMLElement = HTMLElement>() => {
+	const [open, setOpen] = useState(false);
+	const ref = useRef<T>(null);
+
+	const openMenu = useCallback(() => setOpen(true), []);
+	const closeMenu = useCallback(() => setOpen(false), []);
+
+	return { open, ref, openMenu, closeMenu };
+};
+
+// Hook for anchor element-based menus (MUI Menu pattern)
+export const useAnchorMenu = <T extends HTMLElement = HTMLElement>() => {
+	const [anchorEl, setAnchorEl] = useState<T | null>(null);
+	const open = Boolean(anchorEl);
+
+	const handleOpen = useCallback((event: React.MouseEvent<T>) => {
+		setAnchorEl(event.currentTarget);
+	}, []);
+
+	const handleClose = useCallback(() => {
+		setAnchorEl(null);
+	}, []);
+
+	return { anchorEl, open, handleOpen, handleClose };
+};
 
 export const useAppTheme = () => {
 	const appearance = useAppSelector((state) => state.app.appearance);

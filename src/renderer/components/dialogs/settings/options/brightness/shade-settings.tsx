@@ -11,7 +11,6 @@ import { loadMaxShadeLevel, loadMinShadeLevel } from "@renderer/storage";
 const ShadeSettings = () => {
 	const minShadeLevel = useAppSelector((state) => state.app.minShadeLevel);
 	const maxShadeLevel = useAppSelector((state) => state.app.maxShadeLevel);
-	const license = useAppSelector((state) => state.app.license);
 	const [defaultMinShadeLevel, setDefaultMinShadeLevel] = useState<number>();
 	const [defaultMaxShadeLevel, setDefaultMaxShadeLevel] = useState<number>();
 	const dispatch = useAppDispatch();
@@ -80,12 +79,11 @@ const ShadeSettings = () => {
 					<Chip size={"small"} icon={<BacklightHigh />} label={maxShadeLevel} />
 				</Stack>
 			}
-			isPremium={true}
 			wrap={false}
 			icon={<DonutSmallRoundedFilled />}
 			endIcon={
 				<Tooltip title={"Reset"}>
-					<IconButton disabled={isDefault || license === "free"} onClick={handleShadeLevelReset}>
+					<IconButton disabled={isDefault} onClick={handleShadeLevelReset}>
 						<ResetSettings />
 					</IconButton>
 				</Tooltip>
