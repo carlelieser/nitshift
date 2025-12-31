@@ -1,38 +1,13 @@
 import { BrowserWindow, screen } from "electron";
-import { loadLicense, loadMode, loadMonitorNicknames, loadMonitors, saveMonitors } from "@main/storage";
-import lumi from "lumi-control";
+import { loadMode } from "@main/storage";
 import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
-import { clamp, merge, pick, uniqBy } from "lodash";
 import fs from "fs-extra";
 import path from "path";
 import release from "@common/release.json";
 import EventEmitter from "events";
-import * as module from "./lumi/wrapper";
 import { loadAppearance, loadNative, loadStartupSettings, saveMode } from "./storage";
-
-const DEFAULT_MONITOR: UIMonitor = {
-	brightness: 100,
-	connected: false,
-	disabled: false,
-	displayId: "",
-	id: "",
-	internal: false,
-	manufacturer: "",
-	mode: "native",
-	name: "",
-	nickname: "",
-	position: {
-		x: 0,
-		y: 0
-	},
-	productCode: "",
-	serialNumber: "",
-	size: {
-		width: 0,
-		height: 0
-	}
-};
+import { monitorService } from "./services/monitor-service";
 
 class Window extends EventEmitter {
 	public ref: BrowserWindow;
@@ -155,49 +130,12 @@ class Window extends EventEmitter {
 
 	public disableAutoHide = () => (this.autoHide = false);
 
-	public refreshMonitors = async () => {
-		const license = loadLicense();
-		const storedMonitors = loadMonitors();
-		const storedMonitorNicknames = loadMonitorNicknames();
-		const availableMonitors = await module.monitors();
-		const monitors: Array<UIMonitor | lumi.Monitor> = [];
-		const screens = screen.getAllDisplays();
-
-		monitors.push(...storedMonitors, ...availableMonitors);
-
-		monitors.forEach((monitor, index) => {
-			const nickname = storedMonitorNicknames.find(([monitorId]) => monitorId === monitor.id)?.[1] ?? "Monitor";
-			const storedMonitor = storedMonitors.find((storedMonitor) => storedMonitor.id === monitor.id);
-			const connectedMonitor = availableMonitors.find(({ id }) => id === monitor.id);
-			const isConnected = Boolean(
-				connectedMonitor && connectedMonitor?.size.width > 0 && connectedMonitor?.size.height > 0
-			);
-			const brightness = index > 1 ? 100 : clamp(storedMonitor?.brightness ?? 100, 0, 100);
-			const idealMonitor = merge({}, monitor, storedMonitor, connectedMonitor);
-			const screen = screens.find(({ id }) => id === Number(connectedMonitor?.displayId));
-			const freeMonitor =
-				license === "free"
-					? {
-							mode: "native",
-							disabled: index > 1,
-							brightness
-					  }
-					: {};
-			const dimensions = merge({}, pick(screen, "size"), { position: pick(screen?.bounds, "x", "y") });
-
-			monitors[index] = merge({}, DEFAULT_MONITOR, idealMonitor, freeMonitor, dimensions, {
-				connected: isConnected,
-				nickname
-			});
-		});
-
-		const uniqueMonitors = uniqBy(monitors, "id") as Array<UIMonitor>;
-
-		saveMonitors(uniqueMonitors);
+	public refreshMonitors = async (): Promise<UIMonitor[]> => {
+		const monitors = await monitorService.refresh();
 
 		if (this.ref) this.ref.webContents.send("refresh-monitors");
 
-		return uniqueMonitors;
+		return monitors;
 	};
 
 	public capture = async () => {

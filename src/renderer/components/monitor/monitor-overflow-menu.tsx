@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { Box, createTheme, Divider, IconButton, Menu, MenuProps, ThemeProvider, useTheme } from "@mui/material";
 import { MoreVert } from "mui-symbols";
-import { useAppSelector } from "../../hooks";
+import { useAppSelector, useMenuState } from "../../hooks";
 import MonitorToggle from "./monitor-toggle";
 import MonitorModeToggle from "./monitor-mode-toggle";
 import MonitorRename from "./monitor-rename";
@@ -13,11 +13,8 @@ interface MonitorOverflowMenuProps extends Omit<MenuProps, "anchorEl" | "open"> 
 
 const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ disabled = false, monitorId }) => {
 	const monitor = useAppSelector((state) => state.app.monitors.find((monitor) => monitor.id === monitorId));
-	const [isOpen, setIsOpen] = useState(false);
+	const { open, ref, openMenu, closeMenu } = useMenuState<HTMLButtonElement>();
 
-	const open = useCallback(() => setIsOpen(true), []);
-
-	const ref = useRef<HTMLButtonElement>();
 	const defaultTheme = useTheme();
 	const theme = useMemo(() => {
 		return createTheme({
@@ -29,25 +26,23 @@ const MonitorOverflowMenu: React.FC<MonitorOverflowMenuProps> = ({ disabled = fa
 		});
 	}, [defaultTheme]);
 
-	const handleClose = useCallback(() => setIsOpen(false), []);
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Box>
 				<Menu
-					autoFocus={isOpen}
+					autoFocus={open}
 					keepMounted={true}
-					open={isOpen}
+					open={open}
 					anchorEl={ref.current}
-					onClose={handleClose}
-					onClick={handleClose}
+					onClose={closeMenu}
+					onClick={closeMenu}
 				>
 					<MonitorModeToggle variant={"menu-item"} monitorId={monitorId} mode={monitor.mode} />
 					<Divider sx={{ my: 1 }} />
 					<MonitorRename monitorId={monitorId} currentName={monitor.nickname} />
 					<MonitorToggle variant={"menu-item"} monitorId={monitorId} disabled={monitor.disabled} />
 				</Menu>
-				<IconButton color={"inherit"} disabled={disabled} ref={ref} onClick={open}>
+				<IconButton color={"inherit"} disabled={disabled} ref={ref} onClick={openMenu}>
 					<MoreVert />
 				</IconButton>
 			</Box>

@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Paper } from "@mui/material";
 import { useAppSelector } from "@hooks";
 import MonitorList from "@components/monitor/monitor-list";
-import LicenseBar from "@components/license/license-bar";
 
 const ExpandedView = () => {
 	const mode = useAppSelector((state) => state.app.mode);
@@ -20,7 +19,6 @@ const ExpandedView = () => {
 			variant={"elevation"}
 		>
 			<MonitorList />
-			<LicenseBar />
 		</Box>
 	) : null;
 };

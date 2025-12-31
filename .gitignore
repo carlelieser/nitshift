@@ -102,3 +102,6 @@ code-sign-tool/
 **/safe.ts
 
 **/release.json
+
+# Old TypeScript/Electron project files
+_old/

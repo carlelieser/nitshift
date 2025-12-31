@@ -1,16 +1,9 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { Box, Paper, Slide, Stack, ThemeProvider } from "@mui/material";
-import { batch, Provider } from "react-redux";
+import { Provider } from "react-redux";
 import { redux } from "@redux";
 import { useAppDispatch, useAppSelector, useAppTheme } from "@hooks";
-import {
-	refreshAvailableMonitors,
-	setFocused,
-	setLicense,
-	setTransitioning,
-	setTrialStartDate,
-	syncLicenseData
-} from "@reducers/app";
+import { refreshAvailableMonitors, setFocused, setTransitioning } from "@reducers/app";
 import { dimensions, isNumberAroundReference } from "@common/utils";
 import FocusTrap from "@mui/material/Unstable_TrapFocus";
 
@@ -23,7 +16,6 @@ import PassThrough from "./components/pass-through";
 import WindowBar from "./components/window-bar";
 import ExpandedView from "./views/expanded";
 import CompactView from "./views/compact";
-import ReceivedPremium from "./components/received-premium";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -71,20 +63,6 @@ const App = () => {
 	useEffect(() => {
 		ipcRenderer.on("appearance-updated", (_, appearance: Appearance) => {
 			dispatch(setAppearance(appearance));
-		});
-
-		ipcRenderer.on("sync-license", () => {
-			batch(() => {
-				dispatch(syncLicenseData());
-				dispatch(refreshAvailableMonitors());
-			});
-		});
-
-		ipcRenderer.on("trial-ended", () => {
-			batch(() => {
-				dispatch(setTrialStartDate(null));
-				dispatch(setLicense("free"));
-			});
 		});
 
 		ipcRenderer.on("display-arrangement-changed", () => dispatch(refreshAvailableMonitors()));
@@ -140,7 +118,6 @@ const App = () => {
 					>
 						<Box p={2} position={"relative"} width={"100%"} height={"100%"}>
 							<MonitorsRefreshed />
-							<ReceivedPremium />
 							<UpdateSnackbar />
 							<Stack height={"100%"} justifyContent={"end"}>
 								<PassThrough />

@@ -1,4 +1,3 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import {
 	loadActiveMonitor,
@@ -7,7 +6,6 @@ import {
 	loadAutoUpdateCheck,
 	loadBrightnessModes,
 	loadGlobalBrightness,
-	loadLicense,
 	loadMaxShadeLevel,
 	loadMinShadeLevel,
 	loadMode,
@@ -16,231 +14,106 @@ import {
 	loadNative,
 	loadSchedule,
 	loadStartupSettings,
-	loadSyncAppearance,
-	loadTrialAvailability,
-	loadTrialStartDate,
-	loadUserEmail,
-	loadUserId
+	loadSyncAppearance
 } from "@renderer/storage";
-import { AppState, BrightnessModeData, ScheduleItem, ScheduleItemContent, UIMonitor } from "@common/types";
-import { Draft } from "immer";
-import { merge, uniqBy } from "lodash";
-import { randomUUID } from "crypto";
-import update from "immutability-helper";
+import { AppState } from "@common/types";
+import { combinedReducers } from "./slices";
 
-type MonitorAction<T> = { id: string } & T;
+// Re-export types from slices for backwards compatibility
+export type {
+	SetMonitorBrightnessAction,
+	SetMonitorDisabledAction,
+	SetMonitorModeAction,
+	SetMonitorNameAction
+} from "./slices/monitors";
 
-type MonitorMode = UIMonitor["mode"];
+export { findMonitorIndexById } from "./slices/monitors";
 
-interface MonitorActionPayload {
-	nickname: string;
-	brightness: number;
-	disabled: boolean;
-	mode: MonitorMode;
-}
-
-export type SetMonitorBrightnessAction = MonitorAction<
-	Pick<UIMonitor, "brightness" | "mode" | "disabled" | "position" | "size">
->;
-export type SetMonitorDisabledAction = MonitorAction<Pick<MonitorActionPayload, "disabled">>;
-export type SetMonitorModeAction = MonitorAction<Pick<MonitorActionPayload, "mode">>;
-export type SetMonitorNameAction = MonitorAction<Pick<MonitorActionPayload, "nickname">>;
-
-export const findMonitorIndexById = (monitors: UIMonitor[], id: string) =>
-	monitors.findIndex((monitor) => monitor.id === id);
-
+// Initial state
 const initialState: AppState = {
+	// Monitor state
 	activeMonitor: loadActiveMonitor(),
-	appearance: loadAppearance(),
-	autoResize: loadAutoResize(),
-	syncAppearance: loadSyncAppearance(),
-	autoUpdateCheck: loadAutoUpdateCheck(),
-	brightness: loadGlobalBrightness(),
-	brightnessModes: loadBrightnessModes(),
-	license: loadLicense(),
-	mode: loadMode(),
-	prevMode: loadMode(),
 	monitors: loadMonitors(),
 	monitorNicknames: loadMonitorNicknames(),
+
+	// Brightness state
+	brightness: loadGlobalBrightness(),
+	brightnessModes: loadBrightnessModes(),
 	native: loadNative(),
-	receivedPremium: false,
-	refreshed: false,
-	schedule: loadSchedule(),
-	transitioning: false,
-	trialAvailability: loadTrialAvailability(),
-	trialStartDate: loadTrialStartDate(),
-	userEmail: loadUserEmail(),
-	userId: loadUserId(),
-	startup: loadStartupSettings(),
-	focused: false,
-	release: null,
 	minShadeLevel: loadMinShadeLevel(),
 	maxShadeLevel: loadMaxShadeLevel(),
+
+	// Schedule state
+	schedule: loadSchedule(),
+
+	// UI state
+	mode: loadMode(),
+	prevMode: loadMode(),
+	transitioning: false,
+	focused: false,
+	refreshed: false,
+	release: null,
 	settingsDialogOpen: false,
-	upgradeDialogOpen: false
+
+	// Settings state
+	appearance: loadAppearance(),
+	syncAppearance: loadSyncAppearance(),
+	autoUpdateCheck: loadAutoUpdateCheck(),
+	autoResize: loadAutoResize(),
+	startup: loadStartupSettings()
 };
 
-const createReducer =
-	<T>(key: keyof AppState) =>
-	(state: Draft<AppState>, action: PayloadAction<T>) => {
-		state[key] = action.payload;
-	};
-
+// Create slice with combined reducers from domain files
 export const appSlice = createSlice({
 	name: "app",
 	initialState,
-	reducers: {
-		addBrightnessMode: (state, action: PayloadAction<BrightnessModeData>) => {
-			state.brightnessModes.push(merge({ id: randomUUID() }, action.payload));
-		},
-		addSchedule: (state, action: PayloadAction<ScheduleItemContent>) => {
-			state.schedule.push(merge({ id: randomUUID() }, action.payload));
-		},
-		editBrightnessMode: (state, action: PayloadAction<Partial<BrightnessModeData>>) => {
-			let index = state.brightnessModes.findIndex((mode) => mode.id === action.payload.id);
-			state.brightnessModes = update(state.brightnessModes, {
-				[index]: {
-					$merge: action.payload
-				}
-			});
-		},
-		setAutoUpdateCheck: createReducer<AppState["autoUpdateCheck"]>("autoUpdateCheck"),
-		setAutoResize: createReducer<AppState["autoResize"]>("autoResize"),
-		setBrightnessModes: (state, action: PayloadAction<Array<BrightnessModeData>>) => {
-			state.brightnessModes = action.payload;
-		},
-		setFocused: (state, action: PayloadAction<boolean>) => {
-			state.focused = action.payload;
-		},
-		editSchedule: (state, action: PayloadAction<ScheduleItem>) => {
-			let index = state.schedule.findIndex((schedule) => schedule.id === action.payload.id);
-			state.schedule[index] = action.payload;
-		},
-		refreshAvailableMonitors: (state, _: PayloadAction<boolean>) => {
-			state.monitors = loadMonitors();
-		},
-		removeBrightnessMode: (state, action: PayloadAction<string>) => {
-			state.brightnessModes = state.brightnessModes.filter(({ id }) => id !== action.payload);
-		},
-		removeSchedule: (state, action: PayloadAction<string>) => {
-			state.schedule = state.schedule.filter(({ id }) => id !== action.payload);
-		},
-		setActiveBrightnessMode: (
-			state,
-			action: PayloadAction<{ id: string; silent?: boolean; disableBrightness?: boolean }>
-		) => {
-			state.brightnessModes = update(state.brightnessModes, {
-				$apply: (value) => value.map((mode) => ({ ...mode, active: mode.id === action.payload.id }))
-			});
-		},
-		setActiveMonitor: (state, action: PayloadAction<AppState["activeMonitor"]["id"]>) => {
-			state.activeMonitor = state.monitors.find(({ id }) => id === action.payload);
-		},
-		setAppearance: createReducer<AppState["appearance"]>("appearance"),
-		setSyncAppearance: createReducer<AppState["syncAppearance"]>("syncAppearance"),
-		setBrightness: createReducer<AppState["brightness"]>("brightness"),
-		setBrightnessSilent: createReducer<AppState["brightness"]>("brightness"),
-		setLicense: createReducer<AppState["license"]>("license"),
-		setMode: createReducer<AppState["mode"]>("mode"),
-		setPrevMode: createReducer<AppState["prevMode"]>("prevMode"),
-		setMonitorBrightness: (state, action: PayloadAction<SetMonitorBrightnessAction>) => {
-			const { id, brightness } = action.payload;
-			const index = findMonitorIndexById(state.monitors, id);
-			state.monitors[index].brightness = brightness;
-		},
-		setMonitorDisabled: (state, action: PayloadAction<SetMonitorDisabledAction>) => {
-			const { id, disabled } = action.payload;
-			const monitorIndex = findMonitorIndexById(state.monitors, id);
-			state.monitors[monitorIndex].disabled = disabled;
-		},
-		setMonitorMode: (state, action: PayloadAction<SetMonitorModeAction>) => {
-			const { id, mode } = action.payload;
-			const monitorIndex = findMonitorIndexById(state.monitors, id);
-			state.monitors[monitorIndex].mode = mode;
-		},
-		setMonitorName: (state, action: PayloadAction<SetMonitorNameAction>) => {
-			const monitorIndex = findMonitorIndexById(state.monitors, action.payload.id);
-			const monitorNicknameIndex = state.monitorNicknames.findIndex((tuple) => tuple[0] === action.payload.id);
-			const nicknamePair: [string, string] = [action.payload.id, action.payload.nickname];
-
-			state.monitors[monitorIndex].nickname = action.payload.nickname;
-
-			if (monitorNicknameIndex > 0) {
-				state.monitorNicknames[monitorNicknameIndex] = nicknamePair;
-			} else {
-				state.monitorNicknames = [...state.monitorNicknames, nicknamePair];
-			}
-
-			state.monitorNicknames = uniqBy(state.monitorNicknames, 0);
-		},
-		setMonitors: createReducer<AppState["monitors"]>("monitors"),
-		setNative: createReducer<AppState["native"]>("native"),
-		setReceivedPremium: createReducer<AppState["receivedPremium"]>("receivedPremium"),
-		setRefreshed: createReducer<AppState["refreshed"]>("refreshed"),
-		setRelease: createReducer<AppState["release"]>("release"),
-		setSchedule: createReducer<AppState["schedule"]>("schedule"),
-		setSettingsDialogOpen: createReducer<AppState["settingsDialogOpen"]>("settingsDialogOpen"),
-		setStartupSettings: createReducer<AppState["startup"]>("startup"),
-		setTrialAvailability: createReducer<AppState["trialAvailability"]>("trialAvailability"),
-		setTrialStartDate: createReducer<AppState["trialStartDate"]>("trialStartDate"),
-		setTransitioning: createReducer<AppState["transitioning"]>("transitioning"),
-		setUpgradeDialogOpen: createReducer<AppState["upgradeDialogOpen"]>("upgradeDialogOpen"),
-		setUserEmail: createReducer<AppState["userEmail"]>("userEmail"),
-		setMinShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
-			state.minShadeLevel = action.payload.level;
-		},
-		setMaxShadeLevel: (state, action: PayloadAction<{ level: number; save?: boolean; apply?: boolean }>) => {
-			state.maxShadeLevel = action.payload.level;
-		},
-		syncLicenseData: (state) => {
-			state.trialStartDate = loadTrialStartDate();
-			state.trialAvailability = loadTrialAvailability();
-			state.license = loadLicense();
-		}
-	}
+	reducers: combinedReducers
 });
 
+// Export actions
 export const {
-	addBrightnessMode,
-	addSchedule,
-	editBrightnessMode,
-	editSchedule,
+	// Monitor actions
 	refreshAvailableMonitors,
-	removeBrightnessMode,
-	removeSchedule,
-	setActiveBrightnessMode,
 	setActiveMonitor,
-	setAppearance,
-	setAutoResize,
-	setSyncAppearance,
-	setAutoUpdateCheck,
-	setBrightness,
-	setBrightnessModes,
-	setBrightnessSilent,
-	setLicense,
-	setMode,
-	setPrevMode,
+	setMonitors,
 	setMonitorBrightness,
 	setMonitorDisabled,
 	setMonitorMode,
 	setMonitorName,
-	setMonitors,
+
+	// Brightness actions
+	addBrightnessMode,
+	editBrightnessMode,
+	removeBrightnessMode,
+	setActiveBrightnessMode,
+	setBrightness,
+	setBrightnessSilent,
+	setBrightnessModes,
 	setNative,
-	setReceivedPremium,
-	setRefreshed,
-	setSchedule,
-	setUpgradeDialogOpen,
-	setSettingsDialogOpen,
-	setTrialAvailability,
-	setTrialStartDate,
-	setTransitioning,
-	syncLicenseData,
-	setFocused,
-	setRelease,
-	setStartupSettings,
-	setUserEmail,
 	setMinShadeLevel,
-	setMaxShadeLevel
+	setMaxShadeLevel,
+
+	// Schedule actions
+	addSchedule,
+	editSchedule,
+	removeSchedule,
+	setSchedule,
+
+	// UI actions
+	setMode,
+	setPrevMode,
+	setTransitioning,
+	setFocused,
+	setRefreshed,
+	setRelease,
+	setSettingsDialogOpen,
+
+	// Settings actions
+	setAppearance,
+	setSyncAppearance,
+	setAutoUpdateCheck,
+	setAutoResize,
+	setStartupSettings
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -1,4 +1,4 @@
-import { loadLicense, loadMonitors, loadSchedule, saveMonitors } from "@main/storage";
+import { loadMonitors, loadSchedule, saveMonitors } from "@main/storage";
 import { CronJob, CronTime } from "cron";
 import { clone, difference, orderBy } from "lodash";
 import { dayjs, DEFAULT_TIMEZONE, getDateFromTime } from "@common/dayjs";
@@ -65,8 +65,6 @@ class Scheduler extends EventEmitter {
 	};
 
 	private apply = async (id: string) => {
-		if (loadLicense() === "free") return;
-
 		const schedule = await this.getSchedule(id);
 		const referenceMonitors = loadMonitors();
 		const prevMonitors = loadMonitors();
