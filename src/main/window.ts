@@ -4,7 +4,7 @@ import { dimensions, isDev } from "@common/utils";
 import { UIMonitor } from "@common/types";
 import fs from "fs-extra";
 import path from "path";
-import release from "@common/release.json";
+import { version } from "@common/version";
 import EventEmitter from "events";
 import { loadAppearance, loadNative, loadStartupSettings, saveMode } from "./storage";
 import { monitorService } from "./services/monitor-service";
@@ -147,7 +147,7 @@ class Window extends EventEmitter {
 			y: 0
 		});
 		const name = `${loadMode()}-${loadAppearance()}.png`;
-		const output = path.resolve("screenshots", release.tag_name.split(".").join(""), name);
+		const output = path.resolve("screenshots", version.replace(/\./g, ""), name);
 		return fs.outputFile(output, data.toPNG());
 	};
 

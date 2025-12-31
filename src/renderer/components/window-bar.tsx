@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { alpha, Box, Divider, Paper, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { useAppSelector } from "@hooks";
 import iconPro from "@assets/img/icon-pro.svg";
-import release from "@common/release.json";
+import { version } from "@common/version";
 import WindowButtons from "./buttons/window-buttons";
 import MonitorSelect from "./monitor/monitor-select";
 
@@ -35,7 +35,7 @@ const WindowBar = () => {
 				<Tooltip
 					title={
 						<Typography>
-							Glimmr {release.tag_name}
+							Glimmr {version}
 						</Typography>
 					}
 				>

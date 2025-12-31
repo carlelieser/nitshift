@@ -3,7 +3,7 @@ import iconDarkPath from "@assets/img/icon-alt-dark.png?asset";
 import { isDev } from "@common/utils";
 import { app, clipboard, Menu, nativeImage, nativeTheme, Tray } from "electron";
 import process from "process";
-import release from "@common/release.json";
+import { version } from "@common/version";
 import { machineIdSync } from "node-machine-id";
 import EventEmitter from "events";
 import getUuidByString from "uuid-by-string";
@@ -30,7 +30,7 @@ class TrayManager extends EventEmitter {
 		{
 			icon: this.icon.resize({ width: 16 }),
 			label: "Glimmr",
-			sublabel: `${release.tag_name} ${isDev ? "DEV" : ""}`,
+			sublabel: `${version} ${isDev ? "DEV" : ""}`,
 			enabled: false
 		},
 		{

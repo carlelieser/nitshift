@@ -1,7 +1,7 @@
 import { isDev } from "@common/utils";
 import { loadLastUpdatedOn, saveLastUpdatedOn } from "@main/storage";
 import { dayjs } from "@common/dayjs";
-import release from "@common/release.json";
+import { version } from "@common/version";
 import EventEmitter from "events";
 
 const GITHUB_API_URL = "https://api.github.com/repos/carlelieser/glimmr/releases/latest";
@@ -35,7 +35,7 @@ class Updater extends EventEmitter {
 		await this.updateRelease();
 
 		if (this.release) {
-			const updateRequired = this.release.tag_name !== release.tag_name;
+			const updateRequired = this.release.tag_name !== version;
 			if (updateRequired || isDev) {
 				this.emit("update-available", this.release);
 			}
