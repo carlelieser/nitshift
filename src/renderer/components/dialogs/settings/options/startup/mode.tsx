@@ -1,9 +1,8 @@
 import SettingsCard from "../../settings-card";
 import { Wysiwyg } from "mui-symbols";
-import { useAppDispatch, useAppSelector } from "@hooks";
+import { useAppDispatch, useAppSelector, useMenuState } from "@hooks";
 import { capitalize } from "lodash";
 import ModeMenu from "./mode-menu";
-import { useState } from "react";
 import { setStartupSettings } from "@reducers/app";
 import update from "immutability-helper";
 import { AppState } from "@common/types";
@@ -11,10 +10,7 @@ import { AppState } from "@common/types";
 const Mode = () => {
 	const dispatch = useAppDispatch();
 	const startup = useAppSelector((state) => state.app.startup);
-	const [open, setOpen] = useState<boolean>(false);
-
-	const openMenu = () => setOpen(true);
-	const closeMenu = () => setOpen(false);
+	const { open, openMenu, closeMenu } = useMenuState();
 
 	const handleModeChange = (mode: AppState["mode"]) => {
 		dispatch(

@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { Grow, IconButton, IconButtonProps, IconProps } from "@mui/material";
 import Icon from "./icon";
 import IconMenu from "./icon-menu";
 import { randomUUID } from "crypto";
+import { useMenuState } from "@hooks";
 
 interface IconSelectProps {
 	value: string;
@@ -13,12 +14,7 @@ interface IconSelectProps {
 
 const IconSelect: React.FC<IconSelectProps> = ({ value, onChange, buttonProps = {}, iconProps = {} }) => {
 	const id = useMemo(() => randomUUID(), [value]);
-
-	const [open, setOpen] = useState<boolean>(false);
-	const ref = useRef<HTMLButtonElement>();
-
-	const openMenu = () => setOpen(true);
-	const closeMenu = () => setOpen(false);
+	const { open, ref, openMenu, closeMenu } = useMenuState<HTMLButtonElement>();
 
 	return (
 		<>
