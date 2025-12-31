@@ -1,14 +1,10 @@
-import { bytecodePlugin, defineConfig, externalizeDepsPlugin, loadEnv, splitVendorChunkPlugin } from "electron-vite";
+import { defineConfig, externalizeDepsPlugin, loadEnv, splitVendorChunkPlugin } from "electron-vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import renderer from "vite-plugin-electron-renderer";
 import react from "@vitejs/plugin-react";
 import dynamicImport from "vite-plugin-dynamic-import";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import path from "node:path";
-import * as keys from "./src/main/keys";
-import { flatten } from "flat";
-import { obfuscator } from "rollup-obfuscator";
-import { safe } from "./src/main/safe";
 
 const deps = ["lumi-control", "regedit"];
 
@@ -22,10 +18,6 @@ export default defineConfig(({ mode }) => {
 				externalizeDepsPlugin({
 					include: deps,
 					exclude: ["p-queue"]
-				}),
-				bytecodePlugin({
-					transformArrowFunctions: true,
-					protectedStrings: [...Object.values(flatten(keys)), safe]
 				})
 			]
 		},
@@ -51,12 +43,7 @@ export default defineConfig(({ mode }) => {
 						if (id.includes("/node_modules/mui-symbols")) return true;
 					}
 				}),
-				splitVendorChunkPlugin(),
-				obfuscator({
-					selfDefending: false,
-					seed: 94,
-					compact: true
-				})
+				splitVendorChunkPlugin()
 			]
 		},
 		preload: {
@@ -64,15 +51,11 @@ export default defineConfig(({ mode }) => {
 				emptyOutDir: false,
 				rollupOptions: {
 					input: {
-						module: path.resolve(__dirname, "src", "main", "lumi", "module.ts"),
-						hasher: path.resolve(__dirname, "src", "main", "project-hasher.ts")
+						module: path.resolve(__dirname, "src", "main", "lumi", "module.ts")
 					},
 					output: {
 						dir: path.resolve(__dirname),
-						entryFileNames: (chunkInfo) => {
-							if (chunkInfo.name === "module") return "out/main/[name].js";
-							if (chunkInfo.name === "hasher") return "pipeline/[name].js";
-						},
+						entryFileNames: () => "out/main/[name].js",
 						compact: true
 					},
 					external: ["lumi-control"]

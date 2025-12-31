@@ -1,6 +1,5 @@
 import React, { createContext, useMemo } from "react";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
-import { useAppSelector } from "@hooks";
 import { UIMonitor } from "@common/types";
 import DraggableMonitor from "@renderer/components/monitor/draggable-monitor";
 
@@ -27,14 +26,8 @@ const DraggableMonitorWrapper: React.FC<DraggableMonitorProps> = ({
 	isDraggingOver,
 	forceDisableDrag
 }) => {
-	const license = useAppSelector((state) => state.app.license);
-
-	const freeLicenseFilter = useMemo(() => (index > 1 ? true : monitor.disabled), [index, monitor.disabled]);
-	const disabled = useMemo(
-		() => (license === "free" ? freeLicenseFilter : monitor.disabled),
-		[license, freeLicenseFilter, monitor.disabled]
-	);
-	const menuDisabled = useMemo(() => (license === "free" ? index > 1 : false), [license, index]);
+	const disabled = useMemo(() => monitor.disabled, [monitor.disabled]);
+	const menuDisabled = false;
 	const dragDisabled = useMemo(() => disabled || forceDisableDrag, [disabled, forceDisableDrag]);
 
 	return (

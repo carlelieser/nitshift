@@ -30,6 +30,15 @@ export const createDefaultBrightnessMode = (
 	};
 };
 
+export const getDefaultBrightnessModes = () => [
+	createDefaultBrightnessMode("Custom", "LightMode", 100, true),
+	createDefaultBrightnessMode("Work", "Work", 80),
+	createDefaultBrightnessMode("Reading", "Book", 65),
+	createDefaultBrightnessMode("Gaming", "SportsEsports", 90),
+	createDefaultBrightnessMode("Movie", "Movie", 80),
+	createDefaultBrightnessMode("Night", "Bedtime", 30)
+];
+
 export const appearances: Array<Appearance> = ["auto", "light", "dark"];
 
 export const modes: Array<AppState["mode"]> = ["compact", "expanded"];

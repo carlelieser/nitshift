@@ -6,7 +6,6 @@ import { setMode, setTransitioning } from "@reducers/app";
 import { ipcRenderer } from "electron";
 import BrightnessModeButton from "../brightness-mode/brightness-mode-button";
 import SettingsButton from "./settings-button";
-import UpgradeButton from "../promotional/buttons/upgrade-button";
 
 const WindowButtons = () => {
 	const dispatch = useAppDispatch();
@@ -29,7 +28,6 @@ const WindowButtons = () => {
 
 	return (
 		<Stack direction={"row"} alignItems={"center"} spacing={1}>
-			<UpgradeButton context={"window-bar"} size={"small"} />
 			<BrightnessModeButton />
 			<SettingsButton />
 			<Tooltip title={<Typography>{mode === "compact" ? "Expanded View" : "Compact View"}</Typography>}>

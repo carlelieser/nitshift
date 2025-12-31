@@ -3,13 +3,19 @@ import { loadLastUpdatedOn, saveLastUpdatedOn } from "@main/storage";
 import { dayjs } from "@common/dayjs";
 import release from "@common/release.json";
 import EventEmitter from "events";
-import { request } from "@common/fetch";
+
+const GITHUB_API_URL = "https://api.github.com/repos/carlelieser/glimmr/releases/latest";
 
 class Updater extends EventEmitter {
 	private release: any = null;
 
 	public getLatestRelease = async () => {
-		const response = await request("/releases/latest");
+		const response = await fetch(GITHUB_API_URL, {
+			headers: {
+				Accept: "application/vnd.github.v3+json",
+				"User-Agent": "glimmr-updater"
+			}
+		});
 		return response.json();
 	};
 

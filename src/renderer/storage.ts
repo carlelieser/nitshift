@@ -1,94 +1,47 @@
-// THIS FILE IS AUTO-GENERATED. DO NOT EDIT.
-// noinspection ES6UnusedImports
+import Store from "electron-store";
+import { createStorageAccessors, STORE_CONFIG, STORE_KEYS } from "@common/storage";
 
-import { AppState } from "@common/types";
-import { ipcRenderer } from "electron";
+const store = new Store(STORE_CONFIG);
 
-export const STORE = {
-	AUTO_UPDATE_CHECK: "auto-update-check",
-	ACTIVE_MONITOR: "active-monitor",
-	GLOBAL_BRIGHTNESS: "global-brightness",
-	BRIGHTNESS_MODES: "brightness-modes",
-	LAST_UPDATED_ON: "last-updated-on",
-	LICENSE: "license",
-	APPEARANCE: "dark",
-	SYNC_APPEARANCE: "sync-appearance",
-	MODE: "mode",
-	MONITORS: "monitors",
-	MONITOR_NICKNAMES: "monitor-nicknames",
-	NATIVE: "native",
-	SCHEDULE: "schedule",
-	TRIAL_AVAILABILITY: "trail-availability",
-	TRIAL_START_DATE: "trial-start-date",
-	USER_EMAIL: "user-email",
-	USER_ID: "user-id",
-	STARTUP: "startup",
-	MIN_SHADE_LEVEL: "min-shade-level",
-	MAX_SHADE_LEVEL: "max-shade-level",
-	AUTO_RESIZE: "auto-resize"
-};
+// Re-export STORE_KEYS as STORE for backwards compatibility
+export const STORE = STORE_KEYS;
 
-export const remove = (id) => ipcRenderer.sendSync("storage/remove", id);
+// Create all storage accessors using the shared factory
+const accessors = createStorageAccessors(() => store);
 
-export const loadActiveMonitor = (): AppState["activeMonitor"] => ipcRenderer.sendSync("storage/load-active-monitor");
-export const loadAppearance = (): AppState["appearance"] => ipcRenderer.sendSync("storage/load-appearance");
-export const loadAutoResize = (): AppState["autoResize"] => ipcRenderer.sendSync("storage/load-auto-resize");
-export const loadSyncAppearance = (): AppState["syncAppearance"] =>
-	ipcRenderer.sendSync("storage/load-sync-appearance");
-export const loadAutoUpdateCheck = (): AppState["autoUpdateCheck"] =>
-	ipcRenderer.sendSync("storage/load-auto-update-check");
-export const loadBrightnessModes = (): AppState["brightnessModes"] =>
-	ipcRenderer.sendSync("storage/load-brightness-modes");
-export const loadGlobalBrightness = (): AppState["brightness"] =>
-	ipcRenderer.sendSync("storage/load-global-brightness");
-export const loadLastUpdatedOn = (): number => ipcRenderer.sendSync("storage/load-last-updated-on");
-export const loadLicense = (): AppState["license"] => ipcRenderer.sendSync("storage/load-license");
-export const loadMode = (): AppState["mode"] => ipcRenderer.sendSync("storage/load-mode");
-export const loadMonitors = (): AppState["monitors"] => ipcRenderer.sendSync("storage/load-monitors");
-export const loadMonitorNicknames = (): AppState["monitorNicknames"] =>
-	ipcRenderer.sendSync("storage/load-monitor-nicknames");
-export const loadNative = (): AppState["native"] => ipcRenderer.sendSync("storage/load-native");
-export const loadSchedule = (): AppState["schedule"] => ipcRenderer.sendSync("storage/load-schedule");
-export const loadStartupSettings = (): AppState["startup"] => ipcRenderer.sendSync("storage/load-startup-settings");
-export const loadTrialAvailability = (): AppState["trialAvailability"] =>
-	ipcRenderer.sendSync("storage/load-trial-availability");
-export const loadTrialStartDate = (): AppState["trialStartDate"] =>
-	ipcRenderer.sendSync("storage/load-trial-start-date");
-export const loadUserEmail = (): AppState["userEmail"] => ipcRenderer.sendSync("storage/load-user-email");
-export const loadUserId = (): AppState["userId"] => ipcRenderer.sendSync("storage/load-user-id");
-export const loadMinShadeLevel = (): AppState["minShadeLevel"] => ipcRenderer.sendSync("storage/load-min-shade-level");
-export const loadMaxShadeLevel = (): AppState["maxShadeLevel"] => ipcRenderer.sendSync("storage/load-max-shade-level");
-export const saveActiveMonitor = (monitor: AppState["activeMonitor"]) =>
-	ipcRenderer.sendSync("storage/save-active-monitor", monitor);
-export const saveAppearance = (appearance: AppState["appearance"]) =>
-	ipcRenderer.sendSync("storage/save-appearance", appearance);
-export const saveAutoResize = (autoResize: AppState["autoResize"]) =>
-	ipcRenderer.sendSync("storage/save-auto-resize", autoResize);
-export const saveSyncAppearance = (shouldSync: AppState["syncAppearance"]) =>
-	ipcRenderer.sendSync("storage/save-sync-appearance", shouldSync);
-export const saveAutoUpdateCheck = (autoUpdateCheck: boolean) =>
-	ipcRenderer.sendSync("storage/save-auto-update-check", autoUpdateCheck);
-export const saveBrightnessModes = (modes: AppState["brightnessModes"]) =>
-	ipcRenderer.sendSync("storage/save-brightness-modes", modes);
-export const saveGlobalBrightness = (brightness: AppState["brightness"]) =>
-	ipcRenderer.sendSync("storage/save-global-brightness", brightness);
-export const saveLastUpdatedOn = (date: number) => ipcRenderer.sendSync("storage/save-last-updated-on", date);
-export const saveLicense = (license: AppState["license"]) => ipcRenderer.sendSync("storage/save-license", license);
-export const saveMode = (mode: AppState["mode"]) => ipcRenderer.sendSync("storage/save-mode", mode);
-export const saveMonitors = (monitors: AppState["monitors"]) => ipcRenderer.sendSync("storage/save-monitors", monitors);
-export const saveMonitorNicknames = (monitors: AppState["monitorNicknames"]) =>
-	ipcRenderer.sendSync("storage/save-monitor-nicknames", monitors);
-export const saveNative = (isNative: boolean) => ipcRenderer.sendSync("storage/save-native", isNative);
-export const saveSchedule = (schedule: AppState["schedule"]) => ipcRenderer.sendSync("storage/save-schedule", schedule);
-export const saveStartupSettings = (settings: AppState["startup"]) =>
-	ipcRenderer.sendSync("storage/save-startup-settings", settings);
-export const saveTrialAvailability = (available: AppState["trialAvailability"]) =>
-	ipcRenderer.sendSync("storage/save-trial-availability", available);
-export const saveTrialStartDate = (date: AppState["trialStartDate"]) =>
-	ipcRenderer.sendSync("storage/save-trial-start-date", date);
-export const saveUserEmail = (email: AppState["userEmail"]) => ipcRenderer.sendSync("storage/save-user-email", email);
-export const saveUserId = (id: AppState["userId"]) => ipcRenderer.sendSync("storage/save-user-id", id);
-export const saveMinShadeLevel = (level: AppState["minShadeLevel"]) =>
-	ipcRenderer.sendSync("storage/save-min-shade-level", level);
-export const saveMaxShadeLevel = (level: AppState["maxShadeLevel"]) =>
-	ipcRenderer.sendSync("storage/save-max-shade-level", level);
+// Export all accessors
+export const {
+	remove,
+	loadActiveMonitor,
+	loadAppearance,
+	loadAutoResize,
+	loadSyncAppearance,
+	loadAutoUpdateCheck,
+	loadBrightnessModes,
+	loadGlobalBrightness,
+	loadLastUpdatedOn,
+	loadMode,
+	loadMonitors,
+	loadMonitorNicknames,
+	loadNative,
+	loadSchedule,
+	loadStartupSettings,
+	loadMinShadeLevel,
+	loadMaxShadeLevel,
+	saveActiveMonitor,
+	saveAppearance,
+	saveAutoResize,
+	saveSyncAppearance,
+	saveAutoUpdateCheck,
+	saveBrightnessModes,
+	saveGlobalBrightness,
+	saveLastUpdatedOn,
+	saveMode,
+	saveMonitors,
+	saveMonitorNicknames,
+	saveNative,
+	saveSchedule,
+	saveStartupSettings,
+	saveMinShadeLevel,
+	saveMaxShadeLevel
+} = accessors;

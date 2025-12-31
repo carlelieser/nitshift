@@ -79,25 +79,20 @@ export interface AppState {
 	autoUpdateCheck: boolean;
 	brightness: number;
 	brightnessModes: Array<BrightnessModeData>;
-	license: "free" | "trial" | "premium";
 	mode: "expanded" | "compact";
 	prevMode: "expanded" | "compact";
 	monitors: Array<UIMonitor>;
 	monitorNicknames: Array<[string, string]>;
-	receivedPremium: boolean;
 	refreshed: boolean;
 	schedule: Array<ScheduleItem>;
 	settingsDialogOpen: boolean;
-	trialAvailability: boolean;
-	trialStartDate: number | null;
 	transitioning: boolean;
-	userId: string | null;
-	userEmail: string | null;
 	focused: boolean;
 	release: Release;
 	startup: StartupSettings;
 	minShadeLevel: number;
 	maxShadeLevel: number;
+	native: boolean;
 
 	[key: string]: any;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Dialog, { DialogComponentProps } from "../dialog";
 import { Add, LightMode } from "mui-symbols";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { selectActiveBrightnessMode, useAppDispatch, useAppSelector } from "../../hooks";
 import BrightnessMode from "../brightness-mode/brightness-mode";
 import { Box, Grow, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { cloneDeep } from "lodash";
@@ -15,7 +15,7 @@ const EditBrightnessModesDialog: React.FC<DialogComponentProps> = (props) => {
 	const modes = useAppSelector((state) => state.app.brightnessModes);
 	const defaultBrightnessModes = useMemo(() => cloneDeep(modes), []);
 
-	const activeBrightnessMode = useMemo(() => modes.find(({ active }) => active), [modes]);
+	const activeBrightnessMode = useAppSelector(selectActiveBrightnessMode);
 
 	const [modeIndex, setModeIndex] = useState<number>(modes.findIndex((mode) => mode.active));
 

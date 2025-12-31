@@ -2,7 +2,6 @@ import React, { forwardRef, useMemo, useState } from "react";
 import { Button, Chip, Collapse, Paper, Stack, Typography } from "@mui/material";
 import Dialog, { DialogProps } from "@components/dialog";
 import { ChevronRight, KeyboardArrowDown, KeyboardArrowUp } from "mui-symbols";
-import { useAppSelector } from "@renderer/hooks";
 
 type PopupProps = Pick<DialogProps, "title" | "icon"> & { children: React.ReactNode };
 
@@ -32,7 +31,6 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 			icon,
 			endIcon,
 			subtitle,
-			isPremium,
 			isCollapsible,
 			defaultCollapsed = true,
 			visible = true,
@@ -49,8 +47,7 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 	) => {
 		const [popupOpen, setPopupOpen] = useState<boolean>(false);
 		const [collapsed, setCollapsed] = useState<boolean>(defaultCollapsed);
-		const license = useAppSelector((state) => state.app.license);
-		const disabled = useMemo(() => disable || (isPremium && license === "free"), [disable, isPremium, license]);
+		const disabled = useMemo(() => disable, [disable]);
 
 		const handleClose = () => {
 			setPopupOpen(false);
@@ -133,7 +130,6 @@ const SettingsCard = forwardRef<HTMLButtonElement, SettingsCardProps>(
 					<Stack direction={"row"} alignItems={"start"} spacing={2} p={2} flex={1}>
 						<Stack justifyContent={"flex-start"} flex={1} gap={0.5} sx={{ textTransform: "none" }}>
 							<Stack direction={"row"} alignItems={"center"} gap={1}>
-								{isPremium && license === "free" && <Chip size={"small"} label={"PRO"} />}
 								<Typography fontWeight={500} noWrap={!wrap}>
 									{title}
 								</Typography>
