@@ -13,8 +13,6 @@ require("v8-compile-cache");
 
 Store.initRenderer();
 
-process.env.GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
-
 const manager = new AppManager();
 
 AppMessages.init(manager.window);
