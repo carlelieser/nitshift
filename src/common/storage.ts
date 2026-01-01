@@ -43,7 +43,7 @@ export const STORE_DEFAULTS = {
 
 // Store configuration
 export const STORE_CONFIG = {
-	name: "glimmr-store-v2",
+	name: "nitshift-store-v2",
 	clearInvalidConfig: true
 } as const;
 

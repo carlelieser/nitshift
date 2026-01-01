@@ -102,7 +102,7 @@ const ReportABugDialog: React.FC<DialogComponentProps> = (props) => {
 						description={
 							<Typography>
 								Looks like we couldn't send that bug report. Please try again or shoot us an email at{" "}
-								<Link href="mailto:support@glimmr.app?subject=Bug Report">support@glimmr.app</Link>
+								<Link href="mailto:support@nitshift.com?subject=Bug Report">support@nitshift.com</Link>
 							</Typography>
 						}
 					/>

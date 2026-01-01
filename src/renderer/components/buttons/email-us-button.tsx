@@ -7,7 +7,7 @@ const EmailUsButton = () => {
 	const handleOpenEmail: MouseEventHandler<HTMLButtonElement> = (e) => {
 		e.preventDefault();
 		e.stopPropagation();
-		shell.openExternal("mailto:support@glimmr.app?subject=Contact");
+		shell.openExternal("mailto:support@nitshift.com?subject=Contact");
 	};
 
 	return (

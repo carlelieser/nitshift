@@ -16,7 +16,7 @@ interface LaunchItem {
 
 class LaunchManager {
 	private hive = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
-	private path = `${this.hive}\\Glimmr`;
+	private path = `${this.hive}\\Nitshift`;
 
 	constructor() {
 		ipcMain.on("launch/update", (_event) => this.start());

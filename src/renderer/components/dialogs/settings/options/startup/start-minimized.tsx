@@ -25,7 +25,7 @@ const StartMinimized = () => {
 	return (
 		<SettingsCard
 			title={"Start minimized"}
-			subtitle={"Start Glimmr minimized to system tray"}
+			subtitle={"Start Nitshift minimized to system tray"}
 			icon={<Hide />}
 			visible={startup.auto}
 			disableChip={true}

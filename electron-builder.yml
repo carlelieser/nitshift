@@ -1,5 +1,5 @@
-appId: com.glimmr.app
-productName: Glimmr
+appId: com.nitshift.app
+productName: Nitshift
 directories:
   buildResources: build
 files:
@@ -15,10 +15,10 @@ extraResources:
   - from: node_modules/regedit/vbs
     to: vbs
 win:
-  executableName: Glimmr
+  executableName: Nitshift
   icon: src/renderer/assets/img/icon.ico
 squirrelWindows:
-  iconUrl: https://glimmr.app/images/icon.ico
+  iconUrl: https://nitshift.com/images/icon.ico
   artifactName: ${name}-setup.exe
   loadingGif: src/renderer/assets/img/installer.gif
   useAppIdAsId: true

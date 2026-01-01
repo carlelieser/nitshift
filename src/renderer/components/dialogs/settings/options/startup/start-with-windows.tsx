@@ -23,7 +23,7 @@ const StartWithWindows = () => {
 	return (
 		<SettingsCard
 			title={"Start with Windows"}
-			subtitle={"Automatically start Glimmr when you log in"}
+			subtitle={"Automatically start Nitshift when you log in"}
 			icon={<RocketLaunchOutlined />}
 			value={<Switch checked={startup.auto} />}
 			onClick={toggle}

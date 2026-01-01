@@ -22,14 +22,14 @@ class TrayManager extends EventEmitter {
 		this.updateIcon();
 		this.updateTray();
 		this.updateMenu();
-		this.tray.setToolTip("Glimmr");
+		this.tray.setToolTip("Nitshift");
 		this.tray.on("click", () => this.emit("click"));
 	};
 
 	private getMenuTemplate = (): (Electron.MenuItem | Electron.MenuItemConstructorOptions)[] => [
 		{
 			icon: this.icon.resize({ width: 16 }),
-			label: "Glimmr",
+			label: "Nitshift",
 			sublabel: `${version} ${isDev ? "DEV" : ""}`,
 			enabled: false
 		},
@@ -48,7 +48,7 @@ class TrayManager extends EventEmitter {
 			type: "separator"
 		},
 		{
-			label: "Quit Glimmr",
+			label: "Quit Nitshift",
 			click: () => {
 				this.tray.destroy();
 				app.quit();
@@ -58,7 +58,7 @@ class TrayManager extends EventEmitter {
 	];
 
 	private updateTray = () => {
-		this.tray = new Tray(this.icon, getUuidByString("glimmr"));
+		this.tray = new Tray(this.icon, getUuidByString("nitshift"));
 	};
 
 	private updateMenu = () => {

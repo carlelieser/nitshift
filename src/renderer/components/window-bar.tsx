@@ -35,7 +35,7 @@ const WindowBar = () => {
 				<Tooltip
 					title={
 						<Typography>
-							Glimmr {version}
+							Nitshift {version}
 						</Typography>
 					}
 				>
@@ -47,7 +47,7 @@ const WindowBar = () => {
 						/>
 						{mode === "expanded" ? (
 							<Typography variant={"h5"} fontWeight={"bold"}>
-								Glimmr
+								Nitshift
 							</Typography>
 						) : null}
 					</Stack>

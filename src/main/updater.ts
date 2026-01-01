@@ -4,7 +4,7 @@ import { dayjs } from "@common/dayjs";
 import { version } from "@common/version";
 import EventEmitter from "events";
 
-const GITHUB_API_URL = "https://api.github.com/repos/carlelieser/glimmr/releases/latest";
+const GITHUB_API_URL = "https://api.github.com/repos/carlelieser/nitshift/releases/latest";
 
 class Updater extends EventEmitter {
 	private release: any = null;
@@ -13,7 +13,7 @@ class Updater extends EventEmitter {
 		const response = await fetch(GITHUB_API_URL, {
 			headers: {
 				Accept: "application/vnd.github.v3+json",
-				"User-Agent": "glimmr-updater"
+				"User-Agent": "nitshift-updater"
 			}
 		});
 		return response.json();
