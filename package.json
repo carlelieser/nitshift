@@ -105,5 +105,16 @@
     "vite-tsconfig-paths": "^4.2.3",
     "vitest": "^3.2.4"
   },
-  "keywords": []
+  "keywords": [
+    "electron",
+    "react",
+    "typescript",
+    "windows",
+    "brightness-control",
+    "multi-monitor",
+    "ddc-ci",
+    "desktop-app",
+    "system-tray",
+    "automation"
+  ]
 }
