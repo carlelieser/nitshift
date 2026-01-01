@@ -3,7 +3,7 @@
   "productName": "Nitshift",
   "homepage": "https://nitshift.com",
   "target": "node",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "description": "The best multi-monitor brightness tool.",
   "main": "out/main/index.js",
   "overrides": {
